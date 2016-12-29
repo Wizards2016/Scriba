@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput
+  TextInput,
+  Button
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -14,6 +15,7 @@ export default class Scribe extends Component {
     this.state = {
       data: "loading"
     };
+    this.onRegionChange = this.onRegionChange.bind(this);
   }
 
   componentWillMount() {
@@ -53,17 +55,21 @@ export default class Scribe extends Component {
     console.log("STUFF " + stuff);
   }
 
+
+  onRegionChange(region){
+    console.log('region: ', region);
+    this.setState({region});
+  }
+
   render() {
     return (
       <View>
         <MapView
           style={styles.map}
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          onRegionChange={this.onRegionChange}
+          followsUserLocation={true}
+          showsUserLocation={true}
+          loadingEnabled={true}
         />
         <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text: any) => this.postMessage( text.nativeEvent.text  )}/>
 
