@@ -69,9 +69,9 @@ export default class Scribe extends Component {
         console.log(err);
         return;
       }
-      this.setState({
-        userId: profile.userId
-      })
+      // this.setState({
+      //   userId: profile.userId
+      // })
       console.log('User ID', profile.userId);
       AsyncStorage.setItem('id_token', JSON.stringify(token)).then((res)=>{
         console.log('id token created');
