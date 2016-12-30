@@ -55,10 +55,6 @@ export default class Scribe extends Component {
     });
   }
 
-  sayStuff(stuff) {
-    console.log("STUFF " + stuff);
-  }
-
   onRegionChange(region){
     this.setState({region});
   }
@@ -69,9 +65,6 @@ export default class Scribe extends Component {
         console.log(err);
         return;
       }
-      // this.setState({
-      //   userId: profile.userId
-      // })
       console.log('User ID', profile.userId);
       AsyncStorage.setItem('id_token', JSON.stringify(token)).then((res)=>{
         console.log('id token created');
@@ -89,29 +82,33 @@ export default class Scribe extends Component {
 
   render() {
     return (
-      <View>
-        <MapView
-          style={styles.map}
-          onRegionChange={this.onRegionChange}
-          followsUserLocation={true}
-          showsUserLocation={true}
-          loadingEnabled={true}
-        />
-        <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text: any) => this.postMessage( text.nativeEvent.text  )}/>
+      <View style={{ flex:1, flexDirection: 'column'}}>
+        <View>
+          <MapView
+            style={styles.map}
+            onRegionChange={this.onRegionChange}
+            followsUserLocation={true}
+            showsUserLocation={true}
+            loadingEnabled={true}
+          />
+        </View>
+        <View>
+          <TextInput style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text )}/>
 
-        <Text style={styles.welcome}>
-          Welcome to React Native!sdfasdfasefasef
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Button title="Login" onPress={this.login} />
-        <Button title="Logout" onPress={this.logout} />
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{"\n"}
-          Cmd+D or shake for dev menu{"\n"}
-          {this.state.data}
-        </Text>
+          <Text style={styles.welcome}>
+            Welcome to React Native!
+          </Text>
+          <Text style={styles.instructions}>
+            To get started, edit index.ios.js
+          </Text>
+          <Button title="Login" onPress={this.login} />
+          <Button title="Logout" onPress={this.logout} />
+          <Text style={styles.instructions}>
+            Press Cmd+R to reload,{"\n"}
+            Cmd+D or shake for dev menu{"\n"}
+            {this.state.data}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -135,7 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   map: {
-    position: 'absolute',
+    position: 'relative',
     top: 0,
     left: 0,
     width: 400,
