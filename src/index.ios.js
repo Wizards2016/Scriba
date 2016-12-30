@@ -5,15 +5,20 @@ import {
   Text,
   View,
   TextInput,
-  Button
+  Button,
+  AsyncStorage
 } from 'react-native';
 import MapView from 'react-native-maps';
+import Auth0Lock from 'react-native-lock';
+
+var lock = new Auth0Lock({clientId: 'fluO2A5kqKrUAJ9jc9lUm5DT7Wf5HpBj', domain: 'scribemapsapi.auth0.com'});
 
 export default class Scribe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: "loading"
+      data: "loading",
+      userId: ""
     };
     this.onRegionChange = this.onRegionChange.bind(this);
   }
@@ -45,7 +50,6 @@ export default class Scribe extends Component {
         text: text,
       })
     })
-    // .then((response: any) => response.json())
     .then((responseData) => {
       this.getMessages();
     });
@@ -55,10 +59,32 @@ export default class Scribe extends Component {
     console.log("STUFF " + stuff);
   }
 
-
   onRegionChange(region){
-    console.log('region: ', region);
     this.setState({region});
+  }
+
+  login(){
+    lock.show({},(err, profile, token)=>{
+      if(err){
+        console.log(err);
+        return;
+      }
+      // this.setState({
+      //   userId: profile.userId
+      // })
+      console.log('User ID', profile.userId);
+      AsyncStorage.setItem('id_token', JSON.stringify(token)).then((res)=>{
+        console.log('id token created');
+      });
+    });
+  }
+
+  logout(){
+    AsyncStorage.removeItem('id_token').then(()=>{
+      AsyncStorage.getItem('id_token').then((res)=>{
+        console.log('Logged out', res);
+      })
+    })
   }
 
   render() {
@@ -79,6 +105,8 @@ export default class Scribe extends Component {
         <Text style={styles.instructions}>
           To get started, edit index.ios.js
         </Text>
+        <Button title="Login" onPress={this.login} />
+        <Button title="Logout" onPress={this.logout} />
         <Text style={styles.instructions}>
           Press Cmd+R to reload,{"\n"}
           Cmd+D or shake for dev menu{"\n"}
