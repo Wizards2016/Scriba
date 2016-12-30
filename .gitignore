@@ -40,3 +40,8 @@ buck-out/
 \.buckd/
 android/app/libs
 *.keystore
+ios/
+android/
+
+.floo
+.flooignore
