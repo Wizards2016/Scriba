@@ -126,8 +126,8 @@ export default class Scribe extends Component {
                 latitude: 34.05,
                 longitude: -118.2437
               }}
-              title="default"
-              description="default"
+              title="Title"
+              description="Description"
             />
           </MapView>
         </View>
