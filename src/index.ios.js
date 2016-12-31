@@ -120,7 +120,16 @@ export default class Scribe extends Component {
             followsUserLocation={true}
             showsUserLocation={true}
             loadingEnabled={true}
-          />
+          >
+            <MapView.Marker
+              coordinate={{
+                latitude: 34.05,
+                longitude: -118.2437
+              }}
+              title="title"
+              description="description"
+            />
+          </MapView>
         </View>
         <View>
           <TextInput
