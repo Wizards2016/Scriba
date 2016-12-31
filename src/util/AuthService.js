@@ -1,6 +1,6 @@
 // src/utils/AuthService.js
 
-import Auth0Lock from 'auth0-lock';
+import Auth0Lock from 'react-native-lock';
 
 export default class AuthService {
   constructor(clientId, domain) {
@@ -10,36 +10,36 @@ export default class AuthService {
         redirectUrl: 'http://localhost:1337/#/gameOverview',
         responseType: 'token'
       }
-    })
+    });
     // Add callback for lock `authenticated` event
-    this.lock.on('authenticated', this._doAuthentication.bind(this))
+    this.lock.on('authenticated', this._doAuthentication.bind(this));
     // binds login functions to keep this context
-    this.login = this.login.bind(this)
+    this.login = this.login.bind(this);
   }
 
   _doAuthentication(authResult) {
     // Saves the user token
-    this.setToken(authResult.idToken)
+    this.setToken(authResult.idToken);
   }
 
   login() {
     // Call the show method to display the widget.
-    this.lock.show()
+    this.lock.show();
   }
 
   loggedIn() {
     // Checks if there is a saved token and it's still valid
-    return !!this.getToken()
+    return !!this.getToken();
   }
 
   setToken(idToken) {
     // Saves user token to local storage
-    localStorage.setItem('id_token', idToken)
+    localStorage.setItem('id_token', idToken);
   }
 
   getToken() {
     // Retrieves the user token from local storage
-    return localStorage.getItem('id_token')
+    return localStorage.getItem('id_token');
   }
 
   logout() {
