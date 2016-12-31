@@ -47,16 +47,55 @@ export default class Scribe extends Component {
     super(props);
     this.state = {
       data: 'loading',
-      userId: ''
+      userId: '',
+      position: {
+        latitude: 0,
+        longitude: 0
+      },
+      lastPosition: {
+        latitude: 0,
+        longitude: 0
+      }
     };
     this.onRegionChange = this.onRegionChange.bind(this);
   }
 
+  watchID: ?number = null;
+
   componentWillMount() {
+    
     this.getMessages();
   }
 
+  componentDidMount(){
+    this.getCurrentPosition();
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      this.setState({
+        lastPosition:{
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+      });
+    });
+  }
+
+  getCurrentPosition(){
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          position: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
+        });
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+  }
+
   onRegionChange(region) {
+    console.log('this is region', region);
     this.setState({ region });
   }
 
@@ -114,7 +153,7 @@ export default class Scribe extends Component {
     return (
       <View style={{ flex: 1, flexDirection: 'column' }}>
         <View>
-          <MapView
+          <MapView id="map-view"
             style={styles.map}
             onRegionChange={this.onRegionChange}
             followsUserLocation={true}
@@ -123,8 +162,8 @@ export default class Scribe extends Component {
           >
             <MapView.Marker
               coordinate={{
-                latitude: 34.05,
-                longitude: -118.2437
+                latitude: this.state.lastPosition.latitude + .0002,
+                longitude: this.state.lastPosition.longitude + .0002
               }}
               title="title"
               description="description"
@@ -140,6 +179,7 @@ export default class Scribe extends Component {
           <Text style={styles.welcome}>
             Welcome to React Native!
           </Text>
+          <Text>{this.state.lastPosition.latitude},{this.state.lastPosition.longitude}</Text>
           <Text style={styles.instructions}>
             To get started, edit index.ios.js
           </Text>
