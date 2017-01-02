@@ -48,6 +48,9 @@ const styles = StyleSheet.create({
 export default class Scribe extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      data: ''
+    }
   }
 
   componentWillMount() {
@@ -60,6 +63,7 @@ export default class Scribe extends Component {
     })
     .then(response => response.json())
     .then((responseData) => {
+      console.log('gotMessages');
       this.setState({
         data: JSON.stringify(responseData)
       });
@@ -71,7 +75,7 @@ export default class Scribe extends Component {
       <Navigator initialRoute={{index: 0}} renderScene={(route, list) => {
         return (
           route.index === 0 ? 
-          <Map onToPosts={() => {
+          <Map getMessages={this.getMessages.bind(this)} data={this.state.data} lock={lock} onToPosts={() => {
             list.push({index: 1});
           }} /> :
           <Posts backToMap={() => {
