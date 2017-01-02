@@ -83,21 +83,21 @@ export default class Map extends Component {
   }
 
   onRegionChange(region) {
-    console.log('this is region', region);
+    // console.log('this is region', region);
     this.setState({ region });
   }
 
-  getMessages() {
-    fetch('http://127.0.0.1:8000/messages', {
-      method: 'GET'
-    })
-    .then(response => response.json())
-    .then((responseData) => {
-      this.setState({
-        data: JSON.stringify(responseData)
-      });
-    });
-  }
+  // getMessages() {
+  //   fetch('http://127.0.0.1:8000/messages', {
+  //     method: 'GET'
+  //   })
+  //   .then(response => response.json())
+  //   .then((responseData) => {
+  //     this.setState({
+  //       data: JSON.stringify(responseData)
+  //     });
+  //   });
+  // }
 
   postMessage(text) {
     fetch('http://127.0.0.1:8000/messages', {
@@ -111,12 +111,13 @@ export default class Map extends Component {
       })
     })
     .then(() => {
-      this.getMessages();
+      this.props.getMessages();
     });
   }
 
   login() {
-    lock.show({}, (err, profile, token) => {
+    console.log('whats in props', this.props);
+    this.props.lock.show({}, (err, profile, token) => {
       if (err) {
         console.log(err);
         return;
@@ -154,9 +155,11 @@ export default class Map extends Component {
             description="description"
           />
         </MapView>
+        <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
         <Button title="View Posts" onPress={this.props.onToPosts} />
-        <Button title="Login" onPress={this.login} />
-        <Button title="Logout" onPress={this.logout} />
+        <Button title="Login" onPress={this.login.bind(this)} />
+        <Button title="Logout" onPress={this.logout.bind(this)} />
+        <Text>{this.props.data}</Text>
       </View> 
     );
   }
