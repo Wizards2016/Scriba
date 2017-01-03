@@ -115,7 +115,7 @@ export default class Map extends Component {
       })
     })
     .then(() => {
-      this.props.getMessages();
+      this.onRegionChangeComplete();
     });
   }
 
@@ -159,13 +159,14 @@ export default class Map extends Component {
             title="title"
             description="description"
           />
+          {console.log('MAPVIEWMARKER LOG',this.props.data)}
         </MapView>
         <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
         <Button title="View Posts" onPress={this.props.onToPosts} />
         <Button title="Login" onPress={this.login.bind(this)} />
         <Button title="Logout" onPress={this.logout.bind(this)} />
-        <Text>{this.props.data}</Text>
-      </ScrollView> 
+        <Text>{JSON.stringify(this.props.data)}</Text>
+      </ScrollView>
     );
   }
 }

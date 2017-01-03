@@ -62,7 +62,7 @@ export default class Scribe extends Component {
     .then((responseData) => {
       console.log('gotMessages',);
       this.setState({
-        data: JSON.stringify(responseData)
+        data: responseData
       });
     });
   }
@@ -71,7 +71,7 @@ export default class Scribe extends Component {
     return (
       <Navigator initialRoute={{index: 0}} renderScene={(route, list) => {
         return (
-          route.index === 0 ? 
+          route.index === 0 ?
           <Map getMessages={this.getMessages.bind(this)} data={this.state.data} lock={lock} onToPosts={() => {
             list.push({index: 1});
           }} /> :
