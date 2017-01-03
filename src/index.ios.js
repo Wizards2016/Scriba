@@ -53,17 +53,14 @@ export default class Scribe extends Component {
     }
   }
 
-  componentWillMount() {
-    this.getMessages();
-  }
-
-  getMessages() {
-    fetch('http://127.0.0.1:8000/messages', {
+  getMessages(currentRegion) {
+    console.log('index current region', currentRegion);
+    fetch(`http://127.0.0.1:8000/Messages?latitude=${currentRegion.latitude}&longitude=${currentRegion.longitude}`, {
       method: 'GET'
     })
     .then(response => response.json())
     .then((responseData) => {
-      console.log('gotMessages');
+      console.log('gotMessages',);
       this.setState({
         data: JSON.stringify(responseData)
       });
@@ -78,7 +75,7 @@ export default class Scribe extends Component {
           <Map getMessages={this.getMessages.bind(this)} data={this.state.data} lock={lock} onToPosts={() => {
             list.push({index: 1});
           }} /> :
-          <Posts backToMap={() => {
+          <Posts data={this.state.data} lock={lock} backToMap={() => {
             list.pop();
           }}/>
         );

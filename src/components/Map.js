@@ -6,7 +6,8 @@ import {
   View,
   TextInput,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  ScrollView
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -49,6 +50,9 @@ export default class Map extends Component {
       lastPosition: {
         latitude: 0,
         longitude: 0
+      },
+      region: {
+
       }
     };
     this.onRegionChange = this.onRegionChange.bind(this);
@@ -60,13 +64,14 @@ export default class Map extends Component {
     this.getCurrentPosition();
     this.watchID = navigator.geolocation.watchPosition((position) => {
       this.setState({
-        lastPosition:{
+        lastPosition: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }
       });
     });
   }
+
   getCurrentPosition(){
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -83,21 +88,18 @@ export default class Map extends Component {
   }
 
   onRegionChange(region) {
-    // console.log('this is region', region);
     this.setState({ region });
   }
 
-  // getMessages() {
-  //   fetch('http://127.0.0.1:8000/messages', {
-  //     method: 'GET'
-  //   })
-  //   .then(response => response.json())
-  //   .then((responseData) => {
-  //     this.setState({
-  //       data: JSON.stringify(responseData)
-  //     });
-  //   });
-  // }
+  onRegionChangeComplete(){
+    console.log('onregionchangecomplete', this.props);
+    var latitude = this.state.region.latitude;
+    var longitude = this.state.region.longitude;
+    this.props.getMessages({
+      latitude: latitude,
+      longitude: longitude
+    });
+  }
 
   postMessage(text) {
     fetch('http://127.0.0.1:8000/messages', {
@@ -107,7 +109,9 @@ export default class Map extends Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        text: text
+        text: text,
+        latitude: this.state.lastPosition.latitude,
+        longitude: this.state.lastPosition.longitude
       })
     })
     .then(() => {
@@ -138,10 +142,11 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <View>
+      <ScrollView>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
+          onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
           followsUserLocation={true}
           showsUserLocation={true}
           loadingEnabled={true}
@@ -160,7 +165,7 @@ export default class Map extends Component {
         <Button title="Login" onPress={this.login.bind(this)} />
         <Button title="Logout" onPress={this.logout.bind(this)} />
         <Text>{this.props.data}</Text>
-      </View> 
+      </ScrollView> 
     );
   }
 }
