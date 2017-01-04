@@ -38,7 +38,7 @@ export default class Map extends Component {
     super(props);
     this.state = {
       data: 'loading',
-      userId: '',
+      userAuth: '',
       position: {
         latitude: 0,
         longitude: 0
@@ -113,7 +113,7 @@ export default class Map extends Component {
         text: text,
         latitude: this.state.lastPosition.latitude,
         longitude: this.state.lastPosition.longitude,
-        userId: this.state.userId
+        userAuth: this.state.userAuth
       })
     })
     .then(() => {
