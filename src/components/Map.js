@@ -7,7 +7,8 @@ import {
   TextInput,
   Button,
   AsyncStorage,
-  ScrollView
+  ScrollView,
+  TouchableHighlight
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -34,6 +35,10 @@ const styles = StyleSheet.create({
     left: 0,
     width: 400,
     height: 400
+  },
+  callout:{
+    flex: 1,
+    backgroundColor: '#333333',
   }
 });
 
@@ -115,7 +120,7 @@ export default class Map extends Component {
       })
     })
     .then(() => {
-      this.props.getMessages();
+      this.onRegionChangeComplete();
     });
   }
 
@@ -157,15 +162,38 @@ export default class Map extends Component {
               longitude: this.state.lastPosition.longitude + .0002
             }}
             title="title"
-            description="description"
+            description="Lorem ipsum dolor sit amet, nonummy ligula volutpat hac integer nonummy. Suspendisse ultricies, congue etiam tellus, erat libero, nulla eleifend, mauris pellentesque. Suspendisse integer praesent vel, integer gravida mauris, fringilla vehicula lacinia non1234567890"
           />
+          {this.props.data.map((message, i)=>
+            (<MapView.Marker
+              key={"markerID"+i}
+              coordinate={{
+                latitude: message.latitude,
+                longitude: message.longitude
+              }}
+              onCalloutPress={(e) => {console.log("calloutPress")}}
+            >
+              <MapView.Callout width={40} height={40}>
+                <TouchableHighlight
+                  style={styles.callout}
+                  underlayColor="transparent"
+                  onPress={() => console.log('callout was clicked')}
+                >
+                  <View>
+                    <Text>{message.text}</Text>
+                  </View>
+                </TouchableHighlight>
+              </MapView.Callout>
+              </MapView.Marker>
+            )
+          )}
         </MapView>
         <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
         <Button title="View Posts" onPress={this.props.onToPosts} />
         <Button title="Login" onPress={this.login.bind(this)} />
         <Button title="Logout" onPress={this.logout.bind(this)} />
-        <Text>{this.props.data}</Text>
-      </ScrollView> 
+        <Text>{JSON.stringify(this.props.data)}</Text>
+      </ScrollView>
     );
   }
 }
