@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const Header = (props) => (
+const Header = () => (
   <View style={styles.container}>
     <Text>
       This is the header

@@ -7,6 +7,8 @@ import {
   TouchableOpacity
 } from 'react-native';
 import TimeAgo from 'react-native-timeago';
+import UpArrow from '../media/arrow_up.png';
+import DownArrow from '../media/arrow_down.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,20 +50,20 @@ const PostRow = ({ message }) => {
         {`${text}`}
       </Text>
       <View style={styles.options}>
-        <TimeAgo time={createdAt} interval={60000}/>
+        <TimeAgo time={createdAt} interval={60000} />
         <View style={styles.buttons}>
-        <TouchableOpacity onPress={() => {console.log('Upvoted');}}>
+          <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
             <Image
-              style={{width: 20, height: 20}}
-              source={require('../media/arrow_up.png')}
+              style={{ width: 20, height: 20 }}
+              source={UpArrow}
               accessibilityLabel="Up vote"
             />
           </TouchableOpacity>
           <Text style={styles.vote}>2</Text>
-          <TouchableOpacity onPress={() => {console.log('Downvoted');}}>
+          <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
             <Image
-              style={{width: 20, height: 20}}
-              source={require('../media/arrow_down.png')}
+              style={{ width: 20, height: 20 }}
+              source={DownArrow}
               accessibilityLabel="Down vote"
             />
           </TouchableOpacity>
