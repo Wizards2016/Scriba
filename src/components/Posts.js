@@ -25,7 +25,7 @@ export default class Posts extends Component {
       dataSource: ds.cloneWithRows(props.data)
     };
   }
-
+  
   render() {
     return (
       <ListView
