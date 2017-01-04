@@ -151,15 +151,15 @@ export default class Map extends Component {
           showsUserLocation={true}
           loadingEnabled={true}
         >
-          <MapView.Marker
-            coordinate={{
-              latitude: this.state.lastPosition.latitude + .0002,
-              longitude: this.state.lastPosition.longitude + .0002
-            }}
-            title="title"
-            description="description"
-          />
-          {console.log('MAPVIEWMARKER LOG',this.props.data)}
+          {this.props.data.map((message)=>
+            (<MapView.Marker
+              coordinate={{
+                latitude: message.latitude,
+                longitude: message.longitude
+              }}
+              description={message.text}
+            />)
+          )}
         </MapView>
         <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
         <Button title="View Posts" onPress={this.props.onToPosts} />
