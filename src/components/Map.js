@@ -46,7 +46,7 @@ export default class Map extends Component {
     super(props);
     this.state = {
       data: 'loading',
-      userId: '',
+      userAuth: '',
       position: {
         latitude: 0,
         longitude: 0
@@ -115,7 +115,7 @@ export default class Map extends Component {
         text: text,
         latitude: this.state.lastPosition.latitude,
         longitude: this.state.lastPosition.longitude,
-        userId: this.state.userId
+        userAuth: this.state.userAuth
       })
     })
     .then(() => {
@@ -131,7 +131,7 @@ export default class Map extends Component {
         return;
       }
       console.log('User ID', profile.userId);
-      this.setState({userId: profile.userId});
+      this.setState({userAuth: profile.userId});
       AsyncStorage.setItem('id_token', JSON.stringify(token)).then(() => {
         console.log('id token created');
       });
