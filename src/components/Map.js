@@ -8,33 +8,17 @@ import {
   Button,
   AsyncStorage,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
+  KeyboardAvoidingView
 } from 'react-native';
 import MapView from 'react-native-maps';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
+    flex: 1
   },
   map: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    width: 400,
-    height: 400
+    flex: 1
   },
   callout:{
     flex: 1
@@ -145,7 +129,7 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <View>
+      <KeyboardAvoidingView behavior="padding" style={styles.map}>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
@@ -178,11 +162,7 @@ export default class Map extends Component {
           )}
         </MapView>
         <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
-        <Button title="View Posts" onPress={this.props.onToPosts} />
-        <Button title="Login" onPress={this.login.bind(this)} />
-        <Button title="Logout" onPress={this.logout.bind(this)} />
-        <Text>{JSON.stringify(this.props.data)}</Text>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
