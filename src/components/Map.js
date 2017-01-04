@@ -7,7 +7,8 @@ import {
   TextInput,
   Button,
   AsyncStorage,
-  ScrollView
+  ScrollView,
+  TouchableHighlight
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -34,6 +35,9 @@ const styles = StyleSheet.create({
     left: 0,
     width: 400,
     height: 400
+  },
+  callout:{
+    flex: 1
   }
 });
 
@@ -151,14 +155,27 @@ export default class Map extends Component {
           showsUserLocation={true}
           loadingEnabled={true}
         >
-          {this.props.data.map((message)=>
+          {this.props.data.map((message, i)=>
             (<MapView.Marker
+              key={"markerID"+i}
               coordinate={{
                 latitude: message.latitude,
                 longitude: message.longitude
               }}
-              description={message.text}
-            />)
+            >
+              <MapView.Callout width={40} height={40}>
+                <TouchableHighlight
+                  style={styles.callout}
+                  underlayColor="transparent"
+                  onPress={() => console.log('callout was clicked')}
+                >
+                  <View>
+                    <Text>{message.text}</Text>
+                  </View>
+                </TouchableHighlight>
+              </MapView.Callout>
+              </MapView.Marker>
+            )
           )}
         </MapView>
         <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
