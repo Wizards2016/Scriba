@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 import TimeAgo from 'react-native-timeago';
 
@@ -49,21 +50,26 @@ const PostRow = ({ message }) => {
       <View style={styles.options}>
         <TimeAgo time={createdAt} interval={60000}/>
         <View style={styles.buttons}>
-          <Image
-            style={{width: 20, height: 20}}
-            source={require('../media/arrow_up.png')}
-          />
+        <TouchableOpacity onPress={() => {console.log('Upvoted');}}>
+            <Image
+              style={{width: 20, height: 20}}
+              source={require('../media/arrow_up.png')}
+              accessibilityLabel="Up vote"
+            />
+          </TouchableOpacity>
           <Text style={styles.vote}>2</Text>
-          <Image
-            style={{width: 20, height: 20}}
-            source={require('../media/arrow_down.png')}
-          />
+          <TouchableOpacity onPress={() => {console.log('Downvoted');}}>
+            <Image
+              style={{width: 20, height: 20}}
+              source={require('../media/arrow_down.png')}
+              accessibilityLabel="Down vote"
+            />
+          </TouchableOpacity>
           <Text style={styles.vote}>0</Text>
         </View>
       </View>
     </View>
   );
-
-}
+};
 
 export default PostRow;
