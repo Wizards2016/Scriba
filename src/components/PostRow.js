@@ -9,16 +9,25 @@ import TimeAgo from 'react-native-timeago';
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 0,
+    marginRight: 12,
+    marginBottom: 12,
     marginLeft: 12,
-    marginRight: 12
+    padding: 5,
+    backgroundColor: '#c1d9ff'
   },
   options: {
+    backgroundColor: '#e2edff',
     flexDirection: 'row',
     alignItems: 'flex-start',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    padding: 2
   },
   text: {
     fontSize: 16
+  },
+  vote: {
+    marginRight: 5
   },
   buttons: {
     flex: 1,
@@ -44,12 +53,12 @@ const PostRow = ({ message }) => {
             style={{width: 20, height: 20}}
             source={require('../media/arrow_up.png')}
           />
-          <Text>2</Text>
+          <Text style={styles.vote}>2</Text>
           <Image
             style={{width: 20, height: 20}}
             source={require('../media/arrow_down.png')}
           />
-          <Text>0</Text>
+          <Text style={styles.vote}>0</Text>
         </View>
       </View>
     </View>
