@@ -4,11 +4,12 @@ import {
   ListView,
 } from 'react-native';
 import PostRow from './PostRow.js';
+import Header from './PostHeader.js';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
+    marginTop: 20
   }
 });
 
@@ -32,6 +33,7 @@ export default class Posts extends Component {
         contentContainerStyle={styles.container}
         dataSource={this.state.dataSource}
         renderRow={(data) => <PostRow message={data}/>}
+        renderHeader={() => <Header />}
       />
     );
   }

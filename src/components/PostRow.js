@@ -44,10 +44,12 @@ const PostRow = ({ message }) => {
             style={{width: 20, height: 20}}
             source={require('../media/arrow_up.png')}
           />
+          <Text>2</Text>
           <Image
             style={{width: 20, height: 20}}
             source={require('../media/arrow_down.png')}
           />
+          <Text>0</Text>
         </View>
       </View>
     </View>
