@@ -2,26 +2,30 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  Image
 } from 'react-native';
 import TimeAgo from 'react-native-timeago';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 12,
+    marginLeft: 12,
+    marginRight: 12
+  },
+  options: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    flexWrap: 'wrap'
   },
   text: {
-    marginLeft: 12,
-    fontSize: 16,
+    fontSize: 16
   },
-  photo: {
-    height: 40,
-    width: 40,
-    borderRadius: 20,
-  },
+  buttons: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
+  }
 });
 
 const PostRow = ({ message }) => {
@@ -29,11 +33,23 @@ const PostRow = ({ message }) => {
   const createdAt = message.createdAt;
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.text}>
         {`${text}`}
       </Text>
-      <TimeAgo time={createdAt} interval={60000}/>
+      <View style={styles.options}>
+        <TimeAgo time={createdAt} interval={60000}/>
+        <View style={styles.buttons}>
+          <Image
+            style={{width: 20, height: 20}}
+            source={require('../media/arrow_up.png')}
+          />
+          <Image
+            style={{width: 20, height: 20}}
+            source={require('../media/arrow_down.png')}
+          />
+        </View>
+      </View>
     </View>
   );
 
