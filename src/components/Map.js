@@ -114,7 +114,8 @@ export default class Map extends Component {
       body: JSON.stringify({
         text: text,
         latitude: this.state.lastPosition.latitude,
-        longitude: this.state.lastPosition.longitude
+        longitude: this.state.lastPosition.longitude,
+        userId: this.state.userId
       })
     })
     .then(() => {
@@ -130,6 +131,7 @@ export default class Map extends Component {
         return;
       }
       console.log('User ID', profile.userId);
+      this.setState({userId: profile.userId});
       AsyncStorage.setItem('id_token', JSON.stringify(token)).then(() => {
         console.log('id token created');
       });
@@ -145,7 +147,7 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <View>
+      <ScrollView>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
@@ -182,7 +184,7 @@ export default class Map extends Component {
         <Button title="Login" onPress={this.login.bind(this)} />
         <Button title="Logout" onPress={this.logout.bind(this)} />
         <Text>{JSON.stringify(this.props.data)}</Text>
-      </View>
+      </ScrollView>
     );
   }
 }
