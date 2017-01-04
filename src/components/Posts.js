@@ -32,7 +32,7 @@ export default class Posts extends Component {
         contentContainerStyle={styles.container}
         dataSource={this.state.dataSource}
         renderRow={(data) => <PostRow message={data} />}
-        renderHeader={() => <Header />}
+        renderHeader={() => <Header backToMap={this.props.backToMap}/>}
       />
     );
   }

@@ -2,7 +2,8 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  Button
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -16,11 +17,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const Header = () => (
+const Header = (props) => (
   <View style={styles.container}>
-    <Text>
-      This is the header
-    </Text>
+    <Button title="Back to Map" onPress={props.backToMap} />
   </View>
 );
 
