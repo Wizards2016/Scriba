@@ -96,7 +96,6 @@ export default class Map extends Component {
   }
 
   onRegionChangeComplete(){
-    console.log('onregionchangecomplete', this.props);
     var latitude = this.state.region.latitude;
     var longitude = this.state.region.longitude;
     this.props.getMessages({
@@ -146,7 +145,7 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <ScrollView>
+      <View>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
@@ -183,7 +182,7 @@ export default class Map extends Component {
         <Button title="Login" onPress={this.login.bind(this)} />
         <Button title="Logout" onPress={this.logout.bind(this)} />
         <Text>{JSON.stringify(this.props.data)}</Text>
-      </ScrollView>
+      </View>
     );
   }
 }
