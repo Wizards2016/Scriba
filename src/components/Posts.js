@@ -13,17 +13,23 @@ const styles = StyleSheet.create({
   }
 });
 
+const ds = new ListView.DataSource({
+  rowHasChanged: (row1, row2) => row1 !== row2
+});
+
 export default class Posts extends Component {
   constructor(props) {
     super(props);
 
-    const ds = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2
-    });
-
     this.state = {
       dataSource: ds.cloneWithRows(props.data)
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: ds.cloneWithRows(nextProps.data)
+    });
   }
 
   render() {
