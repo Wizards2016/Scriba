@@ -9,7 +9,8 @@ import {
   AsyncStorage,
   ScrollView,
   TouchableHighlight,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TabBar from './TabBar';
@@ -143,7 +144,7 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.map}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
