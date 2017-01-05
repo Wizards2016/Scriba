@@ -50,9 +50,9 @@ export default class Settings extends Component {
     return (
       <ScrollView>
         <Text style={styles.welcome}>
-          {`${this.props.userId === null ? 'Please log in to post messages.' : ''}`}
+          {`${this.props.userAuth === null ? 'Please log in to post messages.' : ''}`}
         </Text>
-        { this.props.userId ?
+        { this.props.userAuth ?
           <Button title="Logout" onPress={this.logout} />
           :
           <Button title="Login" onPress={this.login} />
