@@ -19,8 +19,11 @@ const styles = StyleSheet.create({
 
 const Header = (props) => (
   <View style={styles.container}>
-    <Button title="Back to Map" onPress={props.backToMap} />
   </View>
 );
 
 export default Header;
+
+/*
+    <Button title="Back to Map" onPress={props.backToMap} />
+*/

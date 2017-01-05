@@ -9,9 +9,11 @@ import {
   AsyncStorage,
   ScrollView,
   TouchableHighlight,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
+import TabBar from './TabBar';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,8 +22,14 @@ const styles = StyleSheet.create({
   map: {
     flex: 1
   },
-  callout:{
+  callout: {
     flex: 1
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    height: 40,
+    marginBottom: 48
   }
 });
 
@@ -107,13 +115,11 @@ export default class Map extends Component {
   }
 
   login() {
-    console.log('whats in props', this.props);
     this.props.lock.show({}, (err, profile, token) => {
       if (err) {
         console.log(err);
         return;
       }
-      console.log('User ID', profile.userId);
       AsyncStorage.setItem('id_token', JSON.stringify(token)).then(() => {
         console.log('id token created');
       });
@@ -129,7 +135,7 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={styles.map}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
@@ -161,7 +167,11 @@ export default class Map extends Component {
             )
           )}
         </MapView>
-        <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
+        <TextInput 
+          style={styles.input}
+          onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}
+          placeholder="Type a message"
+        />
       </KeyboardAvoidingView>
     );
   }
