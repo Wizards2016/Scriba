@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  ListView
+  ListView,
+  ScrollView
 } from 'react-native';
 import PostRow from './PostRow';
-import Header from './PostHeader';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,15 +25,17 @@ export default class Posts extends Component {
       dataSource: ds.cloneWithRows(props.data)
     };
   }
-  
+
   render() {
     return (
-      <ListView
-        contentContainerStyle={styles.container}
-        dataSource={this.state.dataSource}
-        renderRow={(data) => <PostRow message={data} />}
-        renderHeader={() => <Header backToMap={this.props.backToMap}/>}
-      />
+      <ScrollView>
+        <ListView
+          automaticallyAdjustContentInsets={false}
+          contentContainerStyle={styles.container}
+          dataSource={this.state.dataSource}
+          renderRow={data => <PostRow message={data} />}
+        />
+      </ScrollView>
     );
   }
 }

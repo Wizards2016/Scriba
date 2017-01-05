@@ -8,36 +8,28 @@ import {
   Button,
   AsyncStorage,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
+  KeyboardAvoidingView,
+  TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
+import TabBar from './TabBar';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF'
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5
+    flex: 1
   },
   map: {
-    position: 'relative',
-    top: 0,
-    left: 0,
-    width: 400,
-    height: 400
-  },
-  callout:{
     flex: 1
+  },
+  callout: {
+    flex: 1
+  },
+  input: {
+    borderColor: 'gray',
+    borderWidth: 1,
+    height: 40,
+    marginBottom: 48
   }
 });
 
@@ -59,7 +51,9 @@ export default class Map extends Component {
 
       }
     };
+
     this.onRegionChange = this.onRegionChange.bind(this);
+    this.postMessage = this.postMessage.bind(this);
   }
 
   watchID: ?number = null;
@@ -105,6 +99,10 @@ export default class Map extends Component {
   }
 
   postMessage(text) {
+    // Clear the text input field
+    this._textInput.setNativeProps({text: ''});
+
+    // Post the message to the database
     fetch('http://127.0.0.1:8000/messages', {
       method: 'POST',
       headers: {
@@ -124,14 +122,13 @@ export default class Map extends Component {
   }
 
   login() {
-    console.log('whats in props', this.props);
     this.props.lock.show({}, (err, profile, token) => {
       if (err) {
         console.log(err);
         return;
       }
-      console.log('User ID', profile.userId);
-      this.setState({userAuth: profile.userId});
+
+      this.setState({userId: profile.userId});
       AsyncStorage.setItem('id_token', JSON.stringify(token)).then(() => {
         console.log('id token created');
       });
@@ -147,7 +144,7 @@ export default class Map extends Component {
   }
   render() {
     return (
-      <ScrollView>
+      <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
         <MapView id="map-view"
           style={styles.map}
           onRegionChange={this.onRegionChange}
@@ -179,12 +176,13 @@ export default class Map extends Component {
             )
           )}
         </MapView>
-        <TextInput  style={{height: 40, borderColor: "gray", borderWidth: 1}} onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}/>
-        <Button title="View Posts" onPress={this.props.onToPosts} />
-        <Button title="Login" onPress={this.login.bind(this)} />
-        <Button title="Logout" onPress={this.logout.bind(this)} />
-        <Text>{JSON.stringify(this.props.data)}</Text>
-      </ScrollView>
+        <TextInput 
+          ref={component => this._textInput = component}
+          style={styles.input}
+          onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}
+          placeholder="Type a message"
+        />
+      </KeyboardAvoidingView>
     );
   }
 }
