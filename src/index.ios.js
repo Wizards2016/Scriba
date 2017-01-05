@@ -23,7 +23,7 @@ export default class Scribe extends Component {
     this.state = {
       data: [],
       selectedTab: 'map',
-      userId: null
+      userAuth: null
     };
 
     this.getMessages = this.getMessages.bind(this);
@@ -42,9 +42,9 @@ export default class Scribe extends Component {
     });
   }
 
-  updateUser(userId) {
+  updateUser(userAuth) {
     this.setState({
-      userId: userId
+      userAuth: userAuth
     });
   }
 
@@ -69,7 +69,7 @@ export default class Scribe extends Component {
           <Map
             getMessages={this.getMessages}
             data={this.state.data}
-            userId={this.state.userId}
+            userAuth={this.state.userAuth}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
@@ -98,7 +98,7 @@ export default class Scribe extends Component {
         >
           <Settings
             lock={lock}
-            userId={this.state.userId}
+            userAuth={this.state.userAuth}
             updateUser={this.updateUser}
           />
         </TabBarIOS.Item>

@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
-  TextInput,
-  Button,
-  AsyncStorage,
-  ScrollView,
+  TextInput
 } from 'react-native';
 
 
@@ -24,12 +20,11 @@ export default class Settings extends Component {
 
     this.state = {
     };
-
   }
 
   postMessage(text) {
     // Clear the text input field
-    this._textInput.setNativeProps({text: ''});
+    this._textInput.setNativeProps({ text: '' });
 
     // Post the message to the database
     fetch('http://127.0.0.1:8000/messages', {
@@ -42,7 +37,7 @@ export default class Settings extends Component {
         text: text,
         latitude: this.props.position.latitude,
         longitude: this.props.position.longitude,
-        userId: this.props.userId
+        userAuth: this.props.userId
       })
     })
     .then(() => {
@@ -50,13 +45,12 @@ export default class Settings extends Component {
     });
   }
 
-
   render() {
     return (
       <TextInput 
-        ref={component => this._textInput = component}
+        ref={(component) => { this._textInput = component; }}
         style={styles.input}
-        onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}
+        onSubmitEditing={(text) => { this.postMessage( text.nativeEvent.text  ) }}
         placeholder="Type a message"
       />
     );

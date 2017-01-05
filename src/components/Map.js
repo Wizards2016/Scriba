@@ -58,12 +58,7 @@ export default class Map extends Component {
   getCurrentPosition(){
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        this.setState({
-          position: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }
-        });
+        this.updatePosition(position);
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
@@ -125,7 +120,7 @@ export default class Map extends Component {
         <Input
           updateMessages={this.updateMessages}
           position={this.state.position}
-          userId={this.props.userId}
+          userAuth={this.props.userAuth}
         />
       </KeyboardAvoidingView>
     );

@@ -4,7 +4,7 @@ import {
   Text,
   Button,
   AsyncStorage,
-  ScrollView,
+  ScrollView
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -20,6 +20,8 @@ export default class Settings extends Component {
     this.state = {
     };
 
+    this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   login() {
@@ -30,7 +32,7 @@ export default class Settings extends Component {
       }
 
       this.props.updateUser(profile.userId);
-      AsyncStorage.setItem('id_token', JSON.stringify(token))
+      AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
   }
 
@@ -51,9 +53,9 @@ export default class Settings extends Component {
           {`${this.props.userId === null ? 'Please log in to post messages.' : ''}`}
         </Text>
         { this.props.userId ?
-          <Button title="Logout" onPress={this.logout.bind(this)} />
+          <Button title="Logout" onPress={this.logout} />
           :
-          <Button title="Login" onPress={this.login.bind(this)} />
+          <Button title="Login" onPress={this.login} />
         }
       </ScrollView>
     );
