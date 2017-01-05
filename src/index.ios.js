@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  Navigator,
   TabBarIOS
 } from 'react-native';
 import Auth0Lock from 'react-native-lock';
@@ -9,7 +8,6 @@ import Map from './components/Map';
 import Posts from './components/Posts';
 import Globe from './media/globe_32.png';
 import Eye from './media/eye_32.png';
-import Menu from './media/menu_32.png';
 
 const lock = new Auth0Lock({
   clientId: 'fluO2A5kqKrUAJ9jc9lUm5DT7Wf5HpBj',
@@ -27,13 +25,11 @@ export default class Scribe extends Component {
   }
 
   getMessages(currentRegion) {
-    console.log('index current region', currentRegion);
     fetch(`http://127.0.0.1:8000/Messages?latitude=${currentRegion.latitude}&longitude=${currentRegion.longitude}`, {
       method: 'GET'
     })
     .then(response => response.json())
     .then((responseData) => {
-      console.log('gotMessages');
       this.setState({
         data: responseData
       });

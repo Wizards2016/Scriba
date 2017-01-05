@@ -33,7 +33,7 @@ export default class Posts extends Component {
           automaticallyAdjustContentInsets={false}
           contentContainerStyle={styles.container}
           dataSource={this.state.dataSource}
-          renderRow={(data) => <PostRow message={data} />}
+          renderRow={data => <PostRow message={data} />}
         />
       </ScrollView>
     );
