@@ -37,7 +37,7 @@ export default class Settings extends Component {
         text: text,
         latitude: this.props.position.latitude,
         longitude: this.props.position.longitude,
-        userAuth: this.props.userId
+        userAuth: this.props.userAuth
       })
     })
     .then(() => {
