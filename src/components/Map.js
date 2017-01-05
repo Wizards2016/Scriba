@@ -13,7 +13,7 @@ import {
   TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
-import TabBar from './TabBar';
+import Input from './Input';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,12 +24,6 @@ const styles = StyleSheet.create({
   },
   callout: {
     flex: 1
-  },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    height: 40,
-    marginBottom: 48
   }
 });
 
@@ -37,23 +31,14 @@ export default class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: 'loading',
-      userAuth: '',
       position: {
         latitude: 0,
         longitude: 0
-      },
-      lastPosition: {
-        latitude: 0,
-        longitude: 0
-      },
-      region: {
-
       }
     };
 
-    this.onRegionChange = this.onRegionChange.bind(this);
-    this.postMessage = this.postMessage.bind(this);
+    this.updatePosition = this.updatePosition.bind(this);
+    this.updateMessages = this.updateMessages.bind(this);
   }
 
   watchID: ?number = null;
@@ -62,93 +47,49 @@ export default class Map extends Component {
     this.getCurrentPosition();
     this.watchID = navigator.geolocation.watchPosition((position) => {
       this.setState({
-        lastPosition: {
+        position: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         }
-      });
+      }, () => this.updateMessages);
     });
   }
 
   getCurrentPosition(){
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        this.setState({
-          position: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }
-        });
+        this.updatePosition(position);
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
   }
 
-  onRegionChange(region) {
-    this.setState({ region });
+  updatePosition(region) {
+    this.setState({
+      position: {
+        latitude: region.latitude,
+        longitude: region.longitude
+      }
+    });
   }
 
-  onRegionChangeComplete(){
-    var latitude = this.state.region.latitude;
-    var longitude = this.state.region.longitude;
+  updateMessages(){
+    const latitude = this.state.position.latitude;
+    const longitude = this.state.position.longitude;
     this.props.getMessages({
       latitude: latitude,
       longitude: longitude
     });
   }
 
-  postMessage(text) {
-    // Clear the text input field
-    this._textInput.setNativeProps({text: ''});
-
-    // Post the message to the database
-    fetch('http://127.0.0.1:8000/messages', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        text: text,
-        latitude: this.state.lastPosition.latitude,
-        longitude: this.state.lastPosition.longitude,
-        userAuth: this.state.userAuth
-      })
-    })
-    .then(() => {
-      this.onRegionChangeComplete();
-    });
-  }
-
-  login() {
-    this.props.lock.show({}, (err, profile, token) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-
-      this.setState({userId: profile.userId});
-      AsyncStorage.setItem('id_token', JSON.stringify(token)).then(() => {
-        console.log('id token created');
-      });
-    });
-  }
-
-  logout() {
-    AsyncStorage.removeItem('id_token').then(() => {
-      AsyncStorage.getItem('id_token').then((res) => {
-        console.log('Logged out', res);
-      });
-    });
-  }
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
         <MapView id="map-view"
           style={styles.map}
-          onRegionChange={this.onRegionChange}
-          onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}
+          onRegionChange={this.updatePosition}
+          onRegionChangeComplete={this.updateMessages}
           followsUserLocation={true}
           showsUserLocation={true}
           loadingEnabled={true}
@@ -176,11 +117,10 @@ export default class Map extends Component {
             )
           )}
         </MapView>
-        <TextInput 
-          ref={component => this._textInput = component}
-          style={styles.input}
-          onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}
-          placeholder="Type a message"
+        <Input
+          updateMessages={this.updateMessages}
+          position={this.state.position}
+          userAuth={this.props.userAuth}
         />
       </KeyboardAvoidingView>
     );
