@@ -102,7 +102,7 @@ export default class Map extends Component {
                 longitude: message.longitude
               }}
             >
-              <MapView.Callout width={40} height={40}>
+              <MapView.Callout width={150} height={40}>
                 <TouchableHighlight
                   style={styles.callout}
                   underlayColor="transparent"
