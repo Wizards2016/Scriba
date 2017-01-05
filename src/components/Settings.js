@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
-  View,
-  TextInput,
   Button,
   AsyncStorage,
   ScrollView,
-  TouchableHighlight,
-  KeyboardAvoidingView,
-  TabBarIOS
 } from 'react-native';
 
 const styles = StyleSheet.create({
