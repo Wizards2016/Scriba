@@ -30,7 +30,6 @@ export default class Settings extends Component {
         console.log(err);
         return;
       }
-
       this.props.updateUser(profile.userId);
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
