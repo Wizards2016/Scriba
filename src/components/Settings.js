@@ -25,7 +25,7 @@ export default class Settings extends Component {
   }
 
   login() {
-    this.props.lock.show({}, (err, profile, token) => {
+    this.props.lock.show({ closable: true }, (err, profile, token) => {
       if (err) {
         console.log(err);
         return;
