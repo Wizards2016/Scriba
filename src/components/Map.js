@@ -13,7 +13,6 @@ import {
   TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
-import TabBar from './TabBar';
 
 const styles = StyleSheet.create({
   container: {
