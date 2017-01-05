@@ -51,7 +51,9 @@ export default class Map extends Component {
 
       }
     };
+
     this.onRegionChange = this.onRegionChange.bind(this);
+    this.postMessage = this.postMessage.bind(this);
   }
 
   watchID: ?number = null;
@@ -97,6 +99,10 @@ export default class Map extends Component {
   }
 
   postMessage(text) {
+    // Clear the text input field
+    this._textInput.setNativeProps({text: ''});
+
+    // Post the message to the database
     fetch('http://127.0.0.1:8000/messages', {
       method: 'POST',
       headers: {
@@ -168,6 +174,7 @@ export default class Map extends Component {
           )}
         </MapView>
         <TextInput 
+          ref={component => this._textInput = component}
           style={styles.input}
           onSubmitEditing={(text) => this.postMessage( text.nativeEvent.text  )}
           placeholder="Type a message"
