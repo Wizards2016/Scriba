@@ -10,9 +10,9 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import TimeAgo from 'react-native-timeago';
+import Button from 'react-native-button';
 import UpArrow from '../media/arrow_up.png';
 import DownArrow from '../media/arrow_down.png';
-import Button from 'react-native-button';
 
 const styles = StyleSheet.create({
   modalContent: {
@@ -124,7 +124,7 @@ export default class PostInfo extends Component {
               height: 45,
               overflow: 'hidden',
               borderRadius: 4,
-              backgroundColor: 'blue',
+              backgroundColor: '#4b89ed',
               margin: 5
             }}
             style={{ color: 'white' }}

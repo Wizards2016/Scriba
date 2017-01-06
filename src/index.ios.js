@@ -65,10 +65,11 @@ export default class Scribe extends Component {
   render() {
     return (
       <TabBarIOS
-        unselectedTintColor="white"
-        tintColor="white"
+        unselectedTintColor="#000000"
+        tintColor="#4b89ed"
         unselectedItemTintColor="#000000"
-        barTintColor="#186bf2"
+        barTintColor="white"
+        translucent={true}
       >
         <TabBarIOS.Item
           icon={Globe}
