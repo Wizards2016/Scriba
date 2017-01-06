@@ -3,7 +3,8 @@ import {
   StyleSheet,
   ListView,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  Text
 } from 'react-native';
 import PostRow from './PostRow';
 
@@ -11,6 +12,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20
+  },
+  text: {
+    textAlign: 'center'
   }
 });
 
@@ -58,12 +62,20 @@ export default class Posts extends Component {
           />
         }
       >
+
+      { this.props.data.length > 0 ?
         <ListView
+          enableEmptySections={true}
           automaticallyAdjustContentInsets={false}
           contentContainerStyle={styles.container}
           dataSource={this.state.dataSource}
           renderRow={data => <PostRow message={data} />}
         />
+        :
+        <Text style={styles.text}>
+          There are no visible messages nearby.
+        </Text>
+      }
       </ScrollView>
     );
   }
