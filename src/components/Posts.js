@@ -7,6 +7,8 @@ import {
   Text
 } from 'react-native';
 import PostRow from './PostRow';
+import PostSorting from '../util/PostSorting';
+import AuthService from '../util/AuthService';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,8 +28,11 @@ export default class Posts extends Component {
   constructor(props) {
     super(props);
 
+    // Sort posts by time
+    let sortedPosts = PostSorting.sortByTime(props.data);
+
     this.state = {
-      dataSource: ds.cloneWithRows(props.data),
+      dataSource: ds.cloneWithRows(sortedPosts),
       refreshing: false
     };
 

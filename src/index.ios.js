@@ -34,7 +34,9 @@ export default class Scribe extends Component {
 
   getMessages(cb) {
     if (this.state.location.latitude && this.state.location.longitude) {
-      fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, { method: 'GET'})
+      fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, {
+          method: 'GET'
+        })
         .then(response => response.json())
         .then((responseData) => {
           this.setState({
