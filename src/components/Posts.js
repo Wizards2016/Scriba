@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import PostRow from './PostRow';
 import PostSorting from '../util/PostSorting';
-import AuthService from '../util/AuthService';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,7 +28,7 @@ export default class Posts extends Component {
     super(props);
 
     // Sort posts by time
-    let sortedPosts = PostSorting.sortByTime(props.data);
+    const sortedPosts = PostSorting.sortByTime(props.data);
 
     this.state = {
       dataSource: ds.cloneWithRows(sortedPosts),
@@ -41,8 +40,10 @@ export default class Posts extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const sortedPosts = PostSorting.sortByTime(nextProps.data);
+
     this.setState({
-      dataSource: ds.cloneWithRows(nextProps.data)
+      dataSource: ds.cloneWithRows(sortedPosts)
     });
   }
 
@@ -68,19 +69,19 @@ export default class Posts extends Component {
         }
       >
 
-      { this.props.data.length > 0 ?
-        <ListView
-          enableEmptySections={true}
-          automaticallyAdjustContentInsets={false}
-          contentContainerStyle={styles.container}
-          dataSource={this.state.dataSource}
-          renderRow={data => <PostRow message={data} />}
-        />
-        :
-        <Text style={styles.text}>
-          There are no visible messages nearby.
-        </Text>
-      }
+        { this.props.data.length > 0 ?
+          <ListView
+            enableEmptySections={true}
+            automaticallyAdjustContentInsets={false}
+            contentContainerStyle={styles.container}
+            dataSource={this.state.dataSource}
+            renderRow={data => <PostRow message={data} />}
+          />
+          :
+          <Text style={styles.text}>
+            There are no visible messages nearby.
+          </Text>
+        }
       </ScrollView>
     );
   }
