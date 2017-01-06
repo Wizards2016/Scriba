@@ -22,30 +22,42 @@ export default class Scribe extends Component {
 
     this.state = {
       data: [],
+      location: null,
       selectedTab: 'map',
       userAuth: null
     };
 
+    this.updateLocation = this.updateLocation.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.updateUser = this.updateUser.bind(this);
   }
 
-  getMessages(currentRegion) {
-    fetch(`http://127.0.0.1:8000/Messages?latitude=${currentRegion.latitude}&longitude=${currentRegion.longitude}`, {
-      method: 'GET'
-    })
-    .then(response => response.json())
-    .then((responseData) => {
-      this.setState({
-        data: responseData
-      });
-    });
+  getMessages(cb) {
+    if (this.state.location.latitude && this.state.location.longitude) {
+      fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, { method: 'GET'})
+        .then(response => response.json())
+        .then((responseData) => {
+          this.setState({
+            data: responseData
+          }, () => {
+            if (cb) {
+              cb();
+            }
+          });
+        });
+    }
   }
 
   updateUser(userAuth) {
     this.setState({
       userAuth: userAuth
     });
+  }
+
+  updateLocation(currentRegion) {
+    this.setState({
+      location: currentRegion
+    }, this.getMessages);
   }
 
   render() {
@@ -67,6 +79,8 @@ export default class Scribe extends Component {
           }}
         >
           <Map
+            location={this.state.location}
+            updateLocation={this.updateLocation}
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
@@ -84,6 +98,8 @@ export default class Scribe extends Component {
         >
           <Posts
             data={this.state.data}
+            location={this.state.location}
+            getMessages={this.getMessages}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item

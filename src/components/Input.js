@@ -25,7 +25,6 @@ export default class Settings extends Component {
   postMessage(text) {
     // Clear the text input field
     this._textInput.setNativeProps({ text: '' });
-
     // Post the message to the database
     fetch('http://127.0.0.1:8000/messages', {
       method: 'POST',
@@ -35,14 +34,12 @@ export default class Settings extends Component {
       },
       body: JSON.stringify({
         text: text,
-        latitude: this.props.position.latitude,
-        longitude: this.props.position.longitude,
+        latitude: this.props.location.latitude,
+        longitude: this.props.location.longitude,
         userAuth: this.props.userAuth
       })
     })
-    .then(() => {
-      this.props.updateMessages();
-    });
+    .then(() => { this.props.getMessages(); });
   }
 
   render() {

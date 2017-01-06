@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   ListView,
-  ScrollView
+  ScrollView,
+  RefreshControl
 } from 'react-native';
 import PostRow from './PostRow';
 
@@ -22,8 +23,12 @@ export default class Posts extends Component {
     super(props);
 
     this.state = {
-      dataSource: ds.cloneWithRows(props.data)
+      dataSource: ds.cloneWithRows(props.data),
+      refreshing: false
     };
+
+    this.updateRefreshing = this.updateRefreshing.bind(this);
+    this.refreshMessages = this.refreshMessages.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,9 +37,27 @@ export default class Posts extends Component {
     });
   }
 
+  refreshMessages() {
+    this.setState({refreshing: true});
+    this.props.getMessages(this.updateRefreshing);
+  }
+
+  updateRefreshing() {
+    this.setState({
+      refreshing: false
+    });
+  }
+
   render() {
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.refreshMessages}
+          />
+        }
+      >
         <ListView
           automaticallyAdjustContentInsets={false}
           contentContainerStyle={styles.container}

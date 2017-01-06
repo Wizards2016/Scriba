@@ -31,14 +31,9 @@ export default class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      position: {
-        latitude: 0,
-        longitude: 0
-      }
     };
 
-    this.updatePosition = this.updatePosition.bind(this);
-    this.updateMessages = this.updateMessages.bind(this);
+    this.updateLocation = this.updateLocation.bind(this);
   }
 
   watchID: ?number = null;
@@ -46,38 +41,24 @@ export default class Map extends Component {
   componentDidMount(){
     this.getCurrentPosition();
     this.watchID = navigator.geolocation.watchPosition((position) => {
-      this.setState({
-        position: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }
-      }, () => this.updateMessages);
+      this.updateLocation(position);
     });
   }
 
   getCurrentPosition(){
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        this.updatePosition(position);
+        this.updateLocation(position);
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
   }
 
-  updatePosition(region) {
-    this.setState({
-      position: {
-        latitude: region.latitude,
-        longitude: region.longitude
-      }
-    });
-  }
-
-  updateMessages(){
-    const latitude = this.state.position.latitude;
-    const longitude = this.state.position.longitude;
-    this.props.getMessages({
+  updateLocation(position){
+    const latitude = position.latitude;
+    const longitude = position.longitude;
+    this.props.updateLocation({
       latitude: latitude,
       longitude: longitude
     });
@@ -88,8 +69,7 @@ export default class Map extends Component {
       <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
         <MapView id="map-view"
           style={styles.map}
-          onRegionChange={this.updatePosition}
-          onRegionChangeComplete={this.updateMessages}
+          onRegionChangeComplete={this.updateLocation}
           followsUserLocation={true}
           showsUserLocation={true}
           loadingEnabled={true}
@@ -118,8 +98,8 @@ export default class Map extends Component {
           )}
         </MapView>
         <Input
-          updateMessages={this.updateMessages}
-          position={this.state.position}
+          getMessages={this.props.getMessages}
+          location={this.props.location}
           userAuth={this.props.userAuth}
         />
       </KeyboardAvoidingView>
