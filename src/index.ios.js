@@ -24,7 +24,7 @@ export default class Scribe extends Component {
       data: [],
       location: null,
       selectedTab: 'map',
-      userAuth: null
+      userAuth: null,
     };
 
     this.updateLocation = this.updateLocation.bind(this);

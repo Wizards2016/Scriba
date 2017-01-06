@@ -43,11 +43,14 @@ const styles = StyleSheet.create({
 const PostRow = ({ message }) => {
   const text = message.text;
   const createdAt = message.createdAt;
-
+  const userAuth = message.userAuth;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
+        {`${userAuth}`}
+        {`\n\n`}
         {`${text}`}
+        {`\n`}
       </Text>
       <View style={styles.options}>
         <TimeAgo time={createdAt} interval={60000} />
