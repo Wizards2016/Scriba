@@ -51,11 +51,11 @@ export default class PostRow extends Component {
       modalVisible: false
     };
 
-    this.showPostInfo = this.showPostInfo.bind(this);
+    this.togglePostInfo = this.togglePostInfo.bind(this);
 
   }
 
-  showPostInfo() {
+  togglePostInfo() {
     this.setState((prevState, props) => {
       return {
         modalVisible: !prevState.modalVisible
@@ -72,9 +72,10 @@ export default class PostRow extends Component {
         <PostInfo
           visible={this.state.modalVisible}
           message={this.state.message}
+          togglePostInfo={this.togglePostInfo}
         />
         <TouchableOpacity onPress={() => {
-          this.showPostInfo();
+          this.togglePostInfo();
         }}>
           <Text style={styles.text}>
             {`${userAuth}`}
