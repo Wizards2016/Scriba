@@ -43,11 +43,11 @@ const styles = StyleSheet.create({
 const PostRow = ({ message }) => {
   const text = message.text;
   const createdAt = message.createdAt;
-  const userAuth = message.userAuth;
+  const username = message.username;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        {`${userAuth}`}
+        {`${username}`}
         {`\n\n`}
         {`${text}`}
         {`\n`}

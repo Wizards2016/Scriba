@@ -22,7 +22,7 @@ sortByDistance = function(currentLocation, posts) {
   });
 
   return posts;
-}
+};
 
 // Sorts from newest to oldest
 sortByTime = function(posts) {
@@ -31,12 +31,12 @@ sortByTime = function(posts) {
   });
 
   return posts;
-}
+};
 
 // Convert degrees to radians
 _degreesToRad = function(degree) {
   return degree * (Math.PI / 180);
-}
+};
 
 exports.sortByDistance = sortByDistance;
 exports.sortByTime = sortByTime;

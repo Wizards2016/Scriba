@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  TabBarIOS
+  TabBarIOS,
+  AsyncStorage
 } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 import Map from './components/Map';
@@ -25,18 +26,20 @@ export default class Scribe extends Component {
       location: null,
       selectedTab: 'map',
       userAuth: null,
+      username: null
     };
 
     this.updateLocation = this.updateLocation.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.login = this.login.bind(this);
   }
 
   getMessages(cb) {
     if (this.state.location.latitude && this.state.location.longitude) {
       fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, {
-          method: 'GET'
-        })
+        method: 'GET'
+      })
         .then(response => response.json())
         .then((responseData) => {
           this.setState({
@@ -50,9 +53,10 @@ export default class Scribe extends Component {
     }
   }
 
-  updateUser(userAuth) {
+  updateUser(userAuth, username) {
     this.setState({
-      userAuth: userAuth
+      userAuth: userAuth,
+      username: username
     });
   }
 
@@ -60,6 +64,23 @@ export default class Scribe extends Component {
     this.setState({
       location: currentRegion
     }, this.getMessages);
+  }
+
+  login() {
+    lock.show({ closable: true }, (err, profile, token) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(profile, token);
+      let username = profile.extraInfo.username;
+      if(username) {
+        this.updateUser(username, username);
+      } else {
+        this.updateUser(profile.userId);
+      }
+      AsyncStorage.setItem('id_token', JSON.stringify(token));
+    });
   }
 
   render() {
@@ -81,11 +102,14 @@ export default class Scribe extends Component {
           }}
         >
           <Map
+            lock={lock}
             location={this.state.location}
             updateLocation={this.updateLocation}
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
+            login={this.login}
+            username={this.state.username}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
@@ -118,6 +142,7 @@ export default class Scribe extends Component {
             lock={lock}
             userAuth={this.state.userAuth}
             updateUser={this.updateUser}
+            login={this.login}
           />
         </TabBarIOS.Item>
       </TabBarIOS>
