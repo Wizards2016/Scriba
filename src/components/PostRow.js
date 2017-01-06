@@ -107,7 +107,7 @@ export default class PostRow extends Component {
 const PostRow = ({ message }) => {
   const text = message.text;
   const createdAt = message.createdAt;
-  const username = message.username;
+  const username = message.UserDisplayName;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
