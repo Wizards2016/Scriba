@@ -102,6 +102,8 @@ export default class Map extends Component {
           location={this.props.location}
           userAuth={this.props.userAuth}
           userName={this.props.userName}
+          login={this.props.login}
+          logout={this.props.logout}
         />
       </KeyboardAvoidingView>
     );

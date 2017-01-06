@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
 const PostRow = ({ message }) => {
   const text = message.text;
   const createdAt = message.createdAt;
-
+  const userName = message.userName;
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
+        {`${userName}\n`}
         {`${text}`}
       </Text>
       <View style={styles.options}>
