@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  TabBarIOS
+  TabBarIOS,
+  AsyncStorage
 } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 import Map from './components/Map';
@@ -24,7 +25,8 @@ export default class Scribe extends Component {
       data: [],
       location: null,
       selectedTab: 'map',
-      userAuth: null
+      userAuth: null,
+      username: null
     };
 
     this.updateLocation = this.updateLocation.bind(this);
@@ -36,8 +38,8 @@ export default class Scribe extends Component {
   getMessages(cb) {
     if (this.state.location.latitude && this.state.location.longitude) {
       fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, {
-          method: 'GET'
-        })
+        method: 'GET'
+      })
         .then(response => response.json())
         .then((responseData) => {
           this.setState({
@@ -51,9 +53,10 @@ export default class Scribe extends Component {
     }
   }
 
-  updateUser(userAuth) {
+  updateUser(userAuth, username) {
     this.setState({
-      userAuth: userAuth
+      userAuth: userAuth,
+      username: username
     });
   }
 
@@ -70,7 +73,12 @@ export default class Scribe extends Component {
         return;
       }
       console.log(profile, token);
-      this.updateUser(profile.extraInfo.username);
+      let username = profile.extraInfo.username;
+      if(username) {
+        this.updateUser(username, username);
+      } else {
+        this.updateUser(profile.userId);
+      }
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
   }
@@ -95,12 +103,14 @@ export default class Scribe extends Component {
           }}
         >
           <Map
+            lock={lock}
             location={this.state.location}
             updateLocation={this.updateLocation}
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
             login={this.login}
+            username={this.state.username}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
@@ -133,6 +143,7 @@ export default class Scribe extends Component {
             lock={lock}
             userAuth={this.state.userAuth}
             updateUser={this.updateUser}
+            login={this.login}
           />
         </TabBarIOS.Item>
       </TabBarIOS>

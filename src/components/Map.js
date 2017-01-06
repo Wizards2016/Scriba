@@ -98,10 +98,12 @@ export default class Map extends Component {
           )}
         </MapView>
         <Input
+          lock={this.props.lock}
           getMessages={this.props.getMessages}
           location={this.props.location}
           userAuth={this.props.userAuth}
           login={this.props.login}
+          username={this.props.username}
         />
       </KeyboardAvoidingView>
     );
