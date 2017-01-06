@@ -24,7 +24,8 @@ export default class Scribe extends Component {
       data: [],
       location: null,
       selectedTab: 'map',
-      userAuth: null
+      userAuth: null,
+      userName: null
     };
 
     this.updateLocation = this.updateLocation.bind(this);
@@ -50,8 +51,9 @@ export default class Scribe extends Component {
     }
   }
 
-  updateUser(userAuth) {
+  updateUser(userName, userAuth) {
     this.setState({
+      userName: userName,
       userAuth: userAuth
     });
   }
@@ -86,6 +88,7 @@ export default class Scribe extends Component {
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
+            userName={this.state.userName}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item

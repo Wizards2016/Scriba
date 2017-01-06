@@ -36,7 +36,8 @@ export default class Settings extends Component {
         text: text,
         latitude: this.props.location.latitude,
         longitude: this.props.location.longitude,
-        userAuth: this.props.userAuth
+        userAuth: this.props.userAuth,
+        userName: this.props.userName
       })
     })
     .then(() => { this.props.getMessages(); });

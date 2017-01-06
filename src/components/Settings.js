@@ -30,7 +30,8 @@ export default class Settings extends Component {
         console.log(err);
         return;
       }
-      this.props.updateUser(profile.userId);
+      console.log(profile, token);
+      this.props.updateUser(profile.extraInfo.username, profile.userId);
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
   }
