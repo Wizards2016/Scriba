@@ -52,16 +52,15 @@ export default class PostRow extends Component {
     };
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
-
   }
 
   togglePostInfo() {
-    this.setState((prevState, props) => {
+    this.setState((prevState) => {
       return {
         modalVisible: !prevState.modalVisible
       };
     });
-  };
+  }
 
   render() {
     const text = this.state.message.text;
@@ -78,10 +77,9 @@ export default class PostRow extends Component {
           this.togglePostInfo();
         }}>
           <Text style={styles.text}>
-            {`${userAuth}`}
-            {`\n\n`}
-            {`${text}`}
+            {`${this.state.userAuth}`}
             {`\n`}
+            {`${text}`}
           </Text>
         </TouchableOpacity>
         <View style={styles.options}>

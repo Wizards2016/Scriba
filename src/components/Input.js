@@ -20,7 +20,8 @@ export default class Settings extends Component {
 
     this.state = {
     };
-    var that = this;
+
+    this.postMessage = this.postMessage.bind(this);
   }
 
   postMessage(text) {
@@ -43,7 +44,7 @@ export default class Settings extends Component {
       })
       .then(() => { this.props.getMessages(); });
     } else {
-      that.props.login();
+      this.props.login();
     }
   }
 
@@ -52,7 +53,7 @@ export default class Settings extends Component {
       <TextInput 
         ref={(component) => { this._textInput = component; }}
         style={styles.input}
-        onSubmitEditing={(text) => { this.postMessage( text.nativeEvent.text  ) }}
+        onSubmitEditing={(text) => { this.postMessage(text.nativeEvent.text ) }}
         placeholder="Type a message"
       />
     );
