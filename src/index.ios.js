@@ -153,7 +153,9 @@ export default class Scribe extends Component {
           <Settings
             lock={lock}
             userAuth={this.state.userAuth}
+            promptUN={this.state.promptUN}
             updateUser={this.updateUser}
+            updatePromptUN={this.updatePromptUN}
             login={this.login}
           />
         </TabBarIOS.Item>
