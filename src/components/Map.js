@@ -15,6 +15,7 @@ import {
 import MapView from 'react-native-maps';
 import Prompt from 'react-native-prompt';
 import Input from './Input';
+import UsernameCreate from './UsernameCreate';
 
 const styles = StyleSheet.create({
   container: {
@@ -106,17 +107,10 @@ export default class Map extends Component {
           login={this.props.login}
           username={this.props.username}
         />
-        <Prompt
-          visible={this.props.promptUN}
-          placeholder='Enter a username'
-          onCancel={() => {
-            this.props.updateUser(null, null);
-            this.props.updatePromptUN(false);
-          }}
-          onSubmit={(value) => {
-            this.props.updateUser(value, value);
-            this.props.updatePromptUN(false);
-          }}
+        <UsernameCreate
+          promptUN={this.props.promptUN}
+          updateUser={this.props.updateUser}
+          updatePromptUN={this.props.updatePromptUN}
         />
       </KeyboardAvoidingView>
     );

@@ -6,6 +6,7 @@ import {
   AsyncStorage,
   ScrollView
 } from 'react-native';
+import UsernameCreate from './UsernameCreate';
 
 const styles = StyleSheet.create({
   welcome: {
@@ -44,6 +45,11 @@ export default class Settings extends Component {
           :
           <Button title="Login" onPress={this.props.login} />
         }
+        <UsernameCreate
+          promptUN={this.props.promptUN}
+          updateUser={this.props.updateUser}
+          updatePromptUN={this.props.updatePromptUN}
+        />
       </ScrollView>
     );
   }
