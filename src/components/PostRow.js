@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
   }
 });
 
-<<<<<<< HEAD
 export default class PostRow extends Component {
   constructor(props) {
     super(props);
@@ -66,7 +65,7 @@ export default class PostRow extends Component {
   render() {
     const text = this.state.message.text;
     const createdAt = this.state.message.createdAt;
-
+    const username = this.state.message.UserDisplayName;
     return (
       <View style={styles.container}>
         <PostInfo
@@ -78,7 +77,7 @@ export default class PostRow extends Component {
           this.togglePostInfo();
         }}>
           <Text style={styles.text}>
-            {`${this.state.userAuth}`}
+            {`${username}`}
             {`\n`}
             {`${text}`}
           </Text>
@@ -103,39 +102,6 @@ export default class PostRow extends Component {
             </TouchableOpacity>
             <Text style={styles.vote}>0</Text>
           </View>
-=======
-const PostRow = ({ message }) => {
-  const text = message.text;
-  const createdAt = message.createdAt;
-  const username = message.UserDisplayName;
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>
-        {`${username}`}
-        {`\n\n`}
-        {`${text}`}
-        {`\n`}
-      </Text>
-      <View style={styles.options}>
-        <TimeAgo time={createdAt} interval={60000} />
-        <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
-            <Image
-              style={{ width: 20, height: 20 }}
-              source={UpArrow}
-              accessibilityLabel="Up vote"
-            />
-          </TouchableOpacity>
-          <Text style={styles.vote}>2</Text>
-          <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
-            <Image
-              style={{ width: 20, height: 20 }}
-              source={DownArrow}
-              accessibilityLabel="Down vote"
-            />
-          </TouchableOpacity>
-          <Text style={styles.vote}>0</Text>
->>>>>>> Added login popup when usernames post without signin. Posts view isnt updating.
         </View>
       </View>
     );
