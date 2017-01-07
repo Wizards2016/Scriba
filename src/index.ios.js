@@ -142,7 +142,7 @@ export default class Scribe extends Component {
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={User}
-          title="Settings"
+          title="Profile"
           selected={this.state.selectedTab === 'settings'}
           onPress={() => {
             this.setState({
