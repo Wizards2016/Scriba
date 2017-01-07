@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     height: 40,
-    marginBottom: 48
+    marginBottom: 49
   }
 });
 
@@ -20,6 +20,7 @@ export default class Settings extends Component {
 
     this.state = {
     };
+
     this.postMessage = this.postMessage.bind(this);
   }
 
