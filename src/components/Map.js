@@ -13,6 +13,7 @@ import {
   TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
+import Prompt from 'react-native-prompt';
 import Input from './Input';
 
 const styles = StyleSheet.create({
@@ -104,6 +105,18 @@ export default class Map extends Component {
           userAuth={this.props.userAuth}
           login={this.props.login}
           username={this.props.username}
+        />
+        <Prompt
+          visible={this.props.promptUN}
+          placeholder='Enter a username'
+          onCancel={() => {
+            this.props.updateUser(null, null);
+            this.props.updatePromptUN(false);
+          }}
+          onSubmit={(value) => {
+            this.props.updateUser(value, value);
+            this.props.updatePromptUN(false);
+          }}
         />
       </KeyboardAvoidingView>
     );

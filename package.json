@@ -12,6 +12,7 @@
     "react-native-button": "^1.7.1",
     "react-native-lock": "^0.4.0",
     "react-native-maps": "^0.12.2",
+    "react-native-prompt": "^1.0.0",
     "react-native-timeago": "^0.3.0"
   },
   "devDependencies": {
