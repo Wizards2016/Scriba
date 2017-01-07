@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
 import TimeAgo from 'react-native-timeago';
 import UpArrow from '../media/arrow_up.png';
 import DownArrow from '../media/arrow_down.png';
+import PostInfo from './PostInfo';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,41 +41,70 @@ const styles = StyleSheet.create({
   }
 });
 
-const PostRow = ({ message }) => {
-  const text = message.text;
-  const createdAt = message.createdAt;
-  const userAuth = message.userAuth;
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>
-        {`${userAuth}`}
-        {`\n\n`}
-        {`${text}`}
-        {`\n`}
-      </Text>
-      <View style={styles.options}>
-        <TimeAgo time={createdAt} interval={60000} />
-        <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
-            <Image
-              style={{ width: 20, height: 20 }}
-              source={UpArrow}
-              accessibilityLabel="Up vote"
-            />
-          </TouchableOpacity>
-          <Text style={styles.vote}>2</Text>
-          <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
-            <Image
-              style={{ width: 20, height: 20 }}
-              source={DownArrow}
-              accessibilityLabel="Down vote"
-            />
-          </TouchableOpacity>
-          <Text style={styles.vote}>0</Text>
+export default class PostRow extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      message: props.message,
+      userAuth: props.message.userAuth,
+      modalVisible: false
+    };
+
+    this.togglePostInfo = this.togglePostInfo.bind(this);
+  }
+
+  togglePostInfo() {
+    this.setState((prevState) => {
+      return {
+        modalVisible: !prevState.modalVisible
+      };
+    });
+  }
+
+  render() {
+    const text = this.state.message.text;
+    const createdAt = this.state.message.createdAt;
+
+    return (
+      <View style={styles.container}>
+        <PostInfo
+          visible={this.state.modalVisible}
+          message={this.state.message}
+          togglePostInfo={this.togglePostInfo}
+        />
+        <TouchableOpacity onPress={() => {
+          this.togglePostInfo();
+        }}>
+          <Text style={styles.text}>
+            {`${this.state.userAuth}`}
+            {`\n`}
+            {`${text}`}
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.options}>
+          <TimeAgo time={createdAt} interval={60000} />
+          <View style={styles.buttons}>
+            <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={UpArrow}
+                accessibilityLabel="Up vote"
+              />
+            </TouchableOpacity>
+            <Text style={styles.vote}>2</Text>
+            <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={DownArrow}
+                accessibilityLabel="Down vote"
+              />
+            </TouchableOpacity>
+            <Text style={styles.vote}>0</Text>
+          </View>
         </View>
       </View>
-    </View>
-  );
-};
+    );
+  }
 
-export default PostRow;
+};

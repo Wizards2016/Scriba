@@ -24,12 +24,13 @@ export default class Scribe extends Component {
       data: [],
       location: null,
       selectedTab: 'map',
-      userAuth: null,
+      userAuth: null
     };
 
     this.updateLocation = this.updateLocation.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.login = this.login.bind(this);
   }
 
   getMessages(cb) {
@@ -62,13 +63,26 @@ export default class Scribe extends Component {
     }, this.getMessages);
   }
 
+  login() {
+    lock.show({ closable: true }, (err, profile, token) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(profile, token);
+      this.updateUser(profile.extraInfo.username);
+      AsyncStorage.setItem('id_token', JSON.stringify(token));
+    });
+  }
+
   render() {
     return (
       <TabBarIOS
-        unselectedTintColor="white"
-        tintColor="white"
+        unselectedTintColor="#000000"
+        tintColor="#4b89ed"
         unselectedItemTintColor="#000000"
-        barTintColor="#186bf2"
+        barTintColor="white"
+        translucent={true}
       >
         <TabBarIOS.Item
           icon={Globe}
@@ -86,6 +100,7 @@ export default class Scribe extends Component {
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
+            login={this.login}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
