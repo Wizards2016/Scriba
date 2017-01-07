@@ -26,13 +26,15 @@ export default class Scribe extends Component {
       location: null,
       selectedTab: 'map',
       userAuth: null,
-      username: null
+      username: null,
+      promptUN: false
     };
 
     this.updateLocation = this.updateLocation.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.login = this.login.bind(this);
+    this.updatePromptUN = this.updatePromptUN.bind(this);
   }
 
   getMessages(cb) {
@@ -51,6 +53,12 @@ export default class Scribe extends Component {
           });
         });
     }
+  }
+
+  updatePromptUN(value) {
+    this.setState({
+      promptUN: value
+    });
   }
 
   updateUser(userAuth, username) {
@@ -75,9 +83,9 @@ export default class Scribe extends Component {
       console.log(profile, token);
       let username = profile.extraInfo.username;
       if(username) {
-        this.updateUser(username, username);
+        this.updateUser(profile.userId, username);
       } else {
-        this.updateUser(profile.userId);
+        this.updatePromptUN(true);
       }
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
@@ -106,11 +114,14 @@ export default class Scribe extends Component {
             lock={lock}
             location={this.state.location}
             updateLocation={this.updateLocation}
+            updateUser={this.updateUser}
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
             login={this.login}
             username={this.state.username}
+            promptUN={this.state.promptUN}
+            updatePromptUN={this.updatePromptUN}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
