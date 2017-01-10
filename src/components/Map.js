@@ -13,7 +13,9 @@ import {
   TabBarIOS
 } from 'react-native';
 import MapView from 'react-native-maps';
+import Prompt from 'react-native-prompt';
 import Input from './Input';
+import UsernameCreate from './UsernameCreate';
 
 const styles = StyleSheet.create({
   container: {
@@ -98,10 +100,19 @@ export default class Map extends Component {
           )}
         </MapView>
         <Input
+          lock={this.props.lock}
           getMessages={this.props.getMessages}
           location={this.props.location}
           userAuth={this.props.userAuth}
           login={this.props.login}
+          username={this.props.username}
+        />
+        <UsernameCreate
+          userAuth={this.props.userAuth}
+          verifyUsername={this.props.verifyUsername}
+          promptUN={this.props.promptUN}
+          updateUser={this.props.updateUser}
+          updatePromptUN={this.props.updatePromptUN}
         />
       </KeyboardAvoidingView>
     );

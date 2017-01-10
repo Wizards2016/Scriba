@@ -48,7 +48,7 @@ export default class Posts extends Component {
   }
 
   refreshMessages() {
-    this.setState({refreshing: true});
+    this.setState({ refreshing: true });
     this.props.getMessages(this.updateRefreshing);
   }
 

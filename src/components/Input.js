@@ -14,19 +14,22 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Settings extends Component {
+export default class Input extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
     };
-
+    
     this.postMessage = this.postMessage.bind(this);
   }
 
   postMessage(text) {
     // Clear the text input field
-    if(this.props.userName) {
+    let userAuth = this.props.userAuth;
+    let username = this.props.username;
+    if(userAuth && username) {
+      console.log(username);
       this._textInput.setNativeProps({ text: '' });
       // Post the message to the database
       fetch('http://127.0.0.1:8000/messages', {
@@ -39,21 +42,22 @@ export default class Settings extends Component {
           text: text,
           latitude: this.props.location.latitude,
           longitude: this.props.location.longitude,
-          userAuth: this.props.userAuth
+          userAuth: userAuth,
+          displayName: username
         })
       })
       .then(() => { this.props.getMessages(); });
-    } else {
+    } else if (!userAuth) {
       this.props.login();
     }
   }
 
   render() {
     return (
-      <TextInput 
+      <TextInput
         ref={(component) => { this._textInput = component; }}
         style={styles.input}
-        onSubmitEditing={(text) => { this.postMessage(text.nativeEvent.text ) }}
+        onSubmitEditing={(text) => { this.postMessage(text.nativeEvent.text); }}
         placeholder="Type a message"
       />
     );

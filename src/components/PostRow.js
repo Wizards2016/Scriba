@@ -47,7 +47,6 @@ export default class PostRow extends Component {
 
     this.state = {
       message: props.message,
-      userAuth: props.message.userAuth,
       modalVisible: false
     };
 
@@ -65,7 +64,7 @@ export default class PostRow extends Component {
   render() {
     const text = this.state.message.text;
     const createdAt = this.state.message.createdAt;
-
+    const username = this.state.message.UserDisplayName;
     return (
       <View style={styles.container}>
         <PostInfo
@@ -77,7 +76,7 @@ export default class PostRow extends Component {
           this.togglePostInfo();
         }}>
           <Text style={styles.text}>
-            {`${this.state.userAuth}`}
+            {`${username}`}
             {`\n`}
             {`${text}`}
           </Text>

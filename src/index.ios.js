@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
-  TabBarIOS
+  TabBarIOS,
+  AsyncStorage
 } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 import Map from './components/Map';
@@ -24,20 +25,24 @@ export default class Scribe extends Component {
       data: [],
       location: null,
       selectedTab: 'map',
-      userAuth: null
+      userAuth: null,
+      username: null,
+      promptUN: false
     };
 
     this.updateLocation = this.updateLocation.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.login = this.login.bind(this);
+    this.updatePromptUN = this.updatePromptUN.bind(this);
+    this.verifyUsername = this.verifyUsername.bind(this);
   }
 
   getMessages(cb) {
     if (this.state.location.latitude && this.state.location.longitude) {
       fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, {
-          method: 'GET'
-        })
+        method: 'GET'
+      })
         .then(response => response.json())
         .then((responseData) => {
           this.setState({
@@ -51,10 +56,77 @@ export default class Scribe extends Component {
     }
   }
 
-  updateUser(userAuth) {
-    this.setState({
-      userAuth: userAuth
+  verifyUsername(userAuth, username) {
+    fetch('http://127.0.0.1:8000/users?userAuth=' + userAuth, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      let post = true;
+      if (this.state.userAuth) {
+        if (res.status === 200) {
+          this.updateUser(userAuth, res.displayName);
+          this.updatePromptUN(false);
+          post = false;
+        } else if (!username) {
+          this.updatePromptUN(true);
+          post = false;
+        }
+      } else if (res.status === 200) {
+        this.updateUser(userAuth, username);
+        post = false;
+      }
+      if (this.state.userAuth && post || (post && res.status !== 200)) {
+        fetch('http://127.0.0.1:8000/users', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userAuth: userAuth,
+            displayName: username
+          })
+        })
+        .then(res2 => {
+          if (res2.status === 201) {
+            this.updateUser(userAuth, username);
+            this.updatePromptUN(false);    
+          }
+        })
+        .catch(err => {
+          console.log('POST request err: ', err);
+        });
+      }
+    })
+    .catch(err => {
+      console.log('GET request err: ', err);
+      throw err;
     });
+  }
+
+  updatePromptUN(value) {
+    if (this.state.promptUN !== value) {
+      this.setState({
+        promptUN: value
+      });
+    }
+  }
+
+  updateUser(userAuth, username) {
+    if (this.state.promptUN === userAuth) {
+      this.setState({
+        username: username
+      });
+    } else {
+      this.setState({
+        userAuth: userAuth,
+        username: username
+      });
+    }
   }
 
   updateLocation(currentRegion) {
@@ -69,8 +141,15 @@ export default class Scribe extends Component {
         console.log(err);
         return;
       }
-      console.log(profile, token);
-      this.updateUser(profile.extraInfo.username);
+      let userAuth = profile.userId;
+      console.log(userAuth);
+      let username = profile.extraInfo.username;
+      if(username) {
+        this.verifyUsername(userAuth, username);
+      } else {
+        this.updateUser(userAuth);
+        this.verifyUsername(userAuth);
+      }
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
   }
@@ -95,12 +174,18 @@ export default class Scribe extends Component {
           }}
         >
           <Map
+            lock={lock}
             location={this.state.location}
             updateLocation={this.updateLocation}
+            updateUser={this.updateUser}
             getMessages={this.getMessages}
             data={this.state.data}
             userAuth={this.state.userAuth}
             login={this.login}
+            username={this.state.username}
+            promptUN={this.state.promptUN}
+            updatePromptUN={this.updatePromptUN}
+            verifyUsername={this.verifyUsername}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
@@ -121,7 +206,7 @@ export default class Scribe extends Component {
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={User}
-          title="Settings"
+          title="Profile"
           selected={this.state.selectedTab === 'settings'}
           onPress={() => {
             this.setState({
@@ -132,7 +217,11 @@ export default class Scribe extends Component {
           <Settings
             lock={lock}
             userAuth={this.state.userAuth}
+            promptUN={this.state.promptUN}
             updateUser={this.updateUser}
+            updatePromptUN={this.updatePromptUN}
+            login={this.login}
+            verifyUsername={this.verifyUsername}
           />
         </TabBarIOS.Item>
       </TabBarIOS>

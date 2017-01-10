@@ -6,6 +6,7 @@ import {
   AsyncStorage,
   ScrollView
 } from 'react-native';
+import UsernameCreate from './UsernameCreate';
 
 const styles = StyleSheet.create({
   welcome: {
@@ -20,20 +21,7 @@ export default class Settings extends Component {
     this.state = {
     };
 
-    this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
-  }
-
-  login() {
-    this.props.lock.show({ closable: true }, (err, profile, token) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(profile, token);
-      this.props.updateUser(profile.extraInfo.username);
-      AsyncStorage.setItem('id_token', JSON.stringify(token));
-    });
   }
 
   logout() {
@@ -41,7 +29,7 @@ export default class Settings extends Component {
     .then(() => {
       AsyncStorage.getItem('id_token')
       .then(() => {
-        this.props.updateUser(null);
+        this.props.updateUser(null, null);
       });
     });
   }
@@ -55,8 +43,15 @@ export default class Settings extends Component {
         { this.props.userAuth ?
           <Button title="Logout" onPress={this.logout} />
           :
-          <Button title="Login" onPress={this.login} />
+          <Button title="Login" onPress={this.props.login} />
         }
+        <UsernameCreate
+          userAuth={this.props.userAuth}
+          verifyUsername={this.props.verifyUsername}
+          promptUN={this.props.promptUN}
+          updateUser={this.props.updateUser}
+          updatePromptUN={this.props.updatePromptUN}
+        />
       </ScrollView>
     );
   }
