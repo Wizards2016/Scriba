@@ -47,7 +47,6 @@ export default class PostRow extends Component {
 
     this.state = {
       message: props.message,
-      userAuth: props.message.userAuth,
       modalVisible: false
     };
 
