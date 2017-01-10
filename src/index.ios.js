@@ -64,10 +64,12 @@ export default class Scribe extends Component {
         'Content-Type': 'application/json'
       }
     })
+    .then(res => res.json())
     .then(res => {
       let post = true;
       if (this.state.userAuth) {
         if (res.status === 200) {
+          console.log(res);
           this.updateUser(userAuth, res.displayName);
           this.updatePromptUN(false);
           post = false;
@@ -150,6 +152,7 @@ export default class Scribe extends Component {
         this.updateUser(userAuth);
         this.verifyUsername(userAuth);
       }
+      console.log(this.state);
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
   }
