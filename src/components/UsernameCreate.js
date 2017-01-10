@@ -7,6 +7,7 @@ export default class UsernameCreate extends Component {
   }
   
   render() {
+
     return (
       <Prompt
         title='Enter a username'
@@ -17,8 +18,7 @@ export default class UsernameCreate extends Component {
           this.props.updatePromptUN(false);
         }}
         onSubmit={(value) => {
-          this.props.updateUser(value, value);
-          this.props.updatePromptUN(false);
+          this.props.verifyUsername(this.props.userAuth, value);
         }}
       />
     );

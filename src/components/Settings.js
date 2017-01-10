@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Settings extends Component {
+export default class Input extends Component {
   constructor(props) {
     super(props);
 
@@ -46,6 +46,8 @@ export default class Settings extends Component {
           <Button title="Login" onPress={this.props.login} />
         }
         <UsernameCreate
+          userAuth={this.props.userAuth}
+          verifyUsername={this.props.verifyUsername}
           promptUN={this.props.promptUN}
           updateUser={this.props.updateUser}
           updatePromptUN={this.props.updatePromptUN}

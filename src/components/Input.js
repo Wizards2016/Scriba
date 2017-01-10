@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Settings extends Component {
+export default class Input extends Component {
   constructor(props) {
     super(props);
 
