@@ -57,73 +57,6 @@ export default class Scribe extends Component {
   }
 
   verifyUsername(userAuth, username) {
-    // if (this.state.userAuth) {
-    //   fetch('http://127.0.0.1:8000/users', {
-    //     method: 'GET',
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       userAuth: userAuth,
-    //     })
-    //   }).then((res1) => {
-    //     if (res1.status === 201) {
-    //       this.updateUser(userAuth, res1.body.displayName);
-    //     } else if (!username) {
-    //       this,updatePromptUN(true);
-    //     } else {
-    //       fetch('http://127.0.0.1:8000/users', {
-    //         method: 'POST',
-    //         headers: {
-    //           Accept: 'application/json',
-    //           'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //           userAuth: userAuth,
-    //           displayName: username
-    //         })
-    //       }).then((res2) => {
-    //         if(res2.status === 201) {
-    //           this.updateUser(userAuth, username);
-    //           this.updatePromptUN(false);
-    //         }
-    //       });
-    //     }
-    //   });
-    // } else {
-    //   fetch('http://127.0.0.1:8000/users', {
-    //     method: 'GET',
-    //     headers: {
-    //       Accept: 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify({
-    //       userAuth: userAuth,
-    //       displayName: displayName 
-    //     })
-    //   }).then((res1) => {
-    //     if (res1.status === 201) {
-    //       this.updateUser(userAuth, username);
-    //     } else {
-    //       fetch('http://127.0.0.1:8000/users', {
-    //         method: 'POST',
-    //         headers: {
-    //           Accept: 'application/json',
-    //           'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //           userAuth: userAuth,
-    //           displayName: username
-    //         })
-    //       }).then((res2) => {
-    //         if(res2.status === 201) {
-    //           this.updateUser(userAuth, username);
-    //         }
-    //       });
-    //     }
-    //   });
-    // }
     fetch('http://127.0.0.1:8000/users?userAuth=' + userAuth, {
       method: 'GET',
       headers: {
@@ -133,7 +66,6 @@ export default class Scribe extends Component {
     })
     .then(res => {
       let post = true;
-      console.log(res);
       if (this.state.userAuth) {
         if (res.status === 200) {
           this.updateUser(userAuth, res.displayName);
@@ -158,41 +90,20 @@ export default class Scribe extends Component {
             userAuth: userAuth,
             displayName: username
           })
-        }).then((res2) => {
+        })
+        .then(res2 => {
           if (res2.status === 201) {
             this.updateUser(userAuth, username);
             this.updatePromptUN(false);    
           }
+        })
+        .catch(err => {
+          console.log('POST request err: ', err);
         });
       }
-
-      // if (res1.status !== 201) {
-      //   fetch('http://127.0.0.1:8000/users', {
-      //     method: 'POST',
-      //     headers: {
-      //       Accept: 'application/json',
-      //       'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({
-      //       userAuth: userAuth,
-      //       displayName: username
-      //     })
-      //   }).then((res2) => {
-      //     if (res2.status === 201) {
-      //       this.updateUser(userAuth, username);
-      //       if (this.state.promptUN) {
-      //         this.updatePromptUN(false);
-      //       }
-      //     }
-      //   });
-      // } else {
-      //   this.updateUser(userAuth, username);
-      //   if (this.state.promptUN) {
-      //     this.updatePromptUN(false);
-      //   }
-      // }
     })
     .catch(err => {
+      console.log('GET request err: ', err);
       throw err;
     });
   }
