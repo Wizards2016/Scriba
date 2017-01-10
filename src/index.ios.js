@@ -35,6 +35,7 @@ export default class Scribe extends Component {
     this.updateUser = this.updateUser.bind(this);
     this.login = this.login.bind(this);
     this.updatePromptUN = this.updatePromptUN.bind(this);
+    this.verifyUsername = this.verifyUsername.bind(this);
   }
 
   getMessages(cb) {
@@ -55,17 +56,166 @@ export default class Scribe extends Component {
     }
   }
 
-  updatePromptUN(value) {
-    this.setState({
-      promptUN: value
+  verifyUsername(userAuth, username) {
+    // if (this.state.userAuth) {
+    //   fetch('http://127.0.0.1:8000/users', {
+    //     method: 'GET',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       userAuth: userAuth,
+    //     })
+    //   }).then((res1) => {
+    //     if (res1.status === 201) {
+    //       this.updateUser(userAuth, res1.body.displayName);
+    //     } else if (!username) {
+    //       this,updatePromptUN(true);
+    //     } else {
+    //       fetch('http://127.0.0.1:8000/users', {
+    //         method: 'POST',
+    //         headers: {
+    //           Accept: 'application/json',
+    //           'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //           userAuth: userAuth,
+    //           displayName: username
+    //         })
+    //       }).then((res2) => {
+    //         if(res2.status === 201) {
+    //           this.updateUser(userAuth, username);
+    //           this.updatePromptUN(false);
+    //         }
+    //       });
+    //     }
+    //   });
+    // } else {
+    //   fetch('http://127.0.0.1:8000/users', {
+    //     method: 'GET',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({
+    //       userAuth: userAuth,
+    //       displayName: displayName 
+    //     })
+    //   }).then((res1) => {
+    //     if (res1.status === 201) {
+    //       this.updateUser(userAuth, username);
+    //     } else {
+    //       fetch('http://127.0.0.1:8000/users', {
+    //         method: 'POST',
+    //         headers: {
+    //           Accept: 'application/json',
+    //           'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({
+    //           userAuth: userAuth,
+    //           displayName: username
+    //         })
+    //       }).then((res2) => {
+    //         if(res2.status === 201) {
+    //           this.updateUser(userAuth, username);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
+    fetch('http://127.0.0.1:8000/users?userAuth=' + userAuth, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      let post = true;
+      console.log(res);
+      if (this.state.userAuth) {
+        if (res.status === 200) {
+          this.updateUser(userAuth, res.displayName);
+          this.updatePromptUN(false);
+          post = false;
+        } else if (!username) {
+          this.updatePromptUN(true);
+          post = false;
+        }
+      } else if (res.status === 200) {
+        this.updateUser(userAuth, username);
+        post = false;
+      }
+      if (this.state.userAuth && post || (post && res.status !== 200)) {
+        fetch('http://127.0.0.1:8000/users', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userAuth: userAuth,
+            displayName: username
+          })
+        }).then((res2) => {
+          if (res2.status === 201) {
+            this.updateUser(userAuth, username);
+            this.updatePromptUN(false);    
+          }
+        });
+      }
+
+      // if (res1.status !== 201) {
+      //   fetch('http://127.0.0.1:8000/users', {
+      //     method: 'POST',
+      //     headers: {
+      //       Accept: 'application/json',
+      //       'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({
+      //       userAuth: userAuth,
+      //       displayName: username
+      //     })
+      //   }).then((res2) => {
+      //     if (res2.status === 201) {
+      //       this.updateUser(userAuth, username);
+      //       if (this.state.promptUN) {
+      //         this.updatePromptUN(false);
+      //       }
+      //     }
+      //   });
+      // } else {
+      //   this.updateUser(userAuth, username);
+      //   if (this.state.promptUN) {
+      //     this.updatePromptUN(false);
+      //   }
+      // }
+    })
+    .catch(err => {
+      throw err;
     });
   }
 
+  updatePromptUN(value) {
+    if (this.state.promptUN !== value) {
+      this.setState({
+        promptUN: value
+      });
+    }
+  }
+
   updateUser(userAuth, username) {
-    this.setState({
-      userAuth: userAuth,
-      username: username
-    });
+    if (this.state.promptUN === userAuth) {
+      this.setState({
+        username: username
+      });
+    } else {
+      this.setState({
+        userAuth: userAuth,
+        username: username
+      });
+    }
   }
 
   updateLocation(currentRegion) {
@@ -80,12 +230,14 @@ export default class Scribe extends Component {
         console.log(err);
         return;
       }
-      console.log(profile, token);
+      let userAuth = profile.userId;
+      console.log(userAuth);
       let username = profile.extraInfo.username;
       if(username) {
-        this.updateUser(profile.userId, username);
+        this.verifyUsername(userAuth, username);
       } else {
-        this.updatePromptUN(true);
+        this.updateUser(userAuth);
+        this.verifyUsername(userAuth);
       }
       AsyncStorage.setItem('id_token', JSON.stringify(token));
     });
@@ -122,6 +274,7 @@ export default class Scribe extends Component {
             username={this.state.username}
             promptUN={this.state.promptUN}
             updatePromptUN={this.updatePromptUN}
+            verifyUsername={this.verifyUsername}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
@@ -157,6 +310,7 @@ export default class Scribe extends Component {
             updateUser={this.updateUser}
             updatePromptUN={this.updatePromptUN}
             login={this.login}
+            verifyUsername={this.verifyUsername}
           />
         </TabBarIOS.Item>
       </TabBarIOS>

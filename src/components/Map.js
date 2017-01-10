@@ -108,6 +108,8 @@ export default class Map extends Component {
           username={this.props.username}
         />
         <UsernameCreate
+          userAuth={this.props.userAuth}
+          verifyUsername={this.props.verifyUsername}
           promptUN={this.props.promptUN}
           updateUser={this.props.updateUser}
           updatePromptUN={this.props.updatePromptUN}
