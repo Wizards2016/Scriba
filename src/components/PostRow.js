@@ -113,7 +113,6 @@ export default class PostRow extends Component {
 
   postVote(){
     //send vote state
-    console.log('posting the vote');
     fetch('http://127.0.0.1:8000/votes', {
         method: 'POST',
         headers: {
@@ -128,7 +127,6 @@ export default class PostRow extends Component {
         })
       })
       .then(() => { 
-        console.log('gettingmessages')
         this.props.getMessages();
       });
   }
@@ -196,7 +194,6 @@ export default class PostRow extends Component {
 
   postVote(){
     var remove = null;
-    console.log('posting ', this.props.username, this.props.userAuth);
     if(this.state.userVote === null){
       remove = true;
     }
@@ -221,7 +218,6 @@ export default class PostRow extends Component {
     const text = this.state.message.text;
     const createdAt = this.state.message.createdAt;
     const username = this.state.message.UserDisplayName;
-    console.log('MESSAGES AGAIN', this.state.message);
     return (
       <View style={styles.container}>
         <PostInfo
