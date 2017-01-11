@@ -62,57 +62,77 @@ export default class Scribe extends Component {
   }
 
   verifyUsername(userAuth, username) {
-    fetch('http://127.0.0.1:8000/users?userAuth=' + userAuth, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then(res => {
-      let post = true;
-      if (this.state.userAuth) {
-        if (res.status === 200) {
-          console.log(res);
-          this.updateUser(userAuth, res.displayName);
-          this.updatePromptUN(false);
-          post = false;
-        } else if (!username) {
-          this.updatePromptUN(true);
-          post = false;
+    if (this.state.userAuth) {
+      fetch('http://127.0.0.1:8000/users?userAuth=' + userAuth, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
         }
-      } else if (res.status === 200) {
-        this.updateUser(userAuth, username);
-        post = false;
-      }
-      if (this.state.userAuth && post || (post && res.status !== 200)) {
-        fetch('http://127.0.0.1:8000/users', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            userAuth: userAuth,
-            displayName: username
-          })
-        })
-        .then(res2 => {
-          if (res2.status === 201) {
-            this.updateUser(userAuth, username);
-            this.updatePromptUN(false);    
+      })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          return res;
+        }
+      })
+      .then(res => {
+        console.log(res);
+        if (res.status === 200) {
+          this.updateUser(userAuth, res.displayName);
+        } else {
+          if (!username) {
+            this.updatePromptUN(true);
+          } else {
+            console.log(this.state);
+            fetch('http://127.0.0.1:8000/users', {
+              method: 'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                userAuth: userAuth,
+                displayName: username
+              })
+            })
+            .then(res2 => {
+              if (res2.status === 201) {
+                this.updateUser(userAuth, username);
+                this.updatePromptUN(false);
+              }
+            })
+            .catch(err => {
+              console.log('POST request err: ', err);
+              throw err;
+            });
           }
+        }
+      })
+      .catch((err, result) => {
+        console.log('GET request err: ', err, result);
+        throw err;
+      });
+    } else {
+      fetch('http://127.0.0.1:8000/users', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userAuth: userAuth,
+          displayName: username
         })
-        .catch(err => {
-          console.log('POST request err: ', err);
-        });
-      }
-    })
-    .catch(err => {
-      console.log('GET request err: ', err);
-      throw err;
-    });
+      })
+      .then(res => {
+        this.updateUser(userAuth, username);
+      })
+      .catch(err => {
+        console.log('POST request err: ', err);
+      });
+    }
   }
 
   updatePromptUN(value) {
