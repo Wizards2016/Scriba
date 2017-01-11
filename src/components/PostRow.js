@@ -50,14 +50,9 @@ export default class PostRow extends Component {
     this.state = {
       message: props.message,
       modalVisible: false,
-      username: this.props.username,
-      userAuth: this.props.userAuth,
-      // username: "ThomasCruise",
-      // userAuth: "Thomas Cruise",
       userVote: props.message.userVote,
       upArrowToggle: UpArrow,
       downArrowToggle: DownArrow
-
     };
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
@@ -128,8 +123,8 @@ export default class PostRow extends Component {
         body: JSON.stringify({
           vote: this.state.userVote,
           messageId: this.state.messageId,
-          userAuth: this.state.userAuth,
-          displayName: this.state.username
+          userAuth: this.props.userAuth,
+          displayName: this.props.username
         })
       })
       .then(() => { 
@@ -139,7 +134,7 @@ export default class PostRow extends Component {
   }
 
   updateVote(clicked){
-    if(this.state.username){
+    if(this.props.username && this.props.userAuth){
       var up = 0;
       var down = 0;
       var newState = {};
@@ -201,7 +196,7 @@ export default class PostRow extends Component {
 
   postVote(){
     var remove = null;
-    console.log('posting ', this.state.username, this.state.userAuth);
+    console.log('posting ', this.props.username, this.props.userAuth);
     if(this.state.userVote === null){
       remove = true;
     }
@@ -215,8 +210,8 @@ export default class PostRow extends Component {
         vote: this.state.userVote,
         delete: remove,
         messageId: this.state.message.id,
-        userAuth: this.state.userAuth,
-        displayName: this.state.username
+        userAuth: this.props.userAuth,
+        displayName: this.props.username
       })
     })
     .then(() => { });
