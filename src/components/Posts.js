@@ -75,7 +75,13 @@ export default class Posts extends Component {
             automaticallyAdjustContentInsets={false}
             contentContainerStyle={styles.container}
             dataSource={this.state.dataSource}
-            renderRow={data => <PostRow message={data} />}
+            renderRow={data => 
+              <PostRow 
+                message={data}
+                username={this.props.username}
+                userAuth={this.props.userAuth}
+                login={this.props.login} 
+              />}
           />
           :
           <Text style={styles.text}>

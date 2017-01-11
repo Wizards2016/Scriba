@@ -9,6 +9,8 @@ import {
 import TimeAgo from 'react-native-timeago';
 import UpArrow from '../media/arrow_up.png';
 import DownArrow from '../media/arrow_down.png';
+import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
+import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 import PostInfo from './PostInfo';
 
 const styles = StyleSheet.create({
@@ -47,10 +49,19 @@ export default class PostRow extends Component {
 
     this.state = {
       message: props.message,
-      modalVisible: false
+      modalVisible: false,
+      username: this.props.username,
+      userAuth: this.props.userAuth,
+      // username: "ThomasCruise",
+      // userAuth: "Thomas Cruise",
+      userVote: props.message.userVote,
+      upArrowToggle: UpArrow,
+      downArrowToggle: DownArrow
+
     };
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
+    this.delayedVote = this.throttle(this.postVote, 1000);
   }
 
   togglePostInfo() {
@@ -61,10 +72,161 @@ export default class PostRow extends Component {
     });
   }
 
+  componentWillMount(){
+    this.updateArrow();
+  }
+
+  updateArrow(){
+    if(this.state.userVote){
+      this.setState({
+        upArrowToggle: UpArrowHighlighted
+      });
+    } else if(this.state.userVote === false) {
+      this.setState({
+        downArrowToggle: DownArrowHighlighted
+      });
+    }
+  }
+
+  throttle(func, wait) {
+    var wasRecentlyInvoked = false;
+    var doAgain = false;
+    var timerOn = false;
+    return function(){
+      var context = this;
+      if (!timerOn)
+        {
+          timerOn=true;
+          setTimeout(function(){
+            if(doAgain){
+              func.call(context);
+            }
+            wasRecentlyInvoked=false;
+            doAgain=false;
+            timerOn=false;
+          }, wait);
+        }
+      if(!wasRecentlyInvoked) {
+        func.call(context);
+        wasRecentlyInvoked=true;
+      }
+      else if (wasRecentlyInvoked && !doAgain) {
+        doAgain=true;
+      }
+    };
+  };
+
+  postVote(){
+    //send vote state
+    console.log('posting the vote');
+    fetch('http://127.0.0.1:8000/votes', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          vote: this.state.userVote,
+          messageId: this.state.messageId,
+          userAuth: this.state.userAuth,
+          displayName: this.state.username
+        })
+      })
+      .then(() => { 
+        console.log('gettingmessages')
+        this.props.getMessages();
+      });
+  }
+
+  updateVote(clicked){
+    if(this.state.username){
+      var up = 0;
+      var down = 0;
+      var newState = {};
+      var newMessage = {};
+
+      for(var key in this.state.message){
+          newMessage[key] = this.state.message[key];
+      }
+      if(clicked === 'up'){
+        if(this.state.upArrowToggle === UpArrow){
+          up += 1;
+          if(this.state.downArrowToggle === DownArrowHighlighted){
+            down -= 1;
+          }
+          this.setState({
+            upArrowToggle: UpArrowHighlighted,
+            downArrowToggle: DownArrow,
+            userVote: true
+          });
+        } else if(this.state.upArrowToggle === UpArrowHighlighted){
+          up -= 1;
+          this.setState({
+            upArrowToggle: UpArrow,
+            downArrowToggle: DownArrow,
+            userVote: null
+          });
+        }
+      } else if(clicked === 'down') {
+        if(this.state.downArrowToggle === DownArrow){
+          down += 1;
+          if(this.state.upArrowToggle === UpArrowHighlighted){
+            up -= 1;
+          }
+          this.setState({
+            upArrowToggle: UpArrow,
+            downArrowToggle: DownArrowHighlighted,
+            userVote: false
+          });
+        } else if(this.state.downArrowToggle === DownArrowHighlighted){
+          down -= 1;
+          this.setState({
+            upArrowToggle: UpArrow,
+            downArrowToggle: DownArrow,
+            userVote: null
+          });
+        }
+      }
+      newMessage.upVotes = this.state.message.upVotes + up;
+      newMessage.downVotes = this.state.message.downVotes + down;
+      this.setState({
+        message: newMessage
+      }, () => {
+        this.delayedVote()
+      });
+    } else {
+      this.props.login();
+    }
+  }
+
+  postVote(){
+    var remove = null;
+    console.log('posting ', this.state.username, this.state.userAuth);
+    if(this.state.userVote === null){
+      remove = true;
+    }
+    fetch('http://127.0.0.1:8000/votes', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        vote: this.state.userVote,
+        delete: remove,
+        messageId: this.state.message.id,
+        userAuth: this.state.userAuth,
+        displayName: this.state.username
+      })
+    })
+    .then(() => { });
+  }
+
   render() {
     const text = this.state.message.text;
     const createdAt = this.state.message.createdAt;
     const username = this.state.message.UserDisplayName;
+    console.log('MESSAGES AGAIN', this.state.message);
     return (
       <View style={styles.container}>
         <PostInfo
@@ -84,22 +246,22 @@ export default class PostRow extends Component {
         <View style={styles.options}>
           <TimeAgo time={createdAt} interval={60000} />
           <View style={styles.buttons}>
-            <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
+            <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
               <Image
                 style={{ width: 20, height: 20 }}
-                source={UpArrow}
+                source={this.state.upArrowToggle}
                 accessibilityLabel="Up vote"
               />
             </TouchableOpacity>
-            <Text style={styles.vote}>2</Text>
-            <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
+            <Text style={styles.vote}>{this.state.message.upVotes}</Text>
+            <TouchableOpacity onPress={() => { this.updateVote('down'); }}>
               <Image
                 style={{ width: 20, height: 20 }}
-                source={DownArrow}
+                source={this.state.downArrowToggle}
                 accessibilityLabel="Down vote"
               />
             </TouchableOpacity>
-            <Text style={styles.vote}>0</Text>
+            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
           </View>
         </View>
       </View>
