@@ -52,6 +52,11 @@ export default class Scribe extends Component {
               cb();
             }
           });
+        })
+        .then(() => {
+          if(this.state.userAuth){
+            this.getUserVotes();
+          }
         });
     }
   }
@@ -157,6 +162,25 @@ export default class Scribe extends Component {
     });
   }
 
+  getUserVotes(){
+    var messages = this.state.data.slice(0);
+    for(var i = 0; i < this.state.data.length; i++){
+      let index = i;
+      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.displayName}&messageId=${this.state.data[i].id}`, {
+          method: 'GET'
+      })
+      .then(response => response.json())
+      .then((userVote) => {
+        if(userVote){
+          messages[index].userVote = userVote.vote;
+        }
+      })
+    }
+    this.setState({
+      data: messages
+    });
+  }
+
   render() {
     return (
       <TabBarIOS
@@ -205,6 +229,8 @@ export default class Scribe extends Component {
             data={this.state.data}
             location={this.state.location}
             getMessages={this.getMessages}
+            username={this.state.username}
+            userAuth={this.state.userAuth}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
