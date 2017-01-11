@@ -79,7 +79,8 @@ export default class Posts extends Component {
               <PostRow 
                 message={data}
                 username={this.props.username}
-                userAuth={this.props.userAuth} 
+                userAuth={this.props.userAuth}
+                login={this.props.login} 
               />}
           />
           :

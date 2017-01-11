@@ -231,6 +231,7 @@ export default class Scribe extends Component {
             getMessages={this.getMessages}
             username={this.state.username}
             userAuth={this.state.userAuth}
+            login={this.login}
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
