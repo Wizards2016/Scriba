@@ -50,8 +50,10 @@ export default class PostRow extends Component {
     this.state = {
       message: props.message,
       modalVisible: false,
-      username: this.props.username,
-      userAuth: this.props.userAuth,
+      // username: this.props.username,
+      // userAuth: this.props.userAuth,
+      username: "ThomasCruise",
+      userAuth: "Thomas Cruise",
       userVote: props.message.userVote,
       upArrowToggle: UpArrow,
       downArrowToggle: DownArrow
@@ -59,6 +61,7 @@ export default class PostRow extends Component {
     };
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
+    this.delayedVote = this.debounce(this.postVote, 1000);
   }
 
   togglePostInfo() {
@@ -85,13 +88,50 @@ export default class PostRow extends Component {
     }
   }
 
+  debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+
+  postVote(){
+    //send vote state
+    console.log('posting the vote');
+    fetch('http://127.0.0.1:8000/votes', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          vote: this.state.userVote,
+          messageId: this.state.messageId,
+          userAuth: this.state.userAuth,
+          displayName: this.state.username
+        })
+      })
+      .then(() => { 
+        console.log('gettingmessages')
+        this.props.getMessages();
+      });
+  }
+
   updateVote(clicked){
     var up = 0;
     var down = 0;
     var newState = {};
     var newMessage = {};
     for(var key in this.state.message){
-        newMessage.key = this.state.message.key;
+        newMessage[key] = this.state.message[key];
     }
     if(clicked === 'up'){
       if(this.state.upArrowToggle === UpArrow){
@@ -104,7 +144,6 @@ export default class PostRow extends Component {
           downArrowToggle: DownArrow,
           userVote: true
         });
-        //post vote to db on interval
       } else if(this.state.upArrowToggle === UpArrowHighlighted){
         up -= 1;
         this.setState({
@@ -112,7 +151,6 @@ export default class PostRow extends Component {
           downArrowToggle: DownArrow,
           userVote: null
         });
-        //post delete vote to db on interval
       }
     } else if(clicked === 'down') {
       if(this.state.downArrowToggle === DownArrow){
@@ -125,8 +163,6 @@ export default class PostRow extends Component {
           downArrowToggle: DownArrowHighlighted,
           userVote: false
         });
-
-        //post vote to db on interval
       } else if(this.state.downArrowToggle === DownArrowHighlighted){
         down -= 1;
         this.setState({
@@ -134,32 +170,38 @@ export default class PostRow extends Component {
           downArrowToggle: DownArrow,
           userVote: null
         });
-        //post delete vote to db on interval
       }
     }
     newMessage.upVotes = this.state.message.upVotes + up;
     newMessage.downVotes = this.state.message.downVotes + down;
     this.setState({
       message: newMessage
+    }, () => {
+      this.delayedVote()
     });
   }
 
   postVote(){
-    //send vote state
+    var remove = null;
+    console.log('posting ', this.state.username, this.state.userAuth);
+    if(this.state.userVote === null){
+      remove = true;
+    }
     fetch('http://127.0.0.1:8000/votes', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          vote: this.state.userVote,
-          messageId: this.props.message.id,
-          userAuth: this.props.userAuth,
-          UserDisplayName: this.props.displayName
-        })
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        vote: this.state.userVote,
+        delete: remove,
+        messageId: this.state.message.id,
+        userAuth: this.state.userAuth,
+        displayName: this.state.username
       })
-      .then(() => { this.props.getMessages(); });
+    })
+    .then(() => { });
   }
 
   render() {
