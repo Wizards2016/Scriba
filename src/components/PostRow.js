@@ -74,7 +74,6 @@ export default class PostRow extends Component {
   }
 
   updateArrow(){
-    console.log('THIS IS MESSAGE OBJECT', this.state.message)
     if(this.state.userVote){
       this.setState({
         upArrowToggle: UpArrowHighlighted
@@ -167,6 +166,7 @@ export default class PostRow extends Component {
     const text = this.state.message.text;
     const createdAt = this.state.message.createdAt;
     const username = this.state.message.UserDisplayName;
+    console.log('MESSAGES AGAIN', this.state.message);
     return (
       <View style={styles.container}>
         <PostInfo
@@ -201,7 +201,7 @@ export default class PostRow extends Component {
                 accessibilityLabel="Down vote"
               />
             </TouchableOpacity>
-            <Text style={styles.vote}>0</Text>
+            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
           </View>
         </View>
       </View>
