@@ -252,7 +252,6 @@ export default class PostRow extends Component {
             {`${username}\n${text}`}
           </Text>
         </TouchableOpacity>
-        
       </View>
       <View style={styles.options}>
           <TimeAgo time={createdAt} interval={60000} />

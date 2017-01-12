@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import {
-  View,
-  StyleSheet,
   AppRegistry,
   TabBarIOS,
-  StatusBar,
-  AsyncStorage,
-  SegmentedControlIOS
+  AsyncStorage
 } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 import Map from './components/Map';
@@ -19,12 +15,6 @@ import User from './media/user_32.png';
 const lock = new Auth0Lock({
   clientId: 'fluO2A5kqKrUAJ9jc9lUm5DT7Wf5HpBj',
   domain: 'scribemapsapi.auth0.com'
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
 });
 
 export default class Scribe extends Component {
