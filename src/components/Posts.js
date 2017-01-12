@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import PostRow from './PostRow';
 import PostSorting from '../util/PostSorting';
-import NavigationBar from 'react-native-navigation-bar';
 import UpArrow from '../media/arrow_up.png';
 import Clock from '../media/clock.png';
 import Thumbs from '../media/thumbs.png';
