@@ -290,5 +290,4 @@ export default class Scribe extends Component {
   }
 }
 
-
 AppRegistry.registerComponent('Scribe', () => Scribe);
