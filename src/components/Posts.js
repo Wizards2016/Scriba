@@ -14,6 +14,8 @@ import PostRow from './PostRow';
 import PostSorting from '../util/PostSorting';
 import NavigationBar from 'react-native-navigation-bar';
 import UpArrow from '../media/arrow_up.png';
+import Clock from '../media/clock.png';
+import Thumbs from '../media/thumbs.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    marginTop: 0,
+    margin: 0,
     padding: 0,
     zIndex: -1
   },
@@ -32,8 +34,7 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 1,
-    color: '#fff',
+    paddingTop: 10,
     justifyContent: 'center',
     width: 200,
     overflow: 'hidden'
@@ -45,14 +46,13 @@ const styles = StyleSheet.create({
   },
   options: {
     backgroundColor: '#007aff',
-    color: '#fff',
     flexDirection: 'row',
     alignItems: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
     paddingTop: 20,
+    paddingBottom: 0,
     margin: 0,
-    fontSize: 16,
     height: 70
   },
   buttonsLeft: {
@@ -131,14 +131,14 @@ export default class Posts extends Component {
             <TouchableOpacity onPress={() => { console.log(':)'); }}>
               <Image
                 style={{ width: 20, height: 20 }}
-                source={UpArrow}
+                source={Clock}
                 accessibilityLabel="Time"
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { console.log(':)'); }}>
               <Image
                 style={{ width: 20, height: 20 }}
-                source={UpArrow}
+                source={Thumbs}
                 accessibilityLabel="Hot"
               />
             </TouchableOpacity>
