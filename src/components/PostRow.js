@@ -16,9 +16,17 @@ import PostInfo from './PostInfo';
 const styles = StyleSheet.create({
   container: {
     marginTop: 0,
-    marginRight: 12,
+    marginRight: 0,
+    marginBottom: 1,
+    marginLeft: 0,
+    padding: 0,
+    backgroundColor: '#c1d9ff'
+  },
+  post: {
+    marginTop: 0,
+    marginRight: 0,
     marginBottom: 12,
-    marginLeft: 12,
+    marginLeft: 0,
     padding: 5,
     backgroundColor: '#c1d9ff'
   },
@@ -27,13 +35,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
-    padding: 2
+    padding: 5,
+    margin: 0
   },
   text: {
     fontSize: 16
   },
+  statistics: {
+    margin: 0
+  },
   vote: {
-    marginRight: 5
+    marginRight: 0
   },
   buttons: {
     flex: 1,
@@ -219,7 +231,8 @@ export default class PostRow extends Component {
     const createdAt = this.state.message.createdAt;
     const username = this.state.message.UserDisplayName;
     return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.post}>
         <PostInfo
           visible={this.state.modalVisible}
           message={this.state.message}
@@ -234,7 +247,9 @@ export default class PostRow extends Component {
             {`${text}`}
           </Text>
         </TouchableOpacity>
-        <View style={styles.options}>
+        
+      </View>
+      <View style={styles.options}>
           <TimeAgo time={createdAt} interval={60000} />
           <View style={styles.buttons}>
             <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
@@ -255,7 +270,7 @@ export default class PostRow extends Component {
             <Text style={styles.vote}>{this.state.message.downVotes}</Text>
           </View>
         </View>
-      </View>
+    </View>
     );
   }
 

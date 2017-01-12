@@ -15,7 +15,6 @@ import Settings from './components/Settings';
 import Globe from './media/globe_32.png';
 import Eye from './media/eye_32.png';
 import User from './media/user_32.png';
-import NavigationBar from 'react-native-navigation-bar';
 
 const lock = new Auth0Lock({
   clientId: 'fluO2A5kqKrUAJ9jc9lUm5DT7Wf5HpBj',
@@ -231,25 +230,20 @@ export default class Scribe extends Component {
             });
           }}
         >
-          <View style={styles.container}>
-            <StatusBar
-              barStyle="dark-content"
-            />
-            <Map
-              lock={lock}
-              location={this.state.location}
-              updateLocation={this.updateLocation}
-              updateUser={this.updateUser}
-              getMessages={this.getMessages}
-              data={this.state.data}
-              userAuth={this.state.userAuth}
-              login={this.login}
-              username={this.state.username}
-              promptUN={this.state.promptUN}
-              updatePromptUN={this.updatePromptUN}
-              verifyUsername={this.verifyUsername}
-            />
-          </View>
+          <Map
+            lock={lock}
+            location={this.state.location}
+            updateLocation={this.updateLocation}
+            updateUser={this.updateUser}
+            getMessages={this.getMessages}
+            data={this.state.data}
+            userAuth={this.state.userAuth}
+            login={this.login}
+            username={this.state.username}
+            promptUN={this.state.promptUN}
+            updatePromptUN={this.updatePromptUN}
+            verifyUsername={this.verifyUsername}
+          />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={Eye}
@@ -261,25 +255,14 @@ export default class Scribe extends Component {
             });
           }}
         >
-          <View style={styles.container}>
-            <Posts
-              data={this.state.data}
-              location={this.state.location}
-              getMessages={this.getMessages}
-              username={this.state.username}
-              userAuth={this.state.userAuth}
-              login={this.login}
-            />
-            <StatusBar
-              barStyle="light-content"
-            />
-            <NavigationBar
-              title={'Posts'}
-              height={50}
-              titleColor="#fff"
-              backgroundColor="#007aff"
-            />
-          </View>
+          <Posts
+            data={this.state.data}
+            location={this.state.location}
+            getMessages={this.getMessages}
+            username={this.state.username}
+            userAuth={this.state.userAuth}
+            login={this.login}
+          />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={User}
@@ -291,27 +274,16 @@ export default class Scribe extends Component {
             });
           }}
         >
-          <View style={styles.container}>
-            <StatusBar
-              barStyle="light-content"
-            />
-            <NavigationBar
-              title={'Posts'}
-              height={50}
-              titleColor="#fff"
-              backgroundColor="#007aff"
-            />
-            <Settings
-              lock={lock}
-              userAuth={this.state.userAuth}
-              promptUN={this.state.promptUN}
-              updateUser={this.updateUser}
-              updatePromptUN={this.updatePromptUN}
-              login={this.login}
-              getMessages={this.getMessages}
-              verifyUsername={this.verifyUsername}
-            />
-          </View>
+          <Settings
+            lock={lock}
+            userAuth={this.state.userAuth}
+            promptUN={this.state.promptUN}
+            updateUser={this.updateUser}
+            updatePromptUN={this.updatePromptUN}
+            login={this.login}
+            getMessages={this.getMessages}
+            verifyUsername={this.verifyUsername}
+          />
         </TabBarIOS.Item>
       </TabBarIOS>
     );
