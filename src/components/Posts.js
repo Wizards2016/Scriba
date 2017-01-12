@@ -12,7 +12,7 @@ import PostSorting from '../util/PostSorting';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20
+    marginTop: 62
   },
   text: {
     textAlign: 'center'
@@ -61,6 +61,7 @@ export default class Posts extends Component {
   render() {
     return (
       <ScrollView
+        style={styles.container}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
@@ -73,7 +74,6 @@ export default class Posts extends Component {
           <ListView
             enableEmptySections={true}
             automaticallyAdjustContentInsets={false}
-            contentContainerStyle={styles.container}
             dataSource={this.state.dataSource}
             renderRow={data => 
               <PostRow 

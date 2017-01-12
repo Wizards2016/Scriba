@@ -30,6 +30,7 @@ export default class Settings extends Component {
       AsyncStorage.getItem('id_token')
       .then(() => {
         this.props.updateUser(null, null);
+        this.props.getMessages();
       });
     });
   }

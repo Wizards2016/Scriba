@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import {
+  View,
+  StyleSheet,
   AppRegistry,
   TabBarIOS,
-  AsyncStorage
+  StatusBar,
+  AsyncStorage,
+  SegmentedControlIOS
 } from 'react-native';
 import Auth0Lock from 'react-native-lock';
 import Map from './components/Map';
@@ -11,10 +15,17 @@ import Settings from './components/Settings';
 import Globe from './media/globe_32.png';
 import Eye from './media/eye_32.png';
 import User from './media/user_32.png';
+import NavigationBar from 'react-native-navigation-bar';
 
 const lock = new Auth0Lock({
   clientId: 'fluO2A5kqKrUAJ9jc9lUm5DT7Wf5HpBj',
   domain: 'scribemapsapi.auth0.com'
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
 });
 
 export default class Scribe extends Component {
@@ -220,20 +231,25 @@ export default class Scribe extends Component {
             });
           }}
         >
-          <Map
-            lock={lock}
-            location={this.state.location}
-            updateLocation={this.updateLocation}
-            updateUser={this.updateUser}
-            getMessages={this.getMessages}
-            data={this.state.data}
-            userAuth={this.state.userAuth}
-            login={this.login}
-            username={this.state.username}
-            promptUN={this.state.promptUN}
-            updatePromptUN={this.updatePromptUN}
-            verifyUsername={this.verifyUsername}
-          />
+          <View style={styles.container}>
+            <StatusBar
+              barStyle="dark-content"
+            />
+            <Map
+              lock={lock}
+              location={this.state.location}
+              updateLocation={this.updateLocation}
+              updateUser={this.updateUser}
+              getMessages={this.getMessages}
+              data={this.state.data}
+              userAuth={this.state.userAuth}
+              login={this.login}
+              username={this.state.username}
+              promptUN={this.state.promptUN}
+              updatePromptUN={this.updatePromptUN}
+              verifyUsername={this.verifyUsername}
+            />
+          </View>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={Eye}
@@ -245,14 +261,25 @@ export default class Scribe extends Component {
             });
           }}
         >
-          <Posts
-            data={this.state.data}
-            location={this.state.location}
-            getMessages={this.getMessages}
-            username={this.state.username}
-            userAuth={this.state.userAuth}
-            login={this.login}
-          />
+          <View style={styles.container}>
+            <Posts
+              data={this.state.data}
+              location={this.state.location}
+              getMessages={this.getMessages}
+              username={this.state.username}
+              userAuth={this.state.userAuth}
+              login={this.login}
+            />
+            <StatusBar
+              barStyle="light-content"
+            />
+            <NavigationBar
+              title={'Posts'}
+              height={50}
+              titleColor="#fff"
+              backgroundColor="#007aff"
+            />
+          </View>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           icon={User}
@@ -264,15 +291,27 @@ export default class Scribe extends Component {
             });
           }}
         >
-          <Settings
-            lock={lock}
-            userAuth={this.state.userAuth}
-            promptUN={this.state.promptUN}
-            updateUser={this.updateUser}
-            updatePromptUN={this.updatePromptUN}
-            login={this.login}
-            verifyUsername={this.verifyUsername}
-          />
+          <View style={styles.container}>
+            <StatusBar
+              barStyle="light-content"
+            />
+            <NavigationBar
+              title={'Posts'}
+              height={50}
+              titleColor="#fff"
+              backgroundColor="#007aff"
+            />
+            <Settings
+              lock={lock}
+              userAuth={this.state.userAuth}
+              promptUN={this.state.promptUN}
+              updateUser={this.updateUser}
+              updatePromptUN={this.updatePromptUN}
+              login={this.login}
+              getMessages={this.getMessages}
+              verifyUsername={this.verifyUsername}
+            />
+          </View>
         </TabBarIOS.Item>
       </TabBarIOS>
     );
