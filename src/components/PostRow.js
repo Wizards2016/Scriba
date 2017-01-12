@@ -71,6 +71,17 @@ export default class PostRow extends Component {
     this.delayedVote = this.throttle(this.postVote, 1000);
   }
 
+  componentWillMount() {
+    this.updateArrow();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      message: nextProps.message,
+      userVote: nextProps.message.userVote
+    });
+  }
+
   togglePostInfo() {
     this.setState((prevState) => {
       return {
@@ -79,16 +90,12 @@ export default class PostRow extends Component {
     });
   }
 
-  componentWillMount(){
-    this.updateArrow();
-  }
-
-  updateArrow(){
-    if(this.state.userVote){
+  updateArrow() {
+    if (this.state.userVote) {
       this.setState({
         upArrowToggle: UpArrowHighlighted
       });
-    } else if(this.state.userVote === false) {
+    } else if (this.state.userVote === false) {
       this.setState({
         downArrowToggle: DownArrowHighlighted
       });
@@ -96,67 +103,65 @@ export default class PostRow extends Component {
   }
 
   throttle(func, wait) {
-    var wasRecentlyInvoked = false;
-    var doAgain = false;
-    var timerOn = false;
-    return function(){
-      var context = this;
-      if (!timerOn)
-        {
-          timerOn=true;
-          setTimeout(function(){
-            if(doAgain){
-              func.call(context);
-            }
-            wasRecentlyInvoked=false;
-            doAgain=false;
-            timerOn=false;
-          }, wait);
-        }
-      if(!wasRecentlyInvoked) {
-        func.call(context);
-        wasRecentlyInvoked=true;
+    let wasRecentlyInvoked = false;
+    let doAgain = false;
+    let timerOn = false;
+    return () => {
+      const context = this;
+      if (!timerOn) {
+        timerOn = true;
+        setTimeout(() => {
+          if (doAgain) {
+            func.call(context);
+          }
+          wasRecentlyInvoked = false;
+          doAgain = false;
+          timerOn = false;
+        }, wait);
       }
-      else if (wasRecentlyInvoked && !doAgain) {
-        doAgain=true;
+      if (!wasRecentlyInvoked) {
+        func.call(context);
+        wasRecentlyInvoked = true;
+      } else if (wasRecentlyInvoked && !doAgain) {
+        doAgain = true;
       }
     };
   };
 
-  postVote(){
-    //send vote state
+  postVote() {
+    // send vote state
     fetch('http://127.0.0.1:8000/votes', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          vote: this.state.userVote,
-          messageId: this.state.messageId,
-          userAuth: this.props.userAuth,
-          displayName: this.props.username
-        })
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        vote: this.state.userVote,
+        messageId: this.state.messageId,
+        userAuth: this.props.userAuth,
+        displayName: this.props.username
       })
-      .then(() => { 
-        this.props.getMessages();
-      });
+    })
+    .then(() => {
+      this.props.getMessages();
+    });
   }
 
-  updateVote(clicked){
-    if(this.props.username && this.props.userAuth){
-      var up = 0;
-      var down = 0;
-      var newState = {};
-      var newMessage = {};
+  updateVote(clicked) {
+    if (this.props.username && this.props.userAuth) {
+      let up = 0;
+      let down = 0;
+      let newState = {};
+      let newMessage = {};
 
-      for(var key in this.state.message){
-          newMessage[key] = this.state.message[key];
+      for(let key in this.state.message) {
+        newMessage[key] = this.state.message[key];
       }
-      if(clicked === 'up'){
-        if(this.state.upArrowToggle === UpArrow){
+      if (clicked === 'up') {
+        if (this.state.upArrowToggle === UpArrow) {
           up += 1;
-          if(this.state.downArrowToggle === DownArrowHighlighted){
+          if (this.state.downArrowToggle === DownArrowHighlighted) {
             down -= 1;
           }
           this.setState({
@@ -164,7 +169,7 @@ export default class PostRow extends Component {
             downArrowToggle: DownArrow,
             userVote: true
           });
-        } else if(this.state.upArrowToggle === UpArrowHighlighted){
+        } else if (this.state.upArrowToggle === UpArrowHighlighted) {
           up -= 1;
           this.setState({
             upArrowToggle: UpArrow,
@@ -172,10 +177,10 @@ export default class PostRow extends Component {
             userVote: null
           });
         }
-      } else if(clicked === 'down') {
-        if(this.state.downArrowToggle === DownArrow){
+      } else if (clicked === 'down') {
+        if (this.state.downArrowToggle === DownArrow) {
           down += 1;
-          if(this.state.upArrowToggle === UpArrowHighlighted){
+          if (this.state.upArrowToggle === UpArrowHighlighted) {
             up -= 1;
           }
           this.setState({
@@ -183,7 +188,7 @@ export default class PostRow extends Component {
             downArrowToggle: DownArrowHighlighted,
             userVote: false
           });
-        } else if(this.state.downArrowToggle === DownArrowHighlighted){
+        } else if (this.state.downArrowToggle === DownArrowHighlighted) {
           down -= 1;
           this.setState({
             upArrowToggle: UpArrow,
@@ -197,16 +202,16 @@ export default class PostRow extends Component {
       this.setState({
         message: newMessage
       }, () => {
-        this.delayedVote()
+        this.delayedVote();
       });
     } else {
       this.props.login();
     }
   }
 
-  postVote(){
-    var remove = null;
-    if(this.state.userVote === null){
+  postVote() {
+    let remove = null;
+    if (this.state.userVote === null) {
       remove = true;
     }
     fetch('http://127.0.0.1:8000/votes', {
@@ -238,13 +243,13 @@ export default class PostRow extends Component {
           message={this.state.message}
           togglePostInfo={this.togglePostInfo}
         />
-        <TouchableOpacity onPress={() => {
-          this.togglePostInfo();
-        }}>
+        <TouchableOpacity
+          onPress={() => {
+            this.togglePostInfo();
+          }}
+        >
           <Text style={styles.text}>
-            {`${username}`}
-            {`\n`}
-            {`${text}`}
+            {`${username}\n${text}`}
           </Text>
         </TouchableOpacity>
         
@@ -273,5 +278,4 @@ export default class PostRow extends Component {
     </View>
     );
   }
-
 };
