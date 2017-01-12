@@ -59,7 +59,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    width: 40,
+    width: 60,
+    paddingLeft: 20,
+    paddingTop: 5,
     height: 20
   },
   buttonsRight: {
@@ -67,8 +69,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    width: 40,
-    height: 20
+    width: 60,
+    height: 20,
+    paddingRight: 20,
+    paddingTop: 5
   }
 });
 
@@ -129,14 +133,14 @@ export default class Posts extends Component {
           <View style={styles.buttonsRight}>
             <TouchableOpacity onPress={() => { console.log(':)'); }}>
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{ width: 20, height: 20, marginRight: 2 }}
                 source={Clock}
                 accessibilityLabel="Time"
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { console.log(':)'); }}>
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{ width: 20, height: 20, marginLeft: 2 }}
                 source={Thumbs}
                 accessibilityLabel="Hot"
               />
