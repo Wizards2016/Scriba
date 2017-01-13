@@ -12,6 +12,7 @@ import DownArrow from '../media/arrow_down.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 import PostInfo from './PostInfo';
+import API from '../util/APIService';
 
 const styles = StyleSheet.create({
   container: {
@@ -129,26 +130,6 @@ export default class PostRow extends Component {
     };
   };
 
-  postVote() {
-    // send vote state
-    fetch('http://127.0.0.1:8000/votes', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        vote: this.state.userVote,
-        messageId: this.state.messageId,
-        userAuth: this.props.userAuth,
-        displayName: this.props.username
-      })
-    })
-    .then(() => {
-      this.props.getMessages();
-    });
-  }
-
   updateVote(clicked) {
     if (this.props.username && this.props.userAuth) {
       let up = 0;
@@ -211,25 +192,16 @@ export default class PostRow extends Component {
   }
 
   postVote() {
-    let remove = null;
-    if (this.state.userVote === null) {
-      remove = true;
-    }
-    fetch('http://127.0.0.1:8000/votes', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        vote: this.state.userVote,
-        delete: remove,
-        messageId: this.state.message.id,
-        userAuth: this.props.userAuth,
-        displayName: this.props.username
-      })
-    })
-    .then(() => { });
+    const data = {
+      vote: this.state.userVote,
+      messageId: this.state.message.id,
+      userAuth: this.props.userAuth,
+      displayName: this.props.username
+    };
+
+    data.delete = !!(this.state.userVote === null);
+
+    API.post.vote(data);
   }
 
   renderPostInfo() {
