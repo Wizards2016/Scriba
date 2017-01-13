@@ -1,14 +1,21 @@
 const Promise = require('bluebird');
 const baseURL = 'http://127.0.0.1:8000';
+const votesURL = `${baseURL}/votes`;
+const messagesURL = `${baseURL}/messages`;
+const usersURL = `${baseURL}/users`;
+
+const appendParams = (url, params) => {
+  Object.keys(params).forEach((key) => {
+    url.searchParams.append(key, params[key]);
+  });
+  return url;
+};
 
 module.exports = {
   get: {
     vote: (data) => {
       // Append query parameters to URL
-      const url = new URL(`${baseURL}/votes`);
-      Object.keys(data).forEach((key) => {
-        url.searchParams.append(key, data[key]);
-      });
+      const url = appendParams(new URL(votesURL), data);
       return new Promise((resolve, reject) => {
         fetch(url.href, {
           method: 'GET'
@@ -19,10 +26,7 @@ module.exports = {
     },
     message: (data) => {
       // Append query parameters to URL
-      const url = new URL(`${baseURL}/messages`);
-      Object.keys(data).forEach((key) => {
-        url.searchParams.append(key, data[key]);
-      });
+      const url = appendParams(new URL(messagesURL), data);
       return new Promise((resolve, reject) => {
         fetch(url.href, {
           method: 'GET'
@@ -33,10 +37,7 @@ module.exports = {
     },
     user: (data) => {
       // Append query parameters to URL
-      const url = new URL(`${baseURL}/users`);
-      Object.keys(data).forEach((key) => {
-        url.searchParams.append(key, data[key]);
-      });
+      const url = appendParams(new URL(usersURL), data);
       return new Promise((resolve, reject) => {
         fetch(url.href, {
           method: 'GET'
@@ -49,7 +50,7 @@ module.exports = {
   post: {
     vote: (data) => {
       return new Promise((resolve, reject) => {
-        fetch(`${baseURL}/votes`, {
+        fetch(votesURL, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -69,7 +70,7 @@ module.exports = {
     },
     message: (data) => {
       return new Promise((resolve, reject) => {
-        fetch(`${baseURL}/messages`, {
+        fetch(messagesURL, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -89,7 +90,7 @@ module.exports = {
     },
     user: (data) => {
       return new Promise((resolve, reject) => {
-        fetch(`${baseURL}/users`, {
+        fetch(usersURL, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
