@@ -13,12 +13,8 @@ module.exports = {
         fetch(url.href, {
           method: 'GET'
         })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .then(response => resolve(response))
+        .catch(error => reject(error));
       });
     },
     message: (data) => {
@@ -31,12 +27,8 @@ module.exports = {
         fetch(url.href, {
           method: 'GET'
         })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .then(response => resolve(response))
+        .catch(error => reject(error));
       });
     },
     user: (data) => {
@@ -49,12 +41,8 @@ module.exports = {
         fetch(url.href, {
           method: 'GET'
         })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .then(response => resolve(response))
+        .catch(error => reject(error));
       });
     }
   },
@@ -75,12 +63,8 @@ module.exports = {
             displayName: data.displayName
           })
         })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .then(response => resolve(response))
+        .catch(error => reject(error));
       });
     },
     message: (data) => {
@@ -99,12 +83,8 @@ module.exports = {
             displayName: data.displayName
           })
         })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .then(response => resolve(response))
+        .catch(error => reject(error));
       });
     },
     user: (data) => {
@@ -120,12 +100,8 @@ module.exports = {
             displayName: data.displayName
           })
         })
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+        .then(response => resolve(response))
+        .catch(error => reject(error));
       });
     }
   }
