@@ -69,6 +69,7 @@ export default class PostRow extends Component {
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
     this.delayedVote = this.throttle(this.postVote, 1000);
+    this.renderPostInfo = this.renderPostInfo.bind(this);
   }
 
   componentWillMount() {
@@ -231,6 +232,17 @@ export default class PostRow extends Component {
     .then(() => { });
   }
 
+  renderPostInfo() {
+    if (this.state.modalVisible) {
+      return (
+        <PostInfo
+          message={this.state.message}
+          togglePostInfo={this.togglePostInfo}
+        />
+      );
+    }
+  }
+
   render() {
     const text = this.state.message.text;
     const createdAt = this.state.message.createdAt;
@@ -238,11 +250,7 @@ export default class PostRow extends Component {
     return (
     <View style={styles.container}>
       <View style={styles.post}>
-        <PostInfo
-          visible={this.state.modalVisible}
-          message={this.state.message}
-          togglePostInfo={this.togglePostInfo}
-        />
+        {this.renderPostInfo()}
         <TouchableOpacity
           onPress={() => {
             this.togglePostInfo();

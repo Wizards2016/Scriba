@@ -64,7 +64,7 @@ export default class PostInfo extends Component {
         <Modal
           animationType={"slide"}
           transparent={false}
-          visible={this.props.visible}
+          visible={true}
           >
          <View style={styles.modalContent}>
           <View>
