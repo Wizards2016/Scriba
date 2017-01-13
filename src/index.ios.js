@@ -121,19 +121,9 @@ export default class Scribe extends Component {
         throw err;
       });
     } else {
-      fetch('http://127.0.0.1:8000/users', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userAuth: userAuth,
-          displayName: username
-        })
-      })
+      API.post.user(data)
       .then(res => {
-        this.updateUser(userAuth, username);
+        this.updateUser(data.userAuth, data.displayName);
       })
       .catch(err => {
         console.log('POST request err: ', err);

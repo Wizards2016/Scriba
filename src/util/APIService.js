@@ -88,6 +88,27 @@ module.exports = {
           reject(error);
         });
       });
+    },
+    user: (data) => {
+      return new Promise((resolve, reject) => {
+        fetch(`${baseURL}/users`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userAuth: data.userAuth,
+            displayName: data.displayName
+          })
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+      });
     }
   }
 };
