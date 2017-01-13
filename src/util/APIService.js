@@ -3,6 +3,24 @@ const baseURL = 'http://127.0.0.1:8000';
 
 module.exports = {
   get: {
+    vote: (data) => {
+      // Append query parameters to URL
+      const url = new URL(`${baseURL}/votes`);
+      Object.keys(data).forEach((key) => {
+        url.searchParams.append(key, data[key]);
+      });
+      return new Promise((resolve, reject) => {
+        fetch(url.href, {
+          method: 'GET'
+        })
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+      });
+    },
     message: (data) => {
       // Append query parameters to URL
       const url = new URL(`${baseURL}/messages`);
