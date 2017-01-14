@@ -89,6 +89,7 @@ export default class Posts extends Component {
     this.state = {
       dataSource: ds.cloneWithRows(sortedPosts),
       sortBy: 'time',
+      title: 'Latest',
       refreshing: false
     };
     this.updateRefreshing = this.updateRefreshing.bind(this);
@@ -97,12 +98,15 @@ export default class Posts extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.state.sortBy === 'time'){
+      var title = 'Latest';
       var sortedPosts = PostSorting.sortByTime(nextProps.data);
     } else if(this.state.sortBy === 'votes'){
+      var title = 'Popular';
       var sortedPosts = PostSorting.sortByVotes(nextProps.data);
     }
     this.setState({
-      dataSource: ds.cloneWithRows(sortedPosts)
+      dataSource: ds.cloneWithRows(sortedPosts),
+      title: title
     });
   }
 
@@ -130,7 +134,7 @@ export default class Posts extends Component {
           <View style={styles.buttonsLeft}>
           </View>
           <View style={styles.title}>
-            <Text style={styles.titleText}>POSTS</Text>
+            <Text style={styles.titleText}>{this.state.title}</Text>
           </View>
           <View style={styles.buttonsRight}>
             <TouchableOpacity onPress={() => { 
