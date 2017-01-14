@@ -62,6 +62,7 @@ export default class Scribe extends Component {
       })
       .then(response => response.json())
       .then((votes) => {
+        console.log('got this from votes', votes);
         if(votes && this.state.username) {
           for(var i = 0; i < messages.length; i++) {
             for(var j = 0; j < votes.length; j++){
@@ -81,6 +82,9 @@ export default class Scribe extends Component {
       })
       .then(() => {
         this.setState({ data: messages });
+      })
+      .catch((err) => {
+        console.log('Index getUserVote error: ', err);
       });
     }
   }

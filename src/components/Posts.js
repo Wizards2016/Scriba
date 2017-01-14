@@ -18,13 +18,15 @@ import Thumbs from '../media/thumbs.png';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   scrollView: {
     flex: 1,
     margin: 0,
+    marginBottom: 50,
     padding: 0,
-    zIndex: -1
+    zIndex: -1,
+    backgroundColor: '#ddd'
   },
   text: {
     textAlign: 'center',
@@ -157,8 +159,10 @@ export default class Posts extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.container}>
           <ScrollView
             style={styles.scrollView}
+            automaticallyAdjustContentInsets={false}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -187,6 +191,7 @@ export default class Posts extends Component {
               </Text>
             }
           </ScrollView>
+        </View>
       </View>
     );
   }

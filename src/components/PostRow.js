@@ -15,12 +15,12 @@ import PostInfo from './PostInfo';
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 0,
+    marginTop: 1,
     marginRight: 0,
-    marginBottom: 1,
+    marginBottom: 0,
     marginLeft: 0,
-    padding: 0,
-    backgroundColor: '#c1d9ff'
+    padding: 10,
+    backgroundColor: '#fff'
   },
   post: {
     marginTop: 0,
@@ -28,18 +28,41 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     marginLeft: 0,
     padding: 5,
-    backgroundColor: '#c1d9ff'
+    backgroundColor: '#fff'
   },
   options: {
-    backgroundColor: '#e2edff',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'flex-start',
     flexWrap: 'wrap',
-    padding: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingTop: 0,
+    paddingBottom: 5,
     margin: 0
   },
   text: {
-    fontSize: 16
+    fontSize: 14,
+    fontFamily: 'Avenir',
+    margin: 0,
+    padding: 0
+  },
+  usernameText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: 'Avenir', 
+    fontWeight: '500',
+    margin: 0,
+    paddingBottom: 0
+  },
+  timeAgoText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    fontFamily: 'Avenir', 
+    fontWeight: 'bold',
+    color: '#bbb',
+    margin: 0,
+    padding: 0
   },
   statistics: {
     margin: 0
@@ -240,13 +263,12 @@ export default class PostRow extends Component {
             this.togglePostInfo();
           }}
         >
-          <Text style={styles.text}>
-            {`${username}\n${text}`}
-          </Text>
+          <Text style={styles.usernameText}>{`${username}`}</Text>
+          <Text style={styles.text}>{`${text}`}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.options}>
-          <TimeAgo time={createdAt} interval={60000} />
+          <TimeAgo style={styles.timeAgoText} time={createdAt} interval={60000} />
           <View style={styles.buttons}>
             <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
               <Image
