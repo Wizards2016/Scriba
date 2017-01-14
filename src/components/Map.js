@@ -5,6 +5,7 @@ import {
   Text,
   View,
   TextInput,
+  StatusBar,
   Button,
   AsyncStorage,
   ScrollView,
@@ -16,6 +17,7 @@ import MapView from 'react-native-maps';
 import Prompt from 'react-native-prompt';
 import Input from './Input';
 import UsernameCreate from './UsernameCreate';
+import Happy from '../media/map-happy.png'
 
 const styles = StyleSheet.create({
   container: {
@@ -68,6 +70,11 @@ export default class Map extends Component {
 
   render() {
     return (
+      <View style={styles.container}>
+      <StatusBar
+            style="zIndex: 0"
+            barStyle="dark-content"
+      />
       <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
         <MapView id="map-view"
           style={styles.map}
@@ -78,6 +85,7 @@ export default class Map extends Component {
         >
           {this.props.data.map((message, i)=>
             (<MapView.Marker
+              image={Happy}
               key={"markerID"+i}
               coordinate={{
                 latitude: message.latitude,
@@ -115,6 +123,7 @@ export default class Map extends Component {
           updatePromptUN={this.props.updatePromptUN}
         />
       </KeyboardAvoidingView>
+      </View>
     );
   }
 }
