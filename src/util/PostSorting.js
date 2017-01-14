@@ -1,7 +1,7 @@
 const earthRadius = 3959; // in miles
 
 // Calculates distance based on the Haversine formula
-sortByDistance = function(currentLocation, posts) {
+const sortByDistance = function(currentLocation, posts) {
   posts.sort((post1, post2) => {
     // calculate distance between post1 and currentLocation
     const latDistance1 = _degreesToRad(post1.latitude - currentLocation.latitude);
@@ -25,18 +25,25 @@ sortByDistance = function(currentLocation, posts) {
 };
 
 // Sorts from newest to oldest
-sortByTime = function(posts) {
+const sortByTime = function(posts) {
   posts.sort((post1, post2) => {
     return new Date(post2.createdAt) - new Date(post1.createdAt);
   });
-
   return posts;
 };
 
 // Convert degrees to radians
-_degreesToRad = function(degree) {
+const _degreesToRad = function(degree) {
   return degree * (Math.PI / 180);
 };
 
+const sortByVotes = function(posts) {
+  posts.sort((post1, post2) => {
+    return (post2.upVotes - post2.downVotes) - (post1.upVotes - post1.downVotes);
+  });
+  return posts;
+}
+
 exports.sortByDistance = sortByDistance;
 exports.sortByTime = sortByTime;
+exports.sortByVotes = sortByVotes;

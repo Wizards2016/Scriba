@@ -72,13 +72,19 @@ export default class PostRow extends Component {
   }
 
   componentWillMount() {
+    this.setState({
+      message: this.props.message
+    });
     this.updateArrow();
   }
 
   componentWillReceiveProps(nextProps) {
+    var dog = nextProps.message;
     this.setState({
       message: nextProps.message,
       userVote: nextProps.message.userVote
+    }, () => {
+      this.updateArrow();
     });
   }
 
@@ -93,11 +99,18 @@ export default class PostRow extends Component {
   updateArrow() {
     if (this.state.userVote) {
       this.setState({
-        upArrowToggle: UpArrowHighlighted
+        upArrowToggle: UpArrowHighlighted,
+        downArrowToggle: DownArrow
       });
     } else if (this.state.userVote === false) {
       this.setState({
+        upArrowToggle: UpArrow,
         downArrowToggle: DownArrowHighlighted
+      });
+    } else if(this.state.userVote === null){
+      this.setState({
+        upArrowToggle: UpArrow,
+        downArrowToggle: DownArrow
       });
     }
   }
@@ -127,26 +140,6 @@ export default class PostRow extends Component {
       }
     };
   };
-
-  postVote() {
-    // send vote state
-    fetch('http://127.0.0.1:8000/votes', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        vote: this.state.userVote,
-        messageId: this.state.messageId,
-        userAuth: this.props.userAuth,
-        displayName: this.props.username
-      })
-    })
-    .then(() => {
-      this.props.getMessages();
-    });
-  }
 
   updateVote(clicked) {
     if (this.props.username && this.props.userAuth) {
@@ -228,7 +221,6 @@ export default class PostRow extends Component {
         displayName: this.props.username
       })
     })
-    .then(() => { });
   }
 
   render() {

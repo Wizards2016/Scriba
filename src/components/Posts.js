@@ -86,19 +86,21 @@ export default class Posts extends Component {
 
     // Sort posts by time
     const sortedPosts = PostSorting.sortByTime(props.data);
-
     this.state = {
       dataSource: ds.cloneWithRows(sortedPosts),
+      sortBy: 'time',
       refreshing: false
     };
-
     this.updateRefreshing = this.updateRefreshing.bind(this);
     this.refreshMessages = this.refreshMessages.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const sortedPosts = PostSorting.sortByTime(nextProps.data);
-
+    if(this.state.sortBy === 'time'){
+      var sortedPosts = PostSorting.sortByTime(nextProps.data);
+    } else if(this.state.sortBy === 'votes'){
+      var sortedPosts = PostSorting.sortByVotes(nextProps.data);
+    }
     this.setState({
       dataSource: ds.cloneWithRows(sortedPosts)
     });
@@ -131,14 +133,18 @@ export default class Posts extends Component {
             <Text style={styles.titleText}>POSTS</Text>
           </View>
           <View style={styles.buttonsRight}>
-            <TouchableOpacity onPress={() => { console.log(':)'); }}>
+            <TouchableOpacity onPress={() => { 
+              this.setState({sortBy: 'time'}, this.props.getMessages);
+            }}>
               <Image
                 style={{ width: 20, height: 20, marginRight: 2 }}
                 source={Clock}
                 accessibilityLabel="Time"
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { console.log(':)'); }}>
+            <TouchableOpacity onPress={() => {
+              this.setState({sortBy: 'votes'}, this.props.getMessages); 
+            }}>
               <Image
                 style={{ width: 20, height: 20, marginLeft: 2 }}
                 source={Thumbs}
@@ -161,13 +167,15 @@ export default class Posts extends Component {
                 enableEmptySections={true}
                 automaticallyAdjustContentInsets={false}
                 dataSource={this.state.dataSource}
-                renderRow={data =>
+                renderRow={data => {
+                  return (
                   <PostRow
                     message={data}
                     username={this.props.username}
                     userAuth={this.props.userAuth}
                     login={this.props.login}
-                  />}
+                    getMessages={this.props.getMessages}
+                  />)}}
               />
               :
               <Text style={styles.text}>

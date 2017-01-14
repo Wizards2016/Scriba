@@ -45,19 +45,43 @@ export default class Scribe extends Component {
       })
         .then(response => response.json())
         .then((responseData) => {
-          this.setState({
-            data: responseData
-          }, () => {
-            if (cb) {
-              cb();
-            }
-          });
-        })
-        .then(() => {
-          if(this.state.userAuth){
-            this.getUserVotes();
+          if(this.state.username){
+            this.getUserVotes(responseData);
+          } else {
+            responseData.forEach((message, i)=> responseData[i].userVote = null );
+            this.setState({ data: responseData });
           }
-        });
+        })
+    }
+  }
+
+  getUserVotes(messages){
+    if(messages.length){
+      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.username}`, {
+          method: 'GET'
+      })
+      .then(response => response.json())
+      .then((votes) => {
+        if(votes && this.state.username) {
+          for(var i = 0; i < messages.length; i++) {
+            for(var j = 0; j < votes.length; j++){
+              if(messages[i].id === votes[j].MessageId){
+                messages[i].userVote = votes[j].vote;
+                break;
+              } else {
+                messages[i].userVote = null;
+              }
+            }
+          }
+        } else {
+          for(var i = 0; i < messages.length; i++){
+            messages[i].userVote = null;
+          }
+        }
+      })
+      .then(() => {
+        this.setState({ data: messages });
+      });
     }
   }
 
@@ -81,6 +105,7 @@ export default class Scribe extends Component {
         console.log(res);
         if (res.status === 200) {
           this.updateUser(userAuth, res.displayName);
+          this.getUserVotes(this.state.data);
         } else {
           if (!username) {
             this.updatePromptUN(true);
@@ -108,6 +133,7 @@ export default class Scribe extends Component {
               throw err;
             });
           }
+          this.getUserVotes(this.state.data);
         }
       })
       .catch((err, result) => {
@@ -129,6 +155,7 @@ export default class Scribe extends Component {
       .then(res => {
         this.updateUser(userAuth, username);
       })
+      .then(()=> {})
       .catch(err => {
         console.log('POST request err: ', err);
       });
@@ -179,25 +206,6 @@ export default class Scribe extends Component {
       }
       console.log(this.state);
       AsyncStorage.setItem('id_token', JSON.stringify(token));
-    });
-  }
-
-  getUserVotes(){
-    var messages = this.state.data.slice(0);
-    for(var i = 0; i < this.state.data.length; i++){
-      let index = i;
-      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.displayName}&messageId=${this.state.data[i].id}`, {
-          method: 'GET'
-      })
-      .then(response => response.json())
-      .then((userVote) => {
-        if(userVote){
-          messages[index].userVote = userVote.vote;
-        }
-      })
-    }
-    this.setState({
-      data: messages
     });
   }
 
