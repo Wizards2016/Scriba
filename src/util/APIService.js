@@ -5,9 +5,14 @@ const messagesURL = `${baseURL}/messages`;
 const usersURL = `${baseURL}/users`;
 
 const appendParams = (url, params) => {
-  Object.keys(params).forEach((key) => {
-    url.searchParams.append(key, params[key]);
-  });
+  url += '?';
+  // Add query parameters to the url
+  for (const key in params) {
+    url += `${key}=${params[key]}&`;
+  }
+  // Trim off the trailing &
+  url = url.slice(0, url.length - 1);
+
   return url;
 };
 
@@ -15,9 +20,10 @@ module.exports = {
   get: {
     vote: (data) => {
       // Append query parameters to URL
-      const url = appendParams(new URL(votesURL), data);
+      const url = appendParams(votesURL, data);
+      console.log('url:', url);
       return new Promise((resolve, reject) => {
-        fetch(url.href, {
+        fetch(url, {
           method: 'GET'
         })
         .then(response => resolve(response))
@@ -26,9 +32,10 @@ module.exports = {
     },
     message: (data) => {
       // Append query parameters to URL
-      const url = appendParams(new URL(messagesURL), data);
+      const url = appendParams(messagesURL, data);
+      console.log('url:', url);
       return new Promise((resolve, reject) => {
-        fetch(url.href, {
+        fetch(url, {
           method: 'GET'
         })
         .then(response => resolve(response))
@@ -37,9 +44,10 @@ module.exports = {
     },
     user: (data) => {
       // Append query parameters to URL
-      const url = appendParams(new URL(usersURL), data);
+      const url = appendParams(usersURL, data);
+      console.log('url:', url);
       return new Promise((resolve, reject) => {
-        fetch(url.href, {
+        fetch(url, {
           method: 'GET'
         })
         .then(response => resolve(response))
