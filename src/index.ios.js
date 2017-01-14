@@ -48,23 +48,48 @@ export default class Scribe extends Component {
     if (data.latitude && data.longitude) {
       API.get.message(data)
         .then(response => response.json())
-        .then((JSONresponse) => {
-          return this.setState({
-            data: JSONresponse
-          }, () => {
-            if (cb) {
-              cb();
-            }
-          });
-        })
-        .then(() => {
-          if (this.state.userAuth) {
-            this.getUserVotes();
+        .then((responseData) => {
+          if(this.state.username){
+            this.getUserVotes(responseData);
+          } else {
+            responseData.forEach((message, i)=> responseData[i].userVote = null );
+            this.setState({ data: responseData });
           }
         })
-        .catch((error) => {
-          console.log('error:', error);
-        });
+    }
+  }
+
+  getUserVotes(messages){
+    if(messages.length){
+      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.username}`, {
+          method: 'GET'
+      })
+      .then(response => response.json())
+      .then((votes) => {
+        console.log('got this from votes', votes);
+        if(votes && this.state.username) {
+          for(var i = 0; i < messages.length; i++) {
+            for(var j = 0; j < votes.length; j++){
+              if(messages[i].id === votes[j].MessageId){
+                messages[i].userVote = votes[j].vote;
+                break;
+              } else {
+                messages[i].userVote = null;
+              }
+            }
+          }
+        } else {
+          for(var i = 0; i < messages.length; i++){
+            messages[i].userVote = null;
+          }
+        }
+      })
+      .then(() => {
+        this.setState({ data: messages });
+      })
+      .catch((err) => {
+        console.log('Index getUserVote error: ', err);
+      });
     }
   }
 
@@ -103,7 +128,8 @@ export default class Scribe extends Component {
       })
       .then((res) => {
         if (res.status === 200) {
-          this.updateUser(data.userAuth, res.displayName);
+          this.updateUser(userAuth, res.displayName);
+          this.getUserVotes(this.state.data);
         } else {
           if (!data.displayName) {
             this.updatePromptUN(true);
@@ -120,6 +146,7 @@ export default class Scribe extends Component {
               throw err;
             });
           }
+          this.getUserVotes(this.state.data);
         }
       })
       .catch((err, result) => {
@@ -131,7 +158,10 @@ export default class Scribe extends Component {
       .then((res) => {
         this.updateUser(data.userAuth, data.displayName);
       })
-      .catch((err) => {
+      .then(res => {
+        this.updateUser(userAuth, username);
+      })
+      .catch(err => {
         console.log('POST request err: ', err);
       });
     }
