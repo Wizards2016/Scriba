@@ -66,3 +66,5 @@ UserStats.prototype.getPostStats = () => {
     popularByCategory: postsByCateory
   };
 };
+
+exports.UserStats = UserStats;
