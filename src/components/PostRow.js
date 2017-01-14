@@ -12,6 +12,7 @@ import DownArrow from '../media/arrow_down.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 import PostInfo from './PostInfo';
+import API from '../util/APIService';
 
 const styles = StyleSheet.create({
   container: {
@@ -92,6 +93,7 @@ export default class PostRow extends Component {
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
     this.delayedVote = this.throttle(this.postVote, 1000);
+    this.renderPostInfo = this.renderPostInfo.bind(this);
   }
 
   componentWillMount() {
@@ -226,9 +228,26 @@ export default class PostRow extends Component {
   }
 
   postVote() {
-    let remove = null;
-    if (this.state.userVote === null) {
-      remove = true;
+    const data = {
+      vote: this.state.userVote,
+      messageId: this.state.message.id,
+      userAuth: this.props.userAuth,
+      displayName: this.props.username
+    };
+
+    data.delete = !!(this.state.userVote === null);
+
+    API.post.vote(data);
+  }
+
+  renderPostInfo() {
+    if (this.state.modalVisible) {
+      return (
+        <PostInfo
+          message={this.state.message}
+          togglePostInfo={this.togglePostInfo}
+        />
+      );
     }
     fetch('http://127.0.0.1:8000/votes', {
       method: 'POST',
@@ -253,11 +272,7 @@ export default class PostRow extends Component {
     return (
     <View style={styles.container}>
       <View style={styles.post}>
-        <PostInfo
-          visible={this.state.modalVisible}
-          message={this.state.message}
-          togglePostInfo={this.togglePostInfo}
-        />
+        {this.renderPostInfo()}
         <TouchableOpacity
           onPress={() => {
             this.togglePostInfo();

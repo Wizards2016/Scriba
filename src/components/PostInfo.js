@@ -56,15 +56,14 @@ export default class PostInfo extends Component {
   }
 
   render() {
-    const text = this.props.message.text;
-    const createdAt = this.props.message.createdAt;
+    const message = this.props.message;
 
     return (
       <ScrollView style={{ flex: 1 }}>
         <Modal
           animationType={"slide"}
           transparent={false}
-          visible={this.props.visible}
+          visible={true}
           >
          <View style={styles.modalContent}>
           <View>
@@ -88,10 +87,10 @@ export default class PostInfo extends Component {
 
             <View style={styles.container}>
                 <Text style={styles.text}>
-                  {`${text}`}
+                  {`${message.text}`}
                 </Text>
               <View style={styles.options}>
-                <TimeAgo time={createdAt} interval={60000} />
+                <TimeAgo time={message.createdAt} interval={60000} />
                 <View style={styles.voteContainer}>
                   <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
                     <Image
@@ -100,7 +99,7 @@ export default class PostInfo extends Component {
                       accessibilityLabel="Up vote"
                     />
                   </TouchableOpacity>
-                  <Text style={styles.vote}>2</Text>
+                  <Text style={styles.vote}>{message.upVotes}</Text>
                   <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
                     <Image
                       style={{ width: 20, height: 20 }}
@@ -108,7 +107,7 @@ export default class PostInfo extends Component {
                       accessibilityLabel="Down vote"
                     />
                   </TouchableOpacity>
-                  <Text style={styles.vote}>0</Text>
+                  <Text style={styles.vote}>{message.downVotes}</Text>
                 </View>
               </View>
             </View>
