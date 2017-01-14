@@ -11,6 +11,7 @@ import Settings from './components/Settings';
 import Globe from './media/globe_32.png';
 import Eye from './media/eye_32.png';
 import User from './media/user_32.png';
+import API from './util/APIService';
 
 const lock = new Auth0Lock({
   clientId: 'fluO2A5kqKrUAJ9jc9lUm5DT7Wf5HpBj',
@@ -39,14 +40,17 @@ export default class Scribe extends Component {
   }
 
   getMessages(cb) {
-    if (this.state.location.latitude && this.state.location.longitude) {
-      fetch(`http://127.0.0.1:8000/Messages?latitude=${this.state.location.latitude}&longitude=${this.state.location.longitude}`, {
-        method: 'GET'
-      })
+    const data = {
+      latitude: this.state.location.latitude,
+      longitude: this.state.location.longitude
+    };
+
+    if (data.latitude && data.longitude) {
+      API.get.message(data)
         .then(response => response.json())
-        .then((responseData) => {
-          this.setState({
-            data: responseData
+        .then((JSONresponse) => {
+          return this.setState({
+            data: JSONresponse
           }, () => {
             if (cb) {
               cb();
@@ -54,56 +58,64 @@ export default class Scribe extends Component {
           });
         })
         .then(() => {
-          if(this.state.userAuth){
+          if (this.state.userAuth) {
             this.getUserVotes();
           }
+        })
+        .catch((error) => {
+          console.log('error:', error);
         });
     }
   }
 
-  verifyUsername(userAuth, username) {
-    if (this.state.userAuth) {
-      fetch('http://127.0.0.1:8000/users?userAuth=' + userAuth, {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
+  getUserVotes(){
+    const messages = this.state.data.slice(0);
+    for (let i = 0; i < this.state.data.length; i++) {
+      let index = i;
+      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.displayName}&messageId=${this.state.data[i].id}`, {
+        method: 'GET'
       })
-      .then(res => {
+      .then(response => response.json())
+      .then((userVote) => {
+        if (userVote) {
+          messages[index].userVote = userVote.vote;
+        }
+      });
+    }
+    this.setState({
+      data: messages
+    });
+  }
+
+  verifyUsername(userAuth, username) {
+    const data = {
+      userAuth: userAuth,
+      displayName: username
+    };
+
+    if (this.state.userAuth) {
+      API.get.user(data)
+      .then((res) => {
         if (res.status === 200) {
           return res.json();
-        } else {
-          return res;
         }
+        return res;
       })
-      .then(res => {
-        console.log(res);
+      .then((res) => {
         if (res.status === 200) {
-          this.updateUser(userAuth, res.displayName);
+          this.updateUser(data.userAuth, res.displayName);
         } else {
-          if (!username) {
+          if (!data.displayName) {
             this.updatePromptUN(true);
           } else {
-            console.log(this.state);
-            fetch('http://127.0.0.1:8000/users', {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                userAuth: userAuth,
-                displayName: username
-              })
-            })
-            .then(res2 => {
-              if (res2.status === 201) {
+            API.post.user(data)
+            .then((res) => {
+              if (res.status === 201) {
                 this.updateUser(userAuth, username);
                 this.updatePromptUN(false);
               }
             })
-            .catch(err => {
+            .catch((err) => {
               console.log('POST request err: ', err);
               throw err;
             });
@@ -115,21 +127,11 @@ export default class Scribe extends Component {
         throw err;
       });
     } else {
-      fetch('http://127.0.0.1:8000/users', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          userAuth: userAuth,
-          displayName: username
-        })
+      API.post.user(data)
+      .then((res) => {
+        this.updateUser(data.userAuth, data.displayName);
       })
-      .then(res => {
-        this.updateUser(userAuth, username);
-      })
-      .catch(err => {
+      .catch((err) => {
         console.log('POST request err: ', err);
       });
     }
@@ -168,36 +170,15 @@ export default class Scribe extends Component {
         console.log(err);
         return;
       }
-      let userAuth = profile.userId;
-      console.log(userAuth);
-      let username = profile.extraInfo.username;
+      const userAuth = profile.userId;
+      const username = profile.extraInfo.username;
       if(username) {
         this.verifyUsername(userAuth, username);
       } else {
         this.updateUser(userAuth);
         this.verifyUsername(userAuth);
       }
-      console.log(this.state);
       AsyncStorage.setItem('id_token', JSON.stringify(token));
-    });
-  }
-
-  getUserVotes(){
-    var messages = this.state.data.slice(0);
-    for(var i = 0; i < this.state.data.length; i++){
-      let index = i;
-      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.displayName}&messageId=${this.state.data[i].id}`, {
-          method: 'GET'
-      })
-      .then(response => response.json())
-      .then((userVote) => {
-        if(userVote){
-          messages[index].userVote = userVote.vote;
-        }
-      })
-    }
-    this.setState({
-      data: messages
     });
   }
 

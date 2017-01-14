@@ -3,6 +3,7 @@ import {
   StyleSheet,
   TextInput
 } from 'react-native';
+import API from '../util/APIService';
 
 
 const styles = StyleSheet.create({
@@ -20,34 +21,27 @@ export default class Input extends Component {
 
     this.state = {
     };
-    
+
     this.postMessage = this.postMessage.bind(this);
   }
 
   postMessage(text) {
-    // Clear the text input field
-    let userAuth = this.props.userAuth;
-    let username = this.props.username;
-    if(userAuth && username) {
-      console.log(username);
+    const data = {
+      userAuth: this.props.userAuth,
+      displayName: this.props.username,
+      text: text,
+      latitude: this.props.location.latitude,
+      longitude: this.props.location.longitude
+    };
+    if (data.userAuth && data.displayName) {
+      // Clear the text input field
       this._textInput.setNativeProps({ text: '' });
       // Post the message to the database
-      fetch('http://127.0.0.1:8000/messages', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          text: text,
-          latitude: this.props.location.latitude,
-          longitude: this.props.location.longitude,
-          userAuth: userAuth,
-          displayName: username
-        })
-      })
-      .then(() => { this.props.getMessages(); });
-    } else if (!userAuth) {
+      API.post.message(data)
+        .then(() => {
+          this.props.getMessages();
+        });
+    } else {
       this.props.login();
     }
   }
