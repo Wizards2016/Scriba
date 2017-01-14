@@ -18,13 +18,15 @@ import Thumbs from '../media/thumbs.png';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   scrollView: {
     flex: 1,
     margin: 0,
+    marginBottom: 50,
     padding: 0,
-    zIndex: -1
+    zIndex: -1,
+    backgroundColor: '#ddd'
   },
   text: {
     textAlign: 'center',
@@ -59,7 +61,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    width: 40,
+    width: 60,
+    paddingLeft: 20,
+    paddingTop: 5,
     height: 20
   },
   buttonsRight: {
@@ -67,8 +71,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
-    width: 40,
-    height: 20
+    width: 60,
+    height: 20,
+    paddingRight: 20,
+    paddingTop: 5
   }
 });
 
@@ -82,21 +88,27 @@ export default class Posts extends Component {
 
     // Sort posts by time
     const sortedPosts = PostSorting.sortByTime(props.data);
-
     this.state = {
       dataSource: ds.cloneWithRows(sortedPosts),
+      sortBy: 'time',
+      title: 'Latest',
       refreshing: false
     };
-
     this.updateRefreshing = this.updateRefreshing.bind(this);
     this.refreshMessages = this.refreshMessages.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    const sortedPosts = PostSorting.sortByTime(nextProps.data);
-
+    if(this.state.sortBy === 'time'){
+      var title = 'Latest';
+      var sortedPosts = PostSorting.sortByTime(nextProps.data);
+    } else if(this.state.sortBy === 'votes'){
+      var title = 'Popular';
+      var sortedPosts = PostSorting.sortByVotes(nextProps.data);
+    }
     this.setState({
-      dataSource: ds.cloneWithRows(sortedPosts)
+      dataSource: ds.cloneWithRows(sortedPosts),
+      title: title
     });
   }
 
@@ -124,27 +136,33 @@ export default class Posts extends Component {
           <View style={styles.buttonsLeft}>
           </View>
           <View style={styles.title}>
-            <Text style={styles.titleText}>POSTS</Text>
+            <Text style={styles.titleText}>{this.state.title}</Text>
           </View>
           <View style={styles.buttonsRight}>
-            <TouchableOpacity onPress={() => { console.log(':)'); }}>
+            <TouchableOpacity onPress={() => { 
+              this.setState({sortBy: 'time'}, this.props.getMessages);
+            }}>
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{ width: 20, height: 20, marginRight: 2 }}
                 source={Clock}
                 accessibilityLabel="Time"
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { console.log(':)'); }}>
+            <TouchableOpacity onPress={() => {
+              this.setState({sortBy: 'votes'}, this.props.getMessages); 
+            }}>
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{ width: 20, height: 20, marginLeft: 2 }}
                 source={Thumbs}
                 accessibilityLabel="Hot"
               />
             </TouchableOpacity>
           </View>
         </View>
+        <View style={styles.container}>
           <ScrollView
             style={styles.scrollView}
+            automaticallyAdjustContentInsets={false}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -157,13 +175,15 @@ export default class Posts extends Component {
                 enableEmptySections={true}
                 automaticallyAdjustContentInsets={false}
                 dataSource={this.state.dataSource}
-                renderRow={data =>
+                renderRow={data => {
+                  return (
                   <PostRow
                     message={data}
                     username={this.props.username}
                     userAuth={this.props.userAuth}
                     login={this.props.login}
-                  />}
+                    getMessages={this.props.getMessages}
+                  />)}}
               />
               :
               <Text style={styles.text}>
@@ -171,6 +191,7 @@ export default class Posts extends Component {
               </Text>
             }
           </ScrollView>
+        </View>
       </View>
     );
   }
