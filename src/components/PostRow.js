@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   usernameText: {
     fontSize: 14,
     fontWeight: 'bold',
-    fontFamily: 'Avenir',
+    fontFamily: 'Avenir', 
     fontWeight: '500',
     margin: 0,
     paddingBottom: 0
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   timeAgoText: {
     fontSize: 12,
     fontWeight: 'bold',
-    fontFamily: 'Avenir',
+    fontFamily: 'Avenir', 
     fontWeight: 'bold',
     color: '#bbb',
     margin: 0,
@@ -249,6 +249,20 @@ export default class PostRow extends Component {
         />
       );
     }
+    fetch('http://127.0.0.1:8000/votes', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        vote: this.state.userVote,
+        delete: remove,
+        messageId: this.state.message.id,
+        userAuth: this.props.userAuth,
+        displayName: this.props.username
+      })
+    })
   }
 
   render() {
