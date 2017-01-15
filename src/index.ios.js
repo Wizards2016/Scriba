@@ -56,6 +56,14 @@ export default class Scribe extends Component {
             this.setState({ data: responseData });
           }
         })
+        .then(() => {
+          if (cb) {
+            cb();
+          }
+        })
+        .catch((error) => {
+          console.log('Got an error:', error);
+        });
     }
   }
 
@@ -64,9 +72,7 @@ export default class Scribe extends Component {
       fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.username}`, {
           method: 'GET'
       })
-      .then(response => response.json())
       .then((votes) => {
-        console.log('got this from votes', votes);
         if(votes && this.state.username) {
           for(var i = 0; i < messages.length; i++) {
             for(var j = 0; j < votes.length; j++){
@@ -91,25 +97,6 @@ export default class Scribe extends Component {
         console.log('Index getUserVote error: ', err);
       });
     }
-  }
-
-  getUserVotes(){
-    const messages = this.state.data.slice(0);
-    for (let i = 0; i < this.state.data.length; i++) {
-      let index = i;
-      fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.displayName}&messageId=${this.state.data[i].id}`, {
-        method: 'GET'
-      })
-      .then(response => response.json())
-      .then((userVote) => {
-        if (userVote) {
-          messages[index].userVote = userVote.vote;
-        }
-      });
-    }
-    this.setState({
-      data: messages
-    });
   }
 
   verifyUsername(userAuth, username) {
