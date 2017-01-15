@@ -43,8 +43,7 @@ const styles = StyleSheet.create({
   titleText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '400',
-    fontFamily: 'Avenir'
+    fontWeight: '400'
   },
   options: {
     backgroundColor: '#007aff',
