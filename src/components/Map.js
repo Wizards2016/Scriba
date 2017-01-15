@@ -40,7 +40,13 @@ const styles = StyleSheet.create({
   titleText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '400'
+    fontWeight: '400',
+    fontFamily: 'Avenir'
+  },
+  messageText: {
+    fontSize: 14,
+    fontWeight: '400',
+    fontFamily: 'Avenir'
   },
   options: {
     backgroundColor: '#007aff',
@@ -174,7 +180,7 @@ export default class Map extends Component {
                     onPress={() => console.log('callout was clicked')}
                   >
                     <View>
-                      <Text>{message.text}</Text>
+                      <Text style={styles.messageText}>{message.text}</Text>
                     </View>
                   </TouchableHighlight>
                 </MapView.Callout>
