@@ -13,6 +13,9 @@ import TimeAgo from 'react-native-timeago';
 import Button from 'react-native-button';
 import UpArrow from '../media/arrow_up.png';
 import DownArrow from '../media/arrow_down.png';
+import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
+import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
+import PostDetails from './PostDetails';
 
 const styles = StyleSheet.create({
   modalContent: {
@@ -53,6 +56,22 @@ const styles = StyleSheet.create({
 export default class PostInfo extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      message: this.props.message,
+      userVote: props.userVote,
+      upArrowToggle: UpArrow,
+      DownArrowToggle: DownArrow
+    }
+
+    // this.togglePostInfo = this.togglePostInfo.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      message: nextProps.message,
+      userVote: nextProps.message.userVote
+    });
   }
 
   render() {
@@ -86,38 +105,23 @@ export default class PostInfo extends Component {
             </MapView>
 
             <View style={styles.container}>
-                <Text style={styles.text}>
-                  {`${message.text}`}
-                </Text>
-              <View style={styles.options}>
-                <TimeAgo time={message.createdAt} interval={60000} />
-                <View style={styles.voteContainer}>
-                  <TouchableOpacity onPress={() => { console.log('Upvoted'); }}>
-                    <Image
-                      style={{ width: 20, height: 20 }}
-                      source={UpArrow}
-                      accessibilityLabel="Up vote"
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.vote}>{message.upVotes}</Text>
-                  <TouchableOpacity onPress={() => { console.log('Downvoted'); }}>
-                    <Image
-                      style={{ width: 20, height: 20 }}
-                      source={DownArrow}
-                      accessibilityLabel="Down vote"
-                    />
-                  </TouchableOpacity>
-                  <Text style={styles.vote}>{message.downVotes}</Text>
-                </View>
-              </View>
+              <Text style={styles.text}>
+                {`${message.text}`}
+              </Text>
+              <PostDetails 
+                message={this.state.message}
+                userVote={this.state.userVote}
+                username={this.props.username}
+                userAuth={this.props.userAuth}
+                login={this.props.login}
+                togglePostInfo={this.props.toggleMapPostInfo || this.props.togglePostInfo}
+              />
             </View>
-
-
           </View>
          </View>
           <Button
             accessibilityLabel="Return to posts"
-            onPress={this.props.togglePostInfo}
+            onPress={this.props.toggleMapPostInfo || this.props.togglePostInfo}
             containerStyle={{
               padding: 10,
               height: 45,

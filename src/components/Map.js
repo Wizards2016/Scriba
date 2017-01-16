@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   TabBarIOS
 } from 'react-native';
+import PostInfo from './PostInfo';
 import MapView from 'react-native-maps';
 import Prompt from 'react-native-prompt';
 import Input from './Input';
@@ -85,9 +86,11 @@ export default class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modalVisible: false,
     };
 
     this.updateLocation = this.updateLocation.bind(this);
+    this.toggleMapPostInfo = this.toggleMapPostInfo.bind(this);
   }
 
   watchID: ?number = null;
@@ -97,6 +100,17 @@ export default class Map extends Component {
     this.watchID = navigator.geolocation.watchPosition((position) => {
       this.updateLocation(position);
     });
+  }
+
+  toggleMapPostInfo(message) {
+    //setstate with the passed in message and id n stuff
+      //
+    this.setState((prevState) => {
+      return {
+        modalVisible: !prevState.modalVisible,
+        message: message
+      };
+    }, () => this.props.getMessages());
   }
 
   getCurrentPosition(){
@@ -118,6 +132,23 @@ export default class Map extends Component {
     });
   }
 
+  renderPostInfo(message) {
+    if (this.state.modalVisible) {
+      console.log('the message', message);
+      return (
+        <PostInfo
+          message={this.state.message}
+          userVote={this.state.message.userVote}
+          username={this.props.username}
+          userAuth={this.props.userAuth}
+          login={this.props.login}
+          toggleMapPostInfo={this.toggleMapPostInfo}
+          refreshMessages={this.props.getMessages}
+        />
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -137,6 +168,7 @@ export default class Map extends Component {
           </View>
         </View>
         <KeyboardAvoidingView behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
+          {this.renderPostInfo()}
           <MapView id="map-view"
             style={styles.map}
             onRegionChangeComplete={this.updateLocation}
@@ -171,7 +203,7 @@ export default class Map extends Component {
                   <TouchableHighlight
                     style={styles.callout}
                     underlayColor="transparent"
-                    onPress={() => console.log('callout was clicked')}
+                    onPress={() => this.toggleMapPostInfo(message)}
                   >
                     <View>
                       <Text>{message.text}</Text>
