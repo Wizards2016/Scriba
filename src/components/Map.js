@@ -285,14 +285,14 @@ export default class Map extends Component {
 
   updateText(text) {
     this.setState(() => {
-      return { text: text }; 
-    }, () => {}); 
+      return { text: text };
+    }, () => {});
   }
 
   updateSubcategory(subcategory) {
     this.setState(() => {
-      return { subcategory: subcategory }; 
-    }, () => {}); 
+      return { subcategory: subcategory };
+    }, () => {});
   }
 
   updatePostPage() {
@@ -350,7 +350,7 @@ export default class Map extends Component {
       <Navigator
         initialRoute={{ index: 0 }}
         renderScene={(route, list) => {
-          return ( route.index === 0 ? 
+          return ( route.index === 0 ?
             <View style={styles.container}>
               <View>
                 <StatusBar
