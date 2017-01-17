@@ -6,10 +6,14 @@ import {
   AsyncStorage,
   ScrollView,
   View,
-  StatusBar
+  StatusBar,
+  Image
 } from 'react-native';
 import UsernameCreate from './UsernameCreate';
 import Analytics from '../util/Analytics';
+import Marker from '../media/marker.png';
+import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
+import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 
 const styles = StyleSheet.create({
   welcome: {
@@ -34,7 +38,6 @@ const styles = StyleSheet.create({
   options: {
     backgroundColor: '#007aff',
     flexDirection: 'row',
-    alignItems: 'flex-start',
     alignItems: 'center',
     flexWrap: 'wrap',
     paddingTop: 20,
@@ -42,26 +45,11 @@ const styles = StyleSheet.create({
     margin: 0,
     height: 70
   },
-  buttonsLeft: {
+  statsContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    width: 60,
-    paddingLeft: 20,
-    paddingTop: 5,
-    height: 20
-  },
-  buttonsRight: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    width: 60,
-    height: 20,
-    paddingRight: 20,
-    paddingTop: 5
-  },
+    justifyContent: 'center'
+  }
 });
 
 export default class Settings extends Component {
@@ -122,18 +110,35 @@ export default class Settings extends Component {
             {`${this.props.userAuth === null ? 'Please log in to post messages.' : ''}`}
           </Text>
           { this.state.userStats ?
-            <Text>
-              {`Welcome, ${this.state.userStats.user.displayName}\n`}
-              {`Upvotes: ${this.state.voteStats.upVotes}\n`}
-              {`Downvotes: ${this.state.voteStats.downVotes}\n`}
-              {`Total posts: ${this.state.postStats.totalPosts}`}
-            </Text>
+            <View style={styles.statsContainer}>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={UpArrowHighlighted}
+                accessibilityLabel="Up votes"
+              />
+              <Text>{`${this.state.voteStats.upVotes}\n`}</Text>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={DownArrowHighlighted}
+                accessibilityLabel="Down votes"
+              />
+              <Text>{`${this.state.voteStats.downVotes}\n`}</Text>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={Marker}
+                accessibilityLabel="Posts"
+              />
+              <Text>{`${this.state.postStats.totalPosts}`}</Text>
+            </View>
             :
             <Text>
             </Text>
           }
           { this.props.userAuth ?
-            <Button title="Logout" onPress={this.logout} />
+            <View>
+              <Button title="Manage Posts" />
+              <Button title="Logout" onPress={this.logout} />
+            </View>
             :
             <Button title="Login" onPress={this.props.login} />
           }

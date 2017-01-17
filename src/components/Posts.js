@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import PostRow from './PostRow';
 import PostSorting from '../util/PostSorting';
-import UpArrow from '../media/arrow_up.png';
 import Clock from '../media/clock.png';
 import Thumbs from '../media/thumbs.png';
 import Location from '../media/location.png';
@@ -143,7 +142,7 @@ export default class Posts extends Component {
             <Text style={styles.titleText}>{this.state.title}</Text>
           </View>
           <View style={styles.buttonsRight}>
-            <TouchableOpacity onPress={() => { 
+            <TouchableOpacity onPress={() => {
               this.setState({sortBy: 'distance'}, this.props.getMessages);
             }}>
               <Image
@@ -153,7 +152,7 @@ export default class Posts extends Component {
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              this.setState({sortBy: 'time'}, this.props.getMessages); 
+              this.setState({sortBy: 'time'}, this.props.getMessages);
             }}>
               <Image
                 style={{ width: 20, height: 20, marginLeft: 2 }}
@@ -162,7 +161,7 @@ export default class Posts extends Component {
               />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
-              this.setState({sortBy: 'votes'}, this.props.getMessages); 
+              this.setState({sortBy: 'votes'}, this.props.getMessages);
             }}>
               <Image
                 style={{ width: 20, height: 20, marginLeft: 2 }}
