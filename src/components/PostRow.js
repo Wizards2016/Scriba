@@ -12,6 +12,7 @@ import DownArrow from '../media/arrow_down.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 import PostInfo from './PostInfo';
+import PostDetails from './PostDetails';
 import API from '../util/APIService';
 
 const styles = StyleSheet.create({
@@ -92,7 +93,6 @@ export default class PostRow extends Component {
     };
 
     this.togglePostInfo = this.togglePostInfo.bind(this);
-    this.delayedVote = this.throttle(this.postVote, 1000);
     this.renderPostInfo = this.renderPostInfo.bind(this);
   }
 
@@ -100,16 +100,12 @@ export default class PostRow extends Component {
     this.setState({
       message: this.props.message
     });
-    this.updateArrow();
   }
 
   componentWillReceiveProps(nextProps) {
-    var dog = nextProps.message;
     this.setState({
       message: nextProps.message,
       userVote: nextProps.message.userVote
-    }, () => {
-      this.updateArrow();
     });
   }
 
@@ -118,134 +114,21 @@ export default class PostRow extends Component {
       return {
         modalVisible: !prevState.modalVisible
       };
-    });
-  }
-
-  updateArrow() {
-    if (this.state.userVote) {
-      this.setState({
-        upArrowToggle: UpArrowHighlighted,
-        downArrowToggle: DownArrow
-      });
-    } else if (this.state.userVote === false) {
-      this.setState({
-        upArrowToggle: UpArrow,
-        downArrowToggle: DownArrowHighlighted
-      });
-    } else if(this.state.userVote === null){
-      this.setState({
-        upArrowToggle: UpArrow,
-        downArrowToggle: DownArrow
-      });
-    }
-  }
-
-  throttle(func, wait) {
-    let wasRecentlyInvoked = false;
-    let doAgain = false;
-    let timerOn = false;
-    return () => {
-      const context = this;
-      if (!timerOn) {
-        timerOn = true;
-        setTimeout(() => {
-          if (doAgain) {
-            func.call(context);
-          }
-          wasRecentlyInvoked = false;
-          doAgain = false;
-          timerOn = false;
-        }, wait);
-      }
-      if (!wasRecentlyInvoked) {
-        func.call(context);
-        wasRecentlyInvoked = true;
-      } else if (wasRecentlyInvoked && !doAgain) {
-        doAgain = true;
-      }
-    };
-  };
-
-  updateVote(clicked) {
-    if (this.props.username && this.props.userAuth) {
-      let up = 0;
-      let down = 0;
-      let newState = {};
-      let newMessage = {};
-
-      for(let key in this.state.message) {
-        newMessage[key] = this.state.message[key];
-      }
-      if (clicked === 'up') {
-        if (this.state.upArrowToggle === UpArrow) {
-          up += 1;
-          if (this.state.downArrowToggle === DownArrowHighlighted) {
-            down -= 1;
-          }
-          this.setState({
-            upArrowToggle: UpArrowHighlighted,
-            downArrowToggle: DownArrow,
-            userVote: true
-          });
-        } else if (this.state.upArrowToggle === UpArrowHighlighted) {
-          up -= 1;
-          this.setState({
-            upArrowToggle: UpArrow,
-            downArrowToggle: DownArrow,
-            userVote: null
-          });
-        }
-      } else if (clicked === 'down') {
-        if (this.state.downArrowToggle === DownArrow) {
-          down += 1;
-          if (this.state.upArrowToggle === UpArrowHighlighted) {
-            up -= 1;
-          }
-          this.setState({
-            upArrowToggle: UpArrow,
-            downArrowToggle: DownArrowHighlighted,
-            userVote: false
-          });
-        } else if (this.state.downArrowToggle === DownArrowHighlighted) {
-          down -= 1;
-          this.setState({
-            upArrowToggle: UpArrow,
-            downArrowToggle: DownArrow,
-            userVote: null
-          });
-        }
-      }
-      newMessage.upVotes = this.state.message.upVotes + up;
-      newMessage.downVotes = this.state.message.downVotes + down;
-      this.setState({
-        message: newMessage
-      }, () => {
-        this.delayedVote();
-      });
-    } else {
-      this.props.login();
-    }
-  }
-
-  postVote() {
-    const data = {
-      vote: this.state.userVote,
-      messageId: this.state.message.id,
-      userAuth: this.props.userAuth,
-      displayName: this.props.username
-    };
-
-    data.delete = !!(this.state.userVote === null);
-
-    API.post.vote(data);
+    }, () => this.props.refreshMessages());
   }
 
   renderPostInfo() {
     if (this.state.modalVisible) {
       return (
         <PostInfo
-          message={this.state.message}
+          message={this.props.message}
+          userVote={this.props.userVote}
+          username={this.props.username}
+          userAuth={this.props.userAuth}
+          login={this.props.login}
           togglePostInfo={this.togglePostInfo}
+          refreshMessages={this.props.refreshMessages}
+          modalVisible={this.state.modalVisible}
         />
       );
     }
@@ -268,27 +151,14 @@ export default class PostRow extends Component {
           <Text style={styles.text}>{`${text}`}</Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.options}>
-          <TimeAgo style={styles.timeAgoText} time={createdAt} interval={60000} />
-          <View style={styles.buttons}>
-            <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
-              <Image
-                style={{ width: 20, height: 20 }}
-                source={this.state.upArrowToggle}
-                accessibilityLabel="Up vote"
-              />
-            </TouchableOpacity>
-            <Text style={styles.vote}>{this.state.message.upVotes}</Text>
-            <TouchableOpacity onPress={() => { this.updateVote('down'); }}>
-              <Image
-                style={{ width: 20, height: 20 }}
-                source={this.state.downArrowToggle}
-                accessibilityLabel="Down vote"
-              />
-            </TouchableOpacity>
-            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
-          </View>
-        </View>
+      <PostDetails
+        message={this.state.message}
+        userVote={this.state.userVote}
+        username={this.props.username}
+        userAuth={this.props.userAuth}
+        login={this.props.login}
+        togglePostInfo={this.togglePostInfo}
+      />
     </View>
     );
   }

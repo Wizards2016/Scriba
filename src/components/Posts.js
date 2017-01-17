@@ -183,6 +183,7 @@ export default class Posts extends Component {
                     userAuth={this.props.userAuth}
                     login={this.props.login}
                     getMessages={this.props.getMessages}
+                    refreshMessages={this.refreshMessages}
                   />)}}
               />
               :
