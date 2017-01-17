@@ -405,10 +405,10 @@ export default class Map extends Component {
                 </TouchableHighlight>
               </View>
             </View> :
-            <KeyboardAvoidingView 
-              behavior={this.state.behavior} 
-              style={styles.container} 
-              automaticallyAdjustContentInsets={false} 
+            <KeyboardAvoidingView
+              behavior={this.state.behavior}
+              style={styles.container}
+              automaticallyAdjustContentInsets={false}
             >
               <TouchableOpacity
                 activeOpacity={1}
@@ -429,7 +429,7 @@ export default class Map extends Component {
                 />
                 <Text style={styles.category}>Catagory</Text>
                 <Picker
-                  style={styles.picker} 
+                  style={styles.picker}
                   selectedValue={this.state.category}
                   onValueChange={(category) => {
                     this.updateCategory(category);
