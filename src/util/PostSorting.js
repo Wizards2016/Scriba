@@ -6,7 +6,7 @@ const sortByDistance = function(currentLocation, posts) {
     const latDistance1 = Math.pow(post1.latitude - currentLocation.latitude, 2);
     const longDistance1 = Math.pow(post1.longitude - currentLocation.longitude, 2);
     const d1 = Math.sqrt(latDistance1 + longDistance1);
-    
+
     // calculate distance between post2 and currentLocation
     const latDistance2 = Math.pow(post2.latitude - currentLocation.latitude, 2);
     const longDistance2 = Math.pow(post2.longitude - currentLocation.longitude, 2);
@@ -19,7 +19,7 @@ const sortByDistance = function(currentLocation, posts) {
 };
 
 // Sorts from newest to oldest
-const sortByTime = function(posts) {
+const sortByTime = (posts) => {
   posts.sort((post1, post2) => {
     return new Date(post2.createdAt) - new Date(post1.createdAt);
   });
@@ -37,8 +37,22 @@ const sortByVotes = function(posts) {
     return (post2.upVotes - post2.downVotes) - (post1.upVotes - post1.downVotes);
   });
   return posts;
-}
+};
+
+// Returns an object with arrays as values
+const sortByCategory = (posts) => {
+  const sortedPosts = {};
+
+  posts.forEach((post) => {
+    const category = post.category;
+    sortedPosts[category] = sortedPosts[category] || [];
+    sortedPosts[category].push(post);
+  });
+
+  return sortedPosts;
+};
 
 exports.sortByDistance = sortByDistance;
 exports.sortByTime = sortByTime;
 exports.sortByVotes = sortByVotes;
+exports.sortByCategory = sortByCategory;

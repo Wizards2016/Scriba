@@ -285,6 +285,7 @@ export default class Scribe extends Component {
           <Settings
             lock={lock}
             userAuth={this.state.userAuth}
+            username={this.state.username}
             promptUN={this.state.promptUN}
             updateUser={this.updateUser}
             updatePromptUN={this.updatePromptUN}
