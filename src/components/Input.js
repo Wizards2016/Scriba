@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet,
-  TextInput
+  TextInput,
+  View,
+  Text,
+  TouchableHighlight,
+  Picker,
+  KeyboardAvoidingView,
+  StyleSheet
 } from 'react-native';
 import API from '../util/APIService';
 
-
 const styles = StyleSheet.create({
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    height: 40,
-    marginBottom: 49
+  container: {
+    flex: 1
   }
 });
 
@@ -47,12 +48,18 @@ export default class Input extends Component {
   }
 
   render() {
+    let Item = Picker.Item;
     return (
       <TextInput
         ref={(component) => { this._textInput = component; }}
-        style={styles.input}
-        onSubmitEditing={(text) => { this.postMessage(text.nativeEvent.text); }}
-        placeholder="Type a message"
+        value={this.props.value}
+        style={this.props.style}
+        placeholder={this.props.placeholder}
+        onChangeText={(text) => {
+          console.log(text);
+          this.props.updateValue(text);
+        }}
+        onFocus={this.props.updateBehavior}
       />
     );
   }

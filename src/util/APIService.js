@@ -88,6 +88,8 @@ module.exports = {
             text: data.text,
             latitude: data.latitude,
             longitude: data.longitude,
+            category: data.category,
+            subCategory: data.subCategory,
             userAuth: data.userAuth,
             displayName: data.displayName
           })
