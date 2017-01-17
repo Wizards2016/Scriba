@@ -10,10 +10,7 @@ import {
   Image
 } from 'react-native';
 import UsernameCreate from './UsernameCreate';
-import Analytics from '../util/Analytics';
-import Marker from '../media/marker.png';
-import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
-import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
+import Profile from './Profile';
 
 const styles = StyleSheet.create({
   welcome: {
@@ -62,24 +59,6 @@ export default class Settings extends Component {
     this.logout = this.logout.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.username !== undefined &&
-        nextProps.userAuth !== undefined &&
-        nextProps.username !== this.props.username &&
-        nextProps.userAuth !== this.props.userAuth) {
-      this.getUserStats(nextProps.username, nextProps.userAuth);
-    }
-  }
-
-  getUserStats(username, userAuth) {
-    new Analytics.UserStats(username, userAuth)
-    .then(userStats => this.setState({
-      userStats: userStats,
-      voteStats: userStats.getVoteStats(),
-      postStats: userStats.getPostStats()
-    }));
-  }
-
   logout() {
     AsyncStorage.removeItem('id_token')
     .then(() => {
@@ -109,31 +88,10 @@ export default class Settings extends Component {
           <Text style={styles.welcome}>
             {`${this.props.userAuth === null ? 'Please log in to post messages.' : ''}`}
           </Text>
-          { this.state.userStats ?
-            <View style={styles.statsContainer}>
-              <Image
-                style={{ width: 40, height: 40 }}
-                source={UpArrowHighlighted}
-                accessibilityLabel="Up votes"
-              />
-              <Text>{`${this.state.voteStats.upVotes}\n`}</Text>
-              <Image
-                style={{ width: 40, height: 40 }}
-                source={DownArrowHighlighted}
-                accessibilityLabel="Down votes"
-              />
-              <Text>{`${this.state.voteStats.downVotes}\n`}</Text>
-              <Image
-                style={{ width: 40, height: 40 }}
-                source={Marker}
-                accessibilityLabel="Posts"
-              />
-              <Text>{`${this.state.postStats.totalPosts}`}</Text>
-            </View>
-            :
-            <Text>
-            </Text>
-          }
+          <Profile
+            userAuth={this.props.userAuth}
+            username={this.props.username}
+          />
           { this.props.userAuth ?
             <View>
               <Button title="Manage Posts" />
