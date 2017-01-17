@@ -15,6 +15,7 @@ import PostSorting from '../util/PostSorting';
 import UpArrow from '../media/arrow_up.png';
 import Clock from '../media/clock.png';
 import Thumbs from '../media/thumbs.png';
+import Location from '../media/location.png';
 
 const styles = StyleSheet.create({
   container: {
@@ -105,6 +106,9 @@ export default class Posts extends Component {
     } else if(this.state.sortBy === 'votes'){
       var title = 'Popular';
       var sortedPosts = PostSorting.sortByVotes(nextProps.data);
+    } else if(this.state.sortBy === 'distance'){
+      var title = 'Distance';
+      var sortedPosts = PostSorting.sortByDistance(this.props.location, nextProps.data);
     }
     this.setState({
       dataSource: ds.cloneWithRows(sortedPosts),
@@ -140,10 +144,19 @@ export default class Posts extends Component {
           </View>
           <View style={styles.buttonsRight}>
             <TouchableOpacity onPress={() => { 
-              this.setState({sortBy: 'time'}, this.props.getMessages);
+              this.setState({sortBy: 'distance'}, this.props.getMessages);
             }}>
               <Image
                 style={{ width: 20, height: 20, marginRight: 2 }}
+                source={Location}
+                accessibilityLabel="distance"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              this.setState({sortBy: 'time'}, this.props.getMessages); 
+            }}>
+              <Image
+                style={{ width: 20, height: 20, marginLeft: 2 }}
                 source={Clock}
                 accessibilityLabel="Time"
               />
