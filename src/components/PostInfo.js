@@ -168,6 +168,7 @@ export default class PostInfo extends Component {
                   userAuth={this.props.userAuth}
                   login={this.props.login}
                   togglePostInfo={this.props.toggleMapPostInfo || this.props.togglePostInfo}
+                  modalVisible={this.props.modalVisible}
                 />
               </View>
             </View>

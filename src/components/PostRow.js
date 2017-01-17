@@ -128,6 +128,7 @@ export default class PostRow extends Component {
           login={this.props.login}
           togglePostInfo={this.togglePostInfo}
           refreshMessages={this.props.refreshMessages}
+          modalVisible={this.state.modalVisible}
         />
       );
     }
