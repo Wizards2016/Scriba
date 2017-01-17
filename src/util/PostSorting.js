@@ -1,6 +1,6 @@
 const earthRadius = 3959; // in miles
 
-const sortByDistance = function(currentLocation, posts) {
+const sortByDistance = function (currentLocation, posts) {
   posts.sort((post1, post2) => {
     // calculate distance between post1 and currentLocation
     const latDistance1 = Math.pow(post1.latitude - currentLocation.latitude, 2);
@@ -27,12 +27,12 @@ const sortByTime = (posts) => {
 };
 
 // Convert degrees to radians
-const _degreesToRad = function(degree) {
+const _degreesToRad = function (degree) {
   return degree * (Math.PI / 180);
 };
 
 // Sorts by upvotes minus downvotes
-const sortByVotes = function(posts) {
+const sortByVotes = function (posts) {
   posts.sort((post1, post2) => {
     return (post2.upVotes - post2.downVotes) - (post1.upVotes - post1.downVotes);
   });
