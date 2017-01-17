@@ -16,7 +16,7 @@ const sortByDistance = function(currentLocation, posts) {
     const a2 = Math.pow(Math.sin(latDistance2 / 2), 2);
     const b2 = Math.cos(currentLocation.latitude) * Math.cos(post2.latitude) * Math.pow(Math.sin(longDistance2 / 2), 2);
     const d2 = 2 * earthRadius * Math.sqrt(a2 + b2);
-
+    console.log('posts', post1, post2);
     // Sort in ascending order (closest to furthest from the user)
     return d1 - d2;
   });
@@ -37,6 +37,7 @@ const _degreesToRad = function(degree) {
   return degree * (Math.PI / 180);
 };
 
+// Sorts by upvotes minus downvotes
 const sortByVotes = function(posts) {
   posts.sort((post1, post2) => {
     return (post2.upVotes - post2.downVotes) - (post1.upVotes - post1.downVotes);
