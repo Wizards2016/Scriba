@@ -132,9 +132,8 @@ export default class Map extends Component {
     });
   }
 
-  renderPostInfo(message) {
+  renderPostInfo() {
     if (this.state.modalVisible) {
-      console.log('the message', message);
       return (
         <PostInfo
           message={this.state.message}

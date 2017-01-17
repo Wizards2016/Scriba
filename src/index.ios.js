@@ -182,7 +182,6 @@ export default class Scribe extends Component {
   }
 
   login() {
-    console.log('loggin in from index');
     lock.show({ zIndex:10, closable: true }, (err, profile, token) => {
       if (err) {
         console.log(err);

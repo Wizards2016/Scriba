@@ -56,7 +56,6 @@ export default class PostDetails extends Component {
       upArrowToggle: UpArrow,
       downArrowToggle: DownArrow
     };
-    console.log(this.props);
     this.delayedVote = this.throttle(this.postVote, 1000);
   }
 
@@ -175,7 +174,6 @@ export default class PostDetails extends Component {
         this.delayedVote();
       });
     } else {
-      console.log('running login');
       this.props.togglePostInfo();
       setTimeout(() => this.props.login(), 1000);
     }
