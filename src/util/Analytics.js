@@ -7,21 +7,39 @@ const populateUserData = function(context) {
     API.get.message({
       displayName: context.displayName
     })
-    .then(response => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return [];
+      }
+    })
     .then((JSONresponse) => {
       context.messages = JSONresponse;
     })
     .then(() => API.get.vote({
       displayName: context.displayName
     }))
-    .then(response => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return [];
+      }
+    })
     .then((JSONresponse) => {
       context.votes = JSONresponse;
     })
     .then(() => API.get.user({
       displayName: context.displayName
     }))
-    .then(response => response.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return [];
+      }
+    })
     .then((JSONresponse) => {
       context.user = JSONresponse;
     })

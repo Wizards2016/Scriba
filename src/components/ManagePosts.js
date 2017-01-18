@@ -38,7 +38,13 @@ export default class ManagePosts extends Component {
     };
     // Get messages for this user
     API.get.message(data)
-    .then(messages => messages.json())
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        return [];
+      }
+    })
     .then((messages) => {
       this.setState({
         messages: messages,
@@ -77,8 +83,8 @@ export default class ManagePosts extends Component {
                 />)}}
             />
             :
-            <Text>
-              Loading . . .
+            <Text style={{ textAlign: 'center' }}>
+              No messages found.
             </Text>
           }
           <Button
