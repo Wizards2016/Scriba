@@ -16,8 +16,7 @@ import {
   Image,
   Keyboard,
   Picker,
-  TouchableWithoutFeedback,
-  Button
+  TouchableWithoutFeedback
 } from 'react-native';
 import PostInfo from './PostInfo';
 import MapView from 'react-native-maps';
@@ -113,7 +112,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     left: 15,
     width: 345.25,
-    height: 40
+    height: 35
+  },
+  messageRequired: {
+    height: 20,
+    color: "red",
+    left: 15,
+    marginBottom: 2.5
+  },
+  messageRequiredInput: {
+    borderColor: 'red',
+    borderWidth: 1.5,
+    left: 15,
+    width: 345.25,
+    fontSize: 18,
+    height: 65
   },
   messageInput: {
     borderColor: 'black',
@@ -121,8 +134,8 @@ const styles = StyleSheet.create({
     left: 15,
     width: 345.25,
     fontSize: 18,
-    height: 40,
-    marginBottom: 20
+    height: 65,
+    marginBottom: 22.5
   },
   message: {
     textAlign: 'center',
@@ -141,31 +154,31 @@ const styles = StyleSheet.create({
     left: 15,
     width: 345.25,
     borderWidth: 1,
-    marginBottom: 20
+    marginBottom: 22.5
   },
   text: {
     color: 'white',
     fontSize: 18,
     textAlign: 'center',
     width: 100,
-    top: 3.5
+    top: 6
   },
   submit: {
     alignItems: 'center',
-    top: 60,
+    top: 40,
     left: 15,
     backgroundColor: 'green',
     borderRadius: 10,
-    height: 30,
+    height: 35,
     width: 345.25,
   },
   cancel: {
     alignItems: 'center',
-    top: 85,
+    top: 57.5,
     left: 15,
     backgroundColor: 'red',
     borderRadius: 10,
-    height: 30,
+    height: 35,
     width: 345.25
   }
 });
@@ -178,7 +191,9 @@ export default class Map extends Component {
       category: null,
       behavior: null,
       text: null,
-      subcategory: null
+      subcategory: null,
+      textStyle: styles.messageInput,
+      messageRequired: false
     };
     this.updateBehavior = this.updateBehavior.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
@@ -303,12 +318,15 @@ export default class Map extends Component {
       data.category = this.state.category;
     }
     if (data.userAuth && data.displayName) {
-      console.log(this.state);
-      // Clear the text input field
-      // this._textInput.setNativeProps({ text: '' });
       // Post the message to the database
-      API.post.message(data)
+      if (data.text) {
+        API.post.message(data)
         .then(() => {
+          if (this.state.textStyle === styles.messageRequiredInput && this.state.messageRequired) {
+            this.setState(() => {
+              return { textStyle: styles.messageInput, messageRequired: false };
+            }, () => {});
+          }
           this.updatePostPage();
           this.props.getMessages();
         })
@@ -316,6 +334,11 @@ export default class Map extends Component {
           console.log('POST request err: ', err);
           throw err;
         });
+      } else if (this.state.textStyle !== styles.messageRequired) {
+        this.setState(() => {
+          return { textStyle: styles.messageRequiredInput, messageRequired: true };
+        }, () => {});
+      }
     } else {
       this.props.login();
     }
@@ -416,9 +439,13 @@ export default class Map extends Component {
                   Keyboard.dismiss();
                 }}
               >
+                <StatusBar
+                  style="zIndex: 0"
+                  barStyle="dark-content"
+                />
                 <Text style={styles.message} >Message</Text>
                 <Input
-                  style={styles.messageInput}
+                  style={this.state.textStyle}
                   multiline={true}
                   updateValue={this.updateText}
                   value={this.state.text}
@@ -427,6 +454,7 @@ export default class Map extends Component {
                   }}
                   placeholder={'Type here (required)'}
                 />
+                { this.state.messageRequired ? <Text style={styles.messageRequired} >Required input field*</Text> : null }
                 <Text style={styles.category}>Catagory</Text>
                 <Picker
                   style={styles.picker}
@@ -445,7 +473,7 @@ export default class Map extends Component {
                 </Picker>
                 <Text style={styles.category} >Subcategory</Text>
                 <Input
-                  multiline={true}
+                  multiline={false}
                   updateBehavior={() => {
                     this.updateBehavior('position');
                   }}
@@ -465,6 +493,13 @@ export default class Map extends Component {
                   <Text style={styles.text}>Cancel</Text>
                 </TouchableHighlight>
               </TouchableOpacity>
+              <UsernameCreate
+                userAuth={this.props.userAuth}
+                verifyUsername={this.props.verifyUsername}
+                promptUN={this.props.promptUN}
+                updateUser={this.props.updateUser}
+                updatePromptUN={this.props.updatePromptUN}
+              />
             </KeyboardAvoidingView>
           );
         }}

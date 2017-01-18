@@ -16,6 +16,10 @@ const appendParams = (url, params) => {
   return url;
 };
 
+Promise.config({
+  warnings: false
+});
+
 module.exports = {
   get: {
     vote: (data) => {
