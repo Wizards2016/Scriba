@@ -30,9 +30,8 @@ const populateUserData = function(context) {
   });
 };
 
-const UserStats = function (displayName, userAuth) {
+const UserStats = function (displayName) {
   this.displayName = displayName;
-  this.userAuth = userAuth;
 
   this.messages = undefined;
   this.votes = undefined;
