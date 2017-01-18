@@ -174,9 +174,7 @@ export default class PostDetails extends Component {
         this.delayedVote();
       });
     } else {
-      console.log('outisdetheelse', this.props, this.props.userAuth, this.props.username);
       if(this.props.modalVisible && !this.props.userAuth){
-        console.log('thispropsmodalvisibletoggle');
         this.props.togglePostInfo();
         setTimeout(() => this.props.login(), 1000);
       } else {
