@@ -92,7 +92,8 @@ module.exports = {
             category: data.category,
             subCategory: data.subCategory,
             userAuth: data.userAuth,
-            displayName: data.displayName
+            displayName: data.displayName,
+            delete: data.delete
           })
         })
         .then(response => resolve(response))
@@ -109,7 +110,8 @@ module.exports = {
           },
           body: JSON.stringify({
             userAuth: data.userAuth,
-            displayName: data.displayName
+            displayName: data.displayName,
+            delete: data.delete
           })
         })
         .then(response => resolve(response))
