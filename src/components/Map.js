@@ -455,7 +455,7 @@ export default class Map extends Component {
                   placeholder={'Type here (required)'}
                 />
                 { this.state.messageRequired ? <Text style={styles.messageRequired} >Required input field*</Text> : null }
-                <Text style={styles.category}>Catagory</Text>
+                <Text style={styles.category}>Category</Text>
                 <Picker
                   style={styles.picker}
                   selectedValue={this.state.category}
