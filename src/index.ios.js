@@ -23,6 +23,7 @@ export default class Scribe extends Component {
     super(props);
 
     this.state = {
+      list: null,
       data: [],
       location: null,
       selectedTab: 'map',
@@ -37,6 +38,7 @@ export default class Scribe extends Component {
     this.login = this.login.bind(this);
     this.updatePromptUN = this.updatePromptUN.bind(this);
     this.verifyUsername = this.verifyUsername.bind(this);
+    this.updateList = this.updateList.bind(this);
   }
 
   getMessages(cb) {
@@ -180,6 +182,17 @@ export default class Scribe extends Component {
     }, this.getMessages);
   }
 
+  updateList(list) {
+    this.setState((prevState) => {
+      if (list) {
+        return { list: list };
+      } else {
+        prevState.list.pop();
+        return { list: prevState.list};
+      }
+    }, () => {});
+  }
+
   login() {
     lock.show({ zIndex:10, closable: true }, (err, profile, token) => {
       if (err) {
@@ -219,6 +232,8 @@ export default class Scribe extends Component {
           }}
         >
           <Map
+            list={this.state.list}
+            updateList={this.updateList}
             lock={lock}
             location={this.state.location}
             updateLocation={this.updateLocation}
@@ -239,6 +254,7 @@ export default class Scribe extends Component {
           selected={this.state.selectedTab === 'posts'}
           onPress={() => {
             this.getMessages();
+            this.updateList();
             this.setState({
               selectedTab: 'posts'
             });
@@ -259,6 +275,7 @@ export default class Scribe extends Component {
           selected={this.state.selectedTab === 'settings'}
           onPress={() => {
             this.getMessages();
+            this.updateList();
             this.setState({
               selectedTab: 'settings'
             });
