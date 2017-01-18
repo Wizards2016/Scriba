@@ -4,40 +4,49 @@ import {
   ScrollView,
   Text,
   StatusBar,
+  ListView
 } from 'react-native';
 import Button from 'react-native-button';
 import API from '../util/APIService';
+import PostRow from './PostRow';
+
+const ds = new ListView.DataSource({
+  rowHasChanged: (row1, row2) => row1 !== row2
+});
 
 export default class ManagePosts extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       messages: null,
-      userAuth: null
+      dataSource: null
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('got some props:', nextProps);
-    this.setState({
-      userAuth: 'hello'
-    }, () => {
-      console.log('we did something');
-    });
-    // const data = {
-    //   displayName: nextProps.username
-    // };
-    // // Get messages for this user
-    // API.get.message(data)
-    // .then((messages) => {
-    //   this.setState({
-    //     messages: messages,
-    //     userAuth: nextProps.userAuth
-    //   }, () => {
-    //     console.log('state:', this.state);
-    //   });
-    // })
-    // .catch(error => console.log('Got an error while fetching messages:', error));
+  componentWillMount() {
+    this.getUserMessages();
+  }
+
+  componentWillReceiveProps() {
+    this.getUserMessages();
+  }
+
+  getUserMessages() {
+    const data = {
+      displayName: this.props.username
+    };
+    // Get messages for this user
+    API.get.message(data)
+    .then(messages => messages.json())
+    .then((messages) => {
+      this.setState({
+        messages: messages,
+        userAuth: this.props.userAuth,
+        dataSource: ds.cloneWithRows(messages)
+      });
+    })
+    .catch(error => console.log('Got an error while fetching messages:', error));
   }
 
   render() {
@@ -52,15 +61,26 @@ export default class ManagePosts extends Component {
             style="zIndex: 0"
             barStyle="dark-content"
           />
-            { this.state.messages ?
-              <Text>
-                {`${this.state.userAuth} has ${this.state.messages.length} messages`}
-              </Text>
-              :
-              <Text>
-                Loading . . .
-              </Text>
-            }
+          { this.state.dataSource ?
+            <ListView
+              enableEmptySections={true}
+              automaticallyAdjustContentInsets={false}
+              dataSource={this.state.dataSource}
+              renderRow={data => {
+                return (
+                <PostRow
+                  message={data}
+                  static={true}
+                  username={this.props.username}
+                  userAuth={this.props.userAuth}
+                  getMessages={this.props.getMessages}
+                />)}}
+            />
+            :
+            <Text>
+              Loading . . .
+            </Text>
+          }
           <Button
             accessibilityLabel="Return to profile"
             onPress={this.props.toggleManagePosts}

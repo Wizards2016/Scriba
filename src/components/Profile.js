@@ -90,6 +90,9 @@ export default class Profile extends Component {
       <View style={styles.container}>
         { this.state.userStats ?
           <View>
+            <Text style={{ textAlign: 'center' }}>
+              {`Member since ${new Date(this.state.userStats.user.createdAt).getFullYear()}`}
+            </Text>
             <View style={styles.statsContainer}>
               <Image
                 style={{ width: 40, height: 40 }}
@@ -109,25 +112,6 @@ export default class Profile extends Component {
                 accessibilityLabel="Posts"
               />
               <Text>{`${this.state.postStats.totalPosts}`}</Text>
-            </View>
-            <Text>{`Member since ${new Date(this.state.userStats.user.createdAt).getFullYear()}`}</Text>
-          </View>
-          :
-          <Text>
-          </Text>
-        }
-        { this.state.voteStats ?
-          <View>
-            <Text>Popular posts</Text>
-            <View style={styles.postsContainer}>
-              {
-                this.state.voteStats.popular.slice(0, 5).map((message) => {
-                  return (<PostRow
-                    message={message}
-                    static={true}
-                  />);
-                })
-              }
             </View>
           </View>
           :

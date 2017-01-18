@@ -161,6 +161,9 @@ export default class PostRow extends Component {
         <PostDetails
           message={this.state.message}
           static={this.props.static}
+          username={this.props.username}
+          userAuth={this.props.userAuth}
+          getMessages={this.props.getMessages}
         />
         :
         <PostDetails

@@ -86,6 +86,7 @@ export default class Settings extends Component {
           userAuth={this.props.userAuth}
           username={this.props.username}
           toggleManagePosts={this.toggleManagePosts}
+          getMessages={this.props.getMessages}
         />
       );
     }

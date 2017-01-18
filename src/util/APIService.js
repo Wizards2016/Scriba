@@ -93,7 +93,8 @@ module.exports = {
             subCategory: data.subCategory,
             userAuth: data.userAuth,
             displayName: data.displayName,
-            delete: data.delete
+            delete: data.delete,
+            id: data.id
           })
         })
         .then(response => resolve(response))
