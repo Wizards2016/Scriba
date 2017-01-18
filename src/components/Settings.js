@@ -72,8 +72,10 @@ export default class Settings extends Component {
   }
 
   toggleManagePosts() {
-    this.setState({
-      managePosts: true
+    this.setState((prevState) => {
+      return {
+        managePosts: !prevState.managePosts
+      };
     });
   }
 
@@ -83,6 +85,7 @@ export default class Settings extends Component {
         <ManagePosts
           userAuth={this.props.userAuth}
           username={this.props.username}
+          toggleManagePosts={this.toggleManagePosts}
         />
       );
     }
