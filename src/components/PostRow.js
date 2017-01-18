@@ -142,7 +142,6 @@ export default class PostRow extends Component {
     <View style={styles.container}>
       { this.props.static ?
         <View style={styles.post}>
-          <Text style={styles.usernameText}>{`${username}`}</Text>
           <Text style={styles.text}>{`${text}`}</Text>
         </View>
         :

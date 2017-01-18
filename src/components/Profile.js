@@ -45,6 +45,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center'
+  },
+  postsContainer: {
+    flex: 1,
+    backgroundColor: '#ddd'
   }
 });
 
@@ -53,26 +57,31 @@ export default class Profile extends Component {
     super(props);
 
     this.state = {
+      userStats: null,
+      voteStats: null,
+      postStats: null
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.username !== undefined &&
-        nextProps.userAuth !== undefined &&
-        nextProps.username !== this.props.username &&
-        nextProps.userAuth !== this.props.userAuth) {
-      this.getUserStats(nextProps.username, nextProps.userAuth);
+    if (nextProps.username === null) {
+      this.setState({
+        userStats: null,
+        voteStats: null,
+        postStats: null
+      });
+    } else if (nextProps.username !== undefined &&
+        nextProps.username !== this.props.username) {
+      this.getUserStats(nextProps.username);
     }
   }
 
-  getUserStats(username, userAuth) {
-    new Analytics.UserStats(username, userAuth)
+  getUserStats(username) {
+    new Analytics.UserStats(username)
     .then(userStats => this.setState({
       userStats: userStats,
       voteStats: userStats.getVoteStats(),
       postStats: userStats.getPostStats()
-    }, () => {
-      console.log(this.state);
     }));
   }
 
@@ -101,23 +110,25 @@ export default class Profile extends Component {
               />
               <Text>{`${this.state.postStats.totalPosts}`}</Text>
             </View>
-            <Text>{`Member since ${new Date(this.state.userStats.user.createdAt).toDateString()}`}</Text>
+            <Text>{`Member since ${new Date(this.state.userStats.user.createdAt).getFullYear()}`}</Text>
           </View>
           :
           <Text>
           </Text>
         }
         { this.state.voteStats ?
-          <View style={styles.container}>
+          <View>
             <Text>Popular posts</Text>
-            {
-              this.state.voteStats.popular.slice(0, 5).map((message) => {
-                return (<PostRow
-                  message={message}
-                  static={true}
-                />);
-              })
-            }
+            <View style={styles.postsContainer}>
+              {
+                this.state.voteStats.popular.slice(0, 5).map((message) => {
+                  return (<PostRow
+                    message={message}
+                    static={true}
+                  />);
+                })
+              }
+            </View>
           </View>
           :
           <Text>

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import UsernameCreate from './UsernameCreate';
 import Profile from './Profile';
+import ManagePosts from './ManagePosts';
 
 const styles = StyleSheet.create({
   welcome: {
@@ -41,6 +42,9 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     margin: 0,
     height: 70
+  },
+  settingsButtons: {
+    marginTop: 1
   }
 });
 
@@ -49,9 +53,11 @@ export default class Settings extends Component {
     super(props);
 
     this.state = {
+      managePosts: false
     };
 
     this.logout = this.logout.bind(this);
+    this.toggleManagePosts = this.toggleManagePosts.bind(this);
   }
 
   logout() {
@@ -65,6 +71,23 @@ export default class Settings extends Component {
     });
   }
 
+  toggleManagePosts() {
+    this.setState({
+      managePosts: true
+    });
+  }
+
+  renderManagePosts() {
+    if (this.state.managePosts) {
+      return (
+        <ManagePosts
+          userAuth={this.props.userAuth}
+          username={this.props.username}
+        />
+      );
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -74,6 +97,7 @@ export default class Settings extends Component {
             barStyle="light-content"
           />
         </View>
+        {this.renderManagePosts()}
         <View style={styles.options}>
           <View style={styles.title}>
             <Text style={styles.titleText}>{this.props.username ? `${this.props.username}` : 'Welcome'}</Text>
@@ -88,8 +112,8 @@ export default class Settings extends Component {
             username={this.props.username}
           />
           { this.props.userAuth ?
-            <View>
-              <Button title="Manage Posts" />
+            <View style={styles.settingsButtons}>
+              <Button title="Manage Posts" onPress={this.toggleManagePosts}/>
               <Button title="Logout" onPress={this.logout} />
             </View>
             :

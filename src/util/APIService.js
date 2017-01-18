@@ -25,7 +25,6 @@ module.exports = {
     vote: (data) => {
       // Append query parameters to URL
       const url = appendParams(votesURL, data);
-      console.log('url:', url);
       return new Promise((resolve, reject) => {
         fetch(url, {
           method: 'GET'
@@ -37,7 +36,6 @@ module.exports = {
     message: (data) => {
       // Append query parameters to URL
       const url = appendParams(messagesURL, data);
-      console.log('url:', url);
       return new Promise((resolve, reject) => {
         fetch(url, {
           method: 'GET'
@@ -49,7 +47,6 @@ module.exports = {
     user: (data) => {
       // Append query parameters to URL
       const url = appendParams(usersURL, data);
-      console.log('url:', url);
       return new Promise((resolve, reject) => {
         fetch(url, {
           method: 'GET'
