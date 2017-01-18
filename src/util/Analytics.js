@@ -19,8 +19,7 @@ const populateUserData = function(context) {
       context.votes = JSONresponse;
     })
     .then(() => API.get.user({
-      displayName: context.displayName,
-      userAuth: context.userAuth
+      displayName: context.displayName
     }))
     .then(response => response.json())
     .then((JSONresponse) => {

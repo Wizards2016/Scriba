@@ -41,11 +41,6 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     margin: 0,
     height: 70
-  },
-  statsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
   }
 });
 

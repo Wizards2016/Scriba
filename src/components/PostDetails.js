@@ -179,7 +179,7 @@ export default class PostDetails extends Component {
         setTimeout(() => this.props.login(), 1000);
       } else {
         this.props.login();
-      }      
+      }
     }
   }
 
@@ -202,24 +202,41 @@ export default class PostDetails extends Component {
     return (
       <View style={styles.options}>
         <TimeAgo style={styles.timeAgoText} time={createdAt} interval={60000} />
-        <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
+        { this.props.static ?
+          <View style={styles.buttons}>
             <Image
               style={{ width: 20, height: 20 }}
-              source={this.state.upArrowToggle}
-              accessibilityLabel="Up vote"
+              source={UpArrowHighlighted}
+              accessibilityLabel="Up votes"
             />
-          </TouchableOpacity>
-          <Text style={styles.vote}>{this.state.message.upVotes}</Text>
-          <TouchableOpacity onPress={() => { this.updateVote('down'); }}>
+            <Text style={styles.vote}>{this.state.message.upVotes}</Text>
             <Image
               style={{ width: 20, height: 20 }}
-              source={this.state.downArrowToggle}
-              accessibilityLabel="Down vote"
+              source={DownArrowHighlighted}
+              accessibilityLabel="Down votes"
             />
-          </TouchableOpacity>
-          <Text style={styles.vote}>{this.state.message.downVotes}</Text>
-        </View>
+            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
+          </View>
+          :
+          <View style={styles.buttons}>
+            <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={this.state.upArrowToggle}
+                accessibilityLabel="Up vote"
+              />
+            </TouchableOpacity>
+            <Text style={styles.vote}>{this.state.message.upVotes}</Text>
+            <TouchableOpacity onPress={() => { this.updateVote('down'); }}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={this.state.downArrowToggle}
+                accessibilityLabel="Down vote"
+              />
+            </TouchableOpacity>
+            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
+          </View>
+        }
       </View>
     );
   }

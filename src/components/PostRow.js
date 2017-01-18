@@ -140,25 +140,39 @@ export default class PostRow extends Component {
     const username = this.state.message.UserDisplayName;
     return (
     <View style={styles.container}>
-      <View style={styles.post}>
-        {this.renderPostInfo()}
-        <TouchableOpacity
-          onPress={() => {
-            this.togglePostInfo();
-          }}
-        >
+      { this.props.static ?
+        <View style={styles.post}>
           <Text style={styles.usernameText}>{`${username}`}</Text>
           <Text style={styles.text}>{`${text}`}</Text>
-        </TouchableOpacity>
-      </View>
-      <PostDetails
-        message={this.state.message}
-        userVote={this.state.userVote}
-        username={this.props.username}
-        userAuth={this.props.userAuth}
-        login={this.props.login}
-        togglePostInfo={this.togglePostInfo}
-      />
+        </View>
+        :
+        <View style={styles.post}>
+          {this.renderPostInfo()}
+          <TouchableOpacity
+            onPress={() => {
+              this.togglePostInfo();
+            }}
+          >
+            <Text style={styles.usernameText}>{`${username}`}</Text>
+            <Text style={styles.text}>{`${text}`}</Text>
+          </TouchableOpacity>
+        </View>
+      }
+      { this.props.static ?
+        <PostDetails
+          message={this.state.message}
+          static={this.props.static}
+        />
+        :
+        <PostDetails
+          message={this.state.message}
+          userVote={this.state.userVote}
+          username={this.props.username}
+          userAuth={this.props.userAuth}
+          login={this.props.login}
+          togglePostInfo={this.togglePostInfo}
+        />
+      }
     </View>
     );
   }

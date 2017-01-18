@@ -7,15 +7,14 @@ import {
   StatusBar,
   Image
 } from 'react-native';
+import PostRow from './PostRow';
+import PostDetails from './PostDetails';
 import Analytics from '../util/Analytics';
 import Marker from '../media/marker.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 
 const styles = StyleSheet.create({
-  welcome: {
-    textAlign: 'center'
-  },
   container: {
     flex: 1
   },
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class UsernameCreate extends Component {
+export default class Profile extends Component {
   constructor(props) {
     super(props);
 
@@ -72,37 +71,58 @@ export default class UsernameCreate extends Component {
       userStats: userStats,
       voteStats: userStats.getVoteStats(),
       postStats: userStats.getPostStats()
+    }, () => {
+      console.log(this.state);
     }));
   }
 
   render() {
     return (
       <View style={styles.container}>
-      { this.state.userStats ?
-        <View style={styles.statsContainer}>
-          <Image
-            style={{ width: 40, height: 40 }}
-            source={UpArrowHighlighted}
-            accessibilityLabel="Up votes"
-          />
-          <Text>{`${this.state.voteStats.upVotes}\n`}</Text>
-          <Image
-            style={{ width: 40, height: 40 }}
-            source={DownArrowHighlighted}
-            accessibilityLabel="Down votes"
-          />
-          <Text>{`${this.state.voteStats.downVotes}\n`}</Text>
-          <Image
-            style={{ width: 40, height: 40 }}
-            source={Marker}
-            accessibilityLabel="Posts"
-          />
-          <Text>{`${this.state.postStats.totalPosts}`}</Text>
-        </View>
-        :
-        <Text>
-        </Text>
-      }
+        { this.state.userStats ?
+          <View>
+            <View style={styles.statsContainer}>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={UpArrowHighlighted}
+                accessibilityLabel="Up votes"
+              />
+              <Text>{`${this.state.voteStats.upVotes}\n`}</Text>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={DownArrowHighlighted}
+                accessibilityLabel="Down votes"
+              />
+              <Text>{`${this.state.voteStats.downVotes}\n`}</Text>
+              <Image
+                style={{ width: 40, height: 40 }}
+                source={Marker}
+                accessibilityLabel="Posts"
+              />
+              <Text>{`${this.state.postStats.totalPosts}`}</Text>
+            </View>
+            <Text>{`Member since ${new Date(this.state.userStats.user.createdAt).toDateString()}`}</Text>
+          </View>
+          :
+          <Text>
+          </Text>
+        }
+        { this.state.voteStats ?
+          <View style={styles.container}>
+            <Text>Popular posts</Text>
+            {
+              this.state.voteStats.popular.slice(0, 5).map((message) => {
+                return (<PostRow
+                  message={message}
+                  static={true}
+                />);
+              })
+            }
+          </View>
+          :
+          <Text>
+          </Text>
+        }
       </View>
     );
   }
