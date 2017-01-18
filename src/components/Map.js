@@ -143,6 +143,7 @@ export default class Map extends Component {
           login={this.props.login}
           toggleMapPostInfo={this.toggleMapPostInfo}
           refreshMessages={this.props.getMessages}
+          modalVisible={this.state.modalVisible}
         />
       );
     }
