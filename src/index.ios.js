@@ -226,6 +226,7 @@ export default class Scribe extends Component {
           selected={this.state.selectedTab === 'map'}
           onPress={() => {
             this.getMessages();
+            this.updateList();
             this.setState({
               selectedTab: 'map'
             });
