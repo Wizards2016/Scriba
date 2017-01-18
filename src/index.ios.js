@@ -134,6 +134,7 @@ export default class Scribe extends Component {
               throw err;
             });
           }
+          console.log('gettinguservotes after creating user');
           this.getUserVotes(this.state.data);
         }
       })
@@ -142,12 +143,11 @@ export default class Scribe extends Component {
         throw err;
       });
     } else {
+      console.log('Nouserauthfromverifyuesr');
       API.post.user(data)
-      .then((res) => {
-        this.updateUser(data.userAuth, data.displayName);
-      })
       .then(res => {
         this.updateUser(userAuth, username);
+        this.getUserVotes(this.state.data);
       })
       .catch(err => {
         console.log('POST request err: ', err);
@@ -188,6 +188,7 @@ export default class Scribe extends Component {
         console.log(err);
         return;
       }
+      console.log('thereceived profile',profile);
       const userAuth = profile.userId;
       const username = profile.extraInfo.username;
       if(username) {
@@ -214,6 +215,7 @@ export default class Scribe extends Component {
           title="Map"
           selected={this.state.selectedTab === 'map'}
           onPress={() => {
+            this.getMessages();
             this.setState({
               selectedTab: 'map'
             });
@@ -239,6 +241,7 @@ export default class Scribe extends Component {
           title="Posts"
           selected={this.state.selectedTab === 'posts'}
           onPress={() => {
+            this.getMessages();
             this.setState({
               selectedTab: 'posts'
             });
@@ -258,6 +261,7 @@ export default class Scribe extends Component {
           title="Profile"
           selected={this.state.selectedTab === 'settings'}
           onPress={() => {
+            this.getMessages();
             this.setState({
               selectedTab: 'settings'
             });
