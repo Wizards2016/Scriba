@@ -15,8 +15,7 @@ import {
   Navigator,
   Image,
   Keyboard,
-  Picker,
-  TouchableWithoutFeedback
+  Picker
 } from 'react-native';
 import PostInfo from './PostInfo';
 import MapView from 'react-native-maps';
@@ -107,6 +106,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18
   },
+  subcategoryInputRequired: {
+    borderColor: '#4b89ed',
+    borderWidth: 1.5,
+    left: 15,
+    width: 345.25,
+    height: 35
+  },
   subcategoryInput: {
     borderColor: 'black',
     borderWidth: 1,
@@ -114,13 +120,13 @@ const styles = StyleSheet.create({
     width: 345.25,
     height: 35
   },
-  messageRequired: {
+  textRequired: {
     height: 20,
     color: "red",
     left: 15,
     marginBottom: 2.5
   },
-  messageRequiredInput: {
+  textInputRequired: {
     borderColor: 'red',
     borderWidth: 1.5,
     left: 15,
@@ -128,7 +134,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 65
   },
-  messageInput: {
+  textInputFocused: {
+    borderColor: '#4b89ed',
+    borderWidth: 1.5,
+    left: 15,
+    width: 345.25,
+    fontSize: 18,
+    height: 65,
+    marginBottom: 22.5
+  },
+  textInput: {
     borderColor: 'black',
     borderWidth: 1,
     left: 15,
@@ -137,7 +152,7 @@ const styles = StyleSheet.create({
     height: 65,
     marginBottom: 22.5
   },
-  message: {
+  text: {
     textAlign: 'center',
     color: '#4b89ed',
     fontSize: 18,
@@ -156,7 +171,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 22.5
   },
-  text: {
+  buttonText: {
     color: 'white',
     fontSize: 18,
     textAlign: 'center',
@@ -192,15 +207,16 @@ export default class Map extends Component {
       behavior: null,
       text: null,
       subcategory: null,
-      textStyle: styles.messageInput,
-      messageRequired: false
+      textStyle: styles.textInput,
+      prevTextRequired: false,
+      textRequired: false
     };
     this.updateBehavior = this.updateBehavior.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
     this.toggleMapPostInfo = this.toggleMapPostInfo.bind(this);
     this.updateText = this.updateText.bind(this);
     this.updateSubcategory = this.updateSubcategory.bind(this);
-    this.postMessage = this.postMessage.bind(this);
+    this.postText = this.postText.bind(this);
   }
 
   watchID: ?number = null;
@@ -305,7 +321,7 @@ export default class Map extends Component {
     }, () => {});
   }
 
-  postMessage() {
+  postText(list) {
     const data = {
       userAuth: this.props.userAuth,
       displayName: this.props.username,
@@ -322,21 +338,22 @@ export default class Map extends Component {
       if (data.text) {
         API.post.message(data)
         .then(() => {
-          if (this.state.textStyle === styles.messageRequiredInput && this.state.messageRequired) {
+          if (this.state.textStyle === styles.textInputRequired && this.state.textRequired) {
             this.setState(() => {
-              return { textStyle: styles.messageInput, messageRequired: false };
+              return { textStyle: styles.textInput, textRequired: false };
             }, () => {});
           }
           this.updatePostPage();
           this.props.getMessages();
+          list.pop();
         })
-        .catch(() => {
+        .catch((err) => {
           console.log('POST request err: ', err);
           throw err;
         });
-      } else if (this.state.textStyle !== styles.messageRequired) {
+      } else if (this.state.textStyle !== styles.textRequired) {
         this.setState(() => {
-          return { textStyle: styles.messageRequiredInput, messageRequired: true };
+          return { textStyle: styles.textInputRequired, textRequired: true };
         }, () => {});
       }
     } else {
@@ -443,18 +460,18 @@ export default class Map extends Component {
                   style="zIndex: 0"
                   barStyle="dark-content"
                 />
-                <Text style={styles.message} >Message</Text>
+                <Text style={styles.text} >Message</Text>
                 <Input
                   style={this.state.textStyle}
                   multiline={true}
                   updateValue={this.updateText}
                   value={this.state.text}
-                  updateBehavior={() => {
+                  focus={() => {
                     this.updateBehavior('padding');
                   }}
                   placeholder={'Type here (required)'}
                 />
-                { this.state.messageRequired ? <Text style={styles.messageRequired} >Required input field*</Text> : null }
+                { this.state.textRequired ? <Text style={styles.textRequired} >Required input field*</Text> : null }
                 <Text style={styles.category}>Category</Text>
                 <Picker
                   style={styles.picker}
@@ -474,7 +491,7 @@ export default class Map extends Component {
                 <Text style={styles.category} >Subcategory</Text>
                 <Input
                   multiline={false}
-                  updateBehavior={() => {
+                  focus={() => {
                     this.updateBehavior('position');
                   }}
                   updateValue={this.updateSubcategory}
@@ -483,14 +500,14 @@ export default class Map extends Component {
                   placeholder={'Type here (optional)'}
                 />
                 <TouchableHighlight style={styles.submit} onPress={() => {
-                  this.postMessage();
+                  this.postText(list);
                 }} >
-                  <Text style={styles.text}>Submit</Text>
+                  <Text style={styles.buttonText}>Submit</Text>
                 </TouchableHighlight>
                 <TouchableHighlight style={styles.cancel} onPress={() => {
                   list.pop();
                 }} >
-                  <Text style={styles.text}>Cancel</Text>
+                  <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableHighlight>
               </TouchableOpacity>
               <UsernameCreate
@@ -503,7 +520,10 @@ export default class Map extends Component {
             </KeyboardAvoidingView>
           );
         }}
-        configureScene={() => Navigator.SceneConfigs.VerticalDownSwipeJump}
+        configureScene={() => ({
+          ...Navigator.SceneConfigs.FloatFromBottom,
+          gestures: {}
+        })}
       />
     );
   }

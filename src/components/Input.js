@@ -36,7 +36,7 @@ export default class Input extends Component {
         onChangeText={(text) => {
           this.props.updateValue(text);
         }}
-        onFocus={this.props.updateBehavior}
+        onFocus={this.props.focus}
       />
     );
   }
