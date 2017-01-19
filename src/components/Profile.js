@@ -39,8 +39,7 @@ export default class Profile extends Component {
         voteStats: null,
         postStats: null
       });
-    } else if (nextProps.username !== undefined &&
-        nextProps.username !== this.props.username) {
+    } else if (nextProps.username !== undefined) {
       this.getUserStats(nextProps.username);
     }
   }
