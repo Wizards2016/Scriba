@@ -29,7 +29,13 @@ module.exports = {
         fetch(url, {
           method: 'GET'
         })
-        .then(response => resolve(response))
+        .then((response) => {
+          if (response.status === 200) {
+            resolve(response);
+          } else {
+            resolve([]);
+          }
+        })
         .catch(error => reject(error));
       });
     },
@@ -40,7 +46,13 @@ module.exports = {
         fetch(url, {
           method: 'GET'
         })
-        .then(response => resolve(response))
+        .then((response) => {
+          if (response.status === 200) {
+            resolve(response);
+          } else {
+            resolve([]);
+          }
+        })
         .catch(error => reject(error));
       });
     },
@@ -51,7 +63,13 @@ module.exports = {
         fetch(url, {
           method: 'GET'
         })
-        .then(response => resolve(response))
+        .then((response) => {
+          if (response.status === 200) {
+            resolve(response);
+          } else {
+            resolve([]);
+          }
+        })
         .catch(error => reject(error));
       });
     }
