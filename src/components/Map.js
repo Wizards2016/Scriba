@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   StatusBar,
   TouchableOpacity,
   AsyncStorage,
@@ -269,9 +268,9 @@ export default class Map extends Component {
   }
 
   updateCategory(category) {
-    this.setState(() => {
-      return { category: category };
-    }, () => {});
+    this.setState({
+      category: category
+    });
   }
 
   updateLocation(position){
@@ -305,54 +304,58 @@ export default class Map extends Component {
       if (prevState.behavior !== behavior) {
         return { behavior: behavior };
       }
-    }, () => {});
+    });
   }
 
   updateText(text) {
-    this.setState(() => {
-      return { text: text };
-    }, () => {});
+    this.setState({
+      text: text
+    });
   }
 
   updateSubcategory(subcategory) {
-    this.setState(() => {
-      return { subcategory: subcategory };
-    }, () => {});
+    this.setState({
+      subcategory: subcategory
+    });
   }
 
   updatePostPage() {
-    this.setState(() => {
-      return {
-        category: null,
-        text: null,
-        subcategory: null
-      };
-    }, () => {});
+    this.setState({
+      category: null,
+      text: null,
+      subcategory: null
+    });
   }
 
   updateTextStyle(textStyle) {
-    this.setState(() => {
-      return { textStyle: textStyle };
-    }, () => {});
+    this.setState({
+      textStyle: textStyle
+    });
+  }
+
+  updateSubcategoryStyle(subcategoryStyle) {
+    this.setState({
+      subcategoryStyle: subcategoryStyle
+    });
   }
 
   updateTextRequired(textRequired, prevTextRequired) {
-    this.setState((prevState) => {
-      if ((textRequired != null && prevTextRequired != null) && 
-          (textRequired !== prevState.textRequired && 
-           prevTextRequired !== prevState.prevTextRequired)) {
-        return { 
-          textRequired: textRequired, 
-          prevTextRequired: prevTextRequired
-        };
-      } else if (textRequired != null && textRequired !== prevState.textRequired) {
-        return { textRequired: textRequired };
-      } else if (prevTextRequired != null && prevTextRequired !== prevState.prevTextRequired) {
-        return { prevTextRequired: prevTextRequired };
-      } else {
-        return prevState;
-      }
-    }, () => {});
+    if ((textRequired != null && prevTextRequired != null) && 
+        (textRequired !== this.state.textRequired && 
+         prevTextRequired !== this.state.prevTextRequired)) {
+      this.setState({
+        textRequired: textRequired, 
+        prevTextRequired: prevTextRequired
+      });
+    } else if (textRequired != null && textRequired !== this.state.textRequired) {
+      this.setState({
+        textRequired: textRequired
+      });
+    } else if (prevTextRequired != null && prevTextRequired !== this.state.prevTextRequired) {
+      this.setState({
+        prevTextRequired: prevTextRequired
+      });
+    }
   }
 
   postText(list) {
@@ -372,6 +375,7 @@ export default class Map extends Component {
       if (data.text) {
         API.post.message(data)
         .then(() => {
+          this.updateTextStyle(styles.textInput);
           this.updateTextRequired(false, false);
           this.updatePostPage();
           this.props.getMessages();
@@ -382,6 +386,7 @@ export default class Map extends Component {
           throw err;
         });
       } else if (this.state.textStyle !== styles.textRequired) {
+        this.updateTextStyle(styles.textInputRequired);
         this.updateTextRequired(true, true);
       }
     } else {
@@ -482,9 +487,10 @@ export default class Map extends Component {
                   multiline={true}
                   updateValue={this.updateText}
                   value={this.state.text}
-                  focus={(() => {
+                  focus={() => {
                     this.updateBehavior('padding');
-                  }).bind(this)}
+                    this.updateSubcategoryStyle(styles.textInputFocused);
+                  }}
                   placeholder={'Type here (required)'}
                 />
                 { this.state.textRequired ? <Text style={styles.textRequired} >Required input field*</Text> : null }
@@ -507,9 +513,10 @@ export default class Map extends Component {
                 <Text style={styles.category} >Subcategory</Text>
                 <Input
                   multiline={false}
-                  focus={(() => {
+                  focus={() => {
                     this.updateBehavior('position');
-                  }).bind(this)}
+                    this.updateSubcategoryStyle(styles.subcategoryInputFocused);
+                  }}
                   updateValue={this.updateSubcategory}
                   value={this.state.subcategory}
                   style={styles.subcategoryInput}
