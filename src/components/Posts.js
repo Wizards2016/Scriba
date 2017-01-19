@@ -25,8 +25,7 @@ const styles = StyleSheet.create({
     margin: 0,
     marginBottom: 50,
     padding: 0,
-    zIndex: -1,
-    backgroundColor: '#ddd'
+    zIndex: -1
   },
   text: {
     textAlign: 'center',
@@ -75,6 +74,11 @@ const styles = StyleSheet.create({
     height: 20,
     paddingRight: 20,
     paddingTop: 5
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#ddd'
   }
 });
 
@@ -189,6 +193,7 @@ export default class Posts extends Component {
                 enableEmptySections={true}
                 automaticallyAdjustContentInsets={false}
                 dataSource={this.state.dataSource}
+                renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
                 renderRow={data => {
                   return (
                     <PostRow
@@ -198,12 +203,17 @@ export default class Posts extends Component {
                       login={this.props.login}
                       getMessages={this.props.getMessages}
                       refreshMessages={this.refreshMessages}
+                      static={this.props.static}
                     />);
                 }}
               />
               :
               <Text style={styles.text}>
-                There are no visible messages nearby.
+                { this.props.static ?
+                  'You don\'t have any posts.'
+                  :
+                  'There are no visible messages nearby.'
+                }
               </Text>
             }
           </ScrollView>

@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import Button from 'react-native-button';
 import API from '../util/APIService';
-import PostRow from './PostRow';
-import Header from './Header';
+import Posts from './Posts';
 
 const styles = StyleSheet.create({
   centerText: {
@@ -74,31 +73,17 @@ export default class ManagePosts extends Component {
           transparent={false}
           visible={true}
         >
-          <Header
-            title={'Manage Posts'}
-          />
-          <View style={styles.container}>
-          { this.state.dataSource && this.state.messages.length > 0 ?
-            <ListView
-              enableEmptySections={true}
-              automaticallyAdjustContentInsets={false}
-              dataSource={this.state.dataSource}
-              renderRow={data => {
-                return (
-                <PostRow
-                  message={data}
-                  static={true}
-                  username={this.props.username}
-                  userAuth={this.props.userAuth}
-                  getMessages={this.props.getMessages}
-                />)}}
+          { this.state.messages ?
+            <Posts
+              data={this.state.messages}
+              static={true}
+              username={this.props.username}
+              userAuth={this.props.userAuth}
+              getMessages={this.props.getMessages}
             />
             :
-            <Text style={styles.centerText}>
-              You don't have any posts.
-            </Text>
+            <Text />
           }
-          </View>
           <Button
             accessibilityLabel="Return to profile"
             onPress={this.props.toggleManagePosts}
