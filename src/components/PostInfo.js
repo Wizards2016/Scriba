@@ -3,28 +3,22 @@ import {
   Modal,
   Text,
   View,
-  StatusBar,
   ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  Image
+  StyleSheet
 } from 'react-native';
 import MapView from 'react-native-maps';
-import Header from './Header';
-import TimeAgo from 'react-native-timeago';
 import Button from 'react-native-button';
+import Header from './Header';
 import UpArrow from '../media/arrow_up.png';
 import DownArrow from '../media/arrow_down.png';
-import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
-import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 import PostDetails from './PostDetails';
-import Happy from '../media/map-happy.png'
-import Funny from '../media/map-funny.png'
-import Warning from '../media/map-warning.png'
-import Nice from '../media/map-nice.png'
-import Sad from '../media/map-sad.png'
-import Secret from '../media/map-secret.png'
-import General from '../media/map-general.png'
+import Happy from '../media/map-happy.png';
+import Funny from '../media/map-funny.png';
+import Warning from '../media/map-warning.png';
+import Nice from '../media/map-nice.png';
+import Sad from '../media/map-sad.png';
+import Secret from '../media/map-secret.png';
+import General from '../media/map-general.png';
 
 const styles = StyleSheet.create({
   modalContent: {
@@ -59,28 +53,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     fontFamily: 'Avenir',
-    fontWeight: '500',
     margin: 0,
     paddingBottom: 0
-  },
-  options: {
-    backgroundColor: '#e2edff',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    flexWrap: 'wrap',
-    padding: 2
-  },
-  text: {
-    fontSize: 16
-  },
-  vote: {
-    marginRight: 5
-  },
-  voteContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end'
   }
 });
 
@@ -93,9 +67,7 @@ export default class PostInfo extends Component {
       userVote: props.userVote,
       upArrowToggle: UpArrow,
       DownArrowToggle: DownArrow
-    }
-
-    // this.togglePostInfo = this.togglePostInfo.bind(this);
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -108,26 +80,25 @@ export default class PostInfo extends Component {
   render() {
     const message = this.props.message;
     const text = this.state.message.text;
-    const createdAt = this.state.message.createdAt;
     const username = this.state.message.UserDisplayName;
-    var category = General;
-      if(message.category === 'Happy'){
-        category = Happy;
-      } else if(message.category === 'Funny'){
-        category = Funny;
-      } else if(message.category === 'Nice'){
-        category = Nice;
-      } else if(message.category === 'Sad'){
-        category = Sad;
-      } else if(message.category === 'Warning'){
-        category = Warning;
-      } else if(message.category === 'Secret'){
-        category = Secret;
-      }
+    let category = General;
+    if (message.category === 'Happy'){
+      category = Happy;
+    } else if (message.category === 'Funny'){
+      category = Funny;
+    } else if (message.category === 'Nice'){
+      category = Nice;
+    } else if (message.category === 'Sad'){
+      category = Sad;
+    } else if (message.category === 'Warning'){
+      category = Warning;
+    } else if (message.category === 'Secret'){
+      category = Secret;
+    }
     return (
       <ScrollView style={{ flex: 1 }}>
         <Modal
-          animationType={"slide"}
+          animationType={'slide'}
           transparent={false}
           visible={true}
         >
@@ -183,7 +154,7 @@ export default class PostInfo extends Component {
               margin: 5
             }}
             style={{ color: 'white' }}
-            >
+          >
             Return to posts
           </Button>
         </Modal>

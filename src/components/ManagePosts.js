@@ -3,7 +3,6 @@ import {
   Modal,
   ScrollView,
   Text,
-  StatusBar,
   ListView,
   View,
   StyleSheet
@@ -79,7 +78,7 @@ export default class ManagePosts extends Component {
             title={'Manage Posts'}
           />
           <View style={styles.container}>
-          { this.state.dataSource && this.state.dataSource.length > 0 ?
+          { this.state.dataSource && this.state.messages.length > 0 ?
             <ListView
               enableEmptySections={true}
               automaticallyAdjustContentInsets={false}

@@ -5,9 +5,7 @@ import {
   Button,
   AsyncStorage,
   ScrollView,
-  View,
-  StatusBar,
-  Image
+  View
 } from 'react-native';
 import UsernameCreate from './UsernameCreate';
 import Profile from './Profile';
@@ -20,29 +18,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1
-  },
-  title: {
-    flex: 1,
-    alignItems: 'center',
-    paddingTop: 10,
-    justifyContent: 'center',
-    width: 200,
-    overflow: 'hidden'
-  },
-  titleText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '400'
-  },
-  options: {
-    backgroundColor: '#007aff',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    paddingTop: 20,
-    paddingBottom: 0,
-    margin: 0,
-    height: 70
   },
   settingsButtons: {
     marginTop: 1

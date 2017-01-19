@@ -12,7 +12,6 @@ import DownArrow from '../media/arrow_down.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 import Trash from '../media/trash.png';
-import PostInfo from './PostInfo';
 import API from '../util/APIService';
 
 const styles = StyleSheet.create({
@@ -29,7 +28,6 @@ const styles = StyleSheet.create({
   },
   timeAgoText: {
     fontSize: 12,
-    fontWeight: 'bold',
     fontFamily: 'Avenir',
     fontWeight: 'bold',
     color: '#bbb',

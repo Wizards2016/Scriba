@@ -1,20 +1,7 @@
 import React, { Component } from 'react';
 import {
-  TextInput,
-  View,
-  Text,
-  TouchableHighlight,
-  Picker,
-  KeyboardAvoidingView,
-  StyleSheet
+  TextInput
 } from 'react-native';
-import API from '../util/APIService';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});
 
 export default class Input extends Component {
   constructor(props) {
@@ -22,11 +9,9 @@ export default class Input extends Component {
 
     this.state = {
     };
-
   }
 
   render() {
-    let Item = Picker.Item;
     return (
       <TextInput
         multiline={this.props.multiline}

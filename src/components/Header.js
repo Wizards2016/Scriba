@@ -1,10 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Modal,
-  ScrollView,
   Text,
   StatusBar,
-  ListView,
   View,
   StyleSheet
 } from 'react-native';
@@ -35,7 +32,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const Header = ({title}) => {
+const Header = ({ title }) => {
   return (
     <View>
       <View>
