@@ -96,7 +96,6 @@ export default class PostInfo extends Component {
       DownArrowToggle: DownArrow
     }
 
-    // this.togglePostInfo = this.togglePostInfo.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
