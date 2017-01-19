@@ -11,7 +11,7 @@ export default class UsernameCreate extends Component {
       <Prompt
         title="Enter a username"
         visible={this.props.promptUN}
-        placeholder="e.x. who doesnt love cats"
+        placeholder="create a unique username"
         onCancel={() => {
           this.props.updateUser(null, null);
           this.props.updatePromptUN(false);
