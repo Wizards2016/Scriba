@@ -4,11 +4,23 @@ import {
   ScrollView,
   Text,
   StatusBar,
-  ListView
+  ListView,
+  View,
+  StyleSheet
 } from 'react-native';
 import Button from 'react-native-button';
 import API from '../util/APIService';
 import PostRow from './PostRow';
+import Header from './Header';
+
+const styles = StyleSheet.create({
+  centerText: {
+    textAlign: 'center'
+  },
+  container: {
+    flex: 1
+  }
+});
 
 const ds = new ListView.DataSource({
   rowHasChanged: (row1, row2) => row1 !== row2
@@ -57,17 +69,17 @@ export default class ManagePosts extends Component {
 
   render() {
     return (
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
         <Modal
-          animationType={"slide"}
+          animationType="slide"
           transparent={false}
           visible={true}
         >
-          <StatusBar
-            style="zIndex: 0"
-            barStyle="dark-content"
+          <Header
+            title={'Manage Posts'}
           />
-          { this.state.dataSource ?
+          <View style={styles.container}>
+          { this.state.dataSource && this.state.dataSource.length > 0 ?
             <ListView
               enableEmptySections={true}
               automaticallyAdjustContentInsets={false}
@@ -83,10 +95,11 @@ export default class ManagePosts extends Component {
                 />)}}
             />
             :
-            <Text style={{ textAlign: 'center' }}>
-              No messages found.
+            <Text style={styles.centerText}>
+              You don't have any posts.
             </Text>
           }
+          </View>
           <Button
             accessibilityLabel="Return to profile"
             onPress={this.props.toggleManagePosts}

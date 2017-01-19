@@ -12,6 +12,7 @@ import {
 import UsernameCreate from './UsernameCreate';
 import Profile from './Profile';
 import ManagePosts from './ManagePosts';
+import Header from './Header';
 
 const styles = StyleSheet.create({
   welcome: {
@@ -95,18 +96,10 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <StatusBar
-            style="zIndex: 0"
-            barStyle="light-content"
-          />
-        </View>
+        <Header
+          title={this.props.username ? `${this.props.username}` : 'Welcome'}
+        />
         {this.renderManagePosts()}
-        <View style={styles.options}>
-          <View style={styles.title}>
-            <Text style={styles.titleText}>{this.props.username ? `${this.props.username}` : 'Welcome'}</Text>
-          </View>
-        </View>
         <ScrollView style={styles.container}>
           <Text style={styles.welcome}>
             {`${this.props.userAuth === null ? 'Please log in to post messages.' : ''}`}

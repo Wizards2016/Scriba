@@ -10,6 +10,7 @@ import {
   Image
 } from 'react-native';
 import MapView from 'react-native-maps';
+import Header from './Header';
 import TimeAgo from 'react-native-timeago';
 import Button from 'react-native-button';
 import UpArrow from '../media/arrow_up.png';
@@ -27,9 +28,7 @@ import General from '../media/map-general.png'
 
 const styles = StyleSheet.create({
   modalContent: {
-    flex: 1,
-    margin: 10,
-    marginTop: 20
+    flex: 1
   },
   map: {
     height: 300
@@ -132,9 +131,8 @@ export default class PostInfo extends Component {
           transparent={false}
           visible={true}
         >
-          <StatusBar
-            style="zIndex: 0"
-            barStyle="dark-content"
+          <Header
+            title={`${message.category || 'General'} post from ${username}`}
           />
           <View style={styles.modalContent}>
             <View>
@@ -161,7 +159,7 @@ export default class PostInfo extends Component {
                   <Text style={styles.usernameText}>{`${this.state.message.UserDisplayName}`}</Text>
                   <Text style={styles.text}>{`${text}`}</Text>
                 </View>
-                <PostDetails 
+                <PostDetails
                   message={this.state.message}
                   userVote={this.state.userVote}
                   username={this.props.username}
