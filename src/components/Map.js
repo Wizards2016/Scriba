@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   subcategoryInputFocused: {
+    padding: 5,
     borderRadius: 10,
     borderColor: '#4b89ed',
     borderWidth: 1.5,
@@ -116,6 +117,7 @@ const styles = StyleSheet.create({
     height: 35
   },
   subcategoryInput: {
+    padding: 5,
     borderRadius: 10,
     borderColor: 'black',
     borderWidth: 1,
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 2.5
   },
   textInputRequired: {
+    padding: 5,
     borderRadius: 10,
     borderColor: 'red',
     borderWidth: 1.5,
@@ -139,6 +142,7 @@ const styles = StyleSheet.create({
     height: 65
   },
   textInputFocused: {
+    padding: 5,
     borderRadius: 10,
     borderColor: '#4b89ed',
     borderWidth: 1.5,
@@ -149,6 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 22.5
   },
   textInput: {
+    padding: 5,
     borderRadius: 10,
     borderColor: 'black',
     borderWidth: 1,
@@ -340,11 +345,11 @@ export default class Map extends Component {
   }
 
   updateTextRequired(textRequired, prevTextRequired) {
-    if ((textRequired != null && prevTextRequired != null) && 
-        (textRequired !== this.state.textRequired && 
+    if ((textRequired != null && prevTextRequired != null) &&
+        (textRequired !== this.state.textRequired &&
          prevTextRequired !== this.state.prevTextRequired)) {
       this.setState({
-        textRequired: textRequired, 
+        textRequired: textRequired,
         prevTextRequired: prevTextRequired
       });
     } else if (textRequired != null && textRequired !== this.state.textRequired) {
