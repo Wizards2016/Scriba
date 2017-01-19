@@ -63,19 +63,19 @@ export default class Profile extends Component {
             </Text>
             <View style={styles.statsContainer}>
               <Image
-                style={{ width: 40, height: 40 }}
+                style={{ width: 30, height: 30 }}
                 source={UpArrowHighlighted}
                 accessibilityLabel="Up votes"
               />
               <Text>{`${this.state.voteStats.upVotes}\n`}</Text>
               <Image
-                style={{ width: 40, height: 40 }}
+                style={{ width: 30, height: 30 }}
                 source={DownArrowHighlighted}
                 accessibilityLabel="Down votes"
               />
               <Text>{`${this.state.voteStats.downVotes}\n`}</Text>
               <Image
-                style={{ width: 40, height: 40 }}
+                style={{ width: 25, height: 30 }}
                 source={PostsIcon}
                 accessibilityLabel="Posts"
               />
