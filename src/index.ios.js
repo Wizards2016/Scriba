@@ -8,9 +8,9 @@ import Auth0Lock from 'react-native-lock';
 import Map from './components/Map';
 import Posts from './components/Posts';
 import Settings from './components/Settings';
-import Globe from './media/globe_32.png';
-import Eye from './media/eye_32.png';
-import User from './media/user_32.png';
+import MapView from './media/map-icon.png';
+import PostView from './media/posts-icon.png';
+import User from './media/profile-icon.png';
 import API from './util/APIService';
 
 const lock = new Auth0Lock({
@@ -221,7 +221,7 @@ export default class Scribe extends Component {
         translucent={true}
       >
         <TabBarIOS.Item
-          icon={Globe}
+          icon={MapView}
           title="Map"
           selected={this.state.selectedTab === 'map'}
           onPress={() => {
@@ -250,7 +250,7 @@ export default class Scribe extends Component {
           />
         </TabBarIOS.Item>
         <TabBarIOS.Item
-          icon={Eye}
+          icon={PostView}
           title="Posts"
           selected={this.state.selectedTab === 'posts'}
           onPress={() => {
