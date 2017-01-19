@@ -11,6 +11,7 @@ import UpArrow from '../media/arrow_up.png';
 import DownArrow from '../media/arrow_down.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
+import Trash from '../media/trash.png';
 import PostInfo from './PostInfo';
 import API from '../util/APIService';
 
@@ -179,7 +180,7 @@ export default class PostDetails extends Component {
         setTimeout(() => this.props.login(), 1000);
       } else {
         this.props.login();
-      }      
+      }
     }
   }
 
@@ -196,30 +197,72 @@ export default class PostDetails extends Component {
     API.post.vote(data);
   }
 
+  deletePost() {
+    const data = {
+      delete: true,
+      id: this.state.message.id,
+      userAuth: this.props.userAuth,
+      displayName: this.props.username
+    };
+
+    API.post.message(data)
+    .then(() => {
+      // refresh messages
+      this.props.getMessages();
+    })
+    .catch(() => {
+      console.log('error while deleting message');
+    });
+  }
+
   render() {
     const createdAt = this.state.message.createdAt;
     const username = this.state.message.UserDisplayName;
     return (
       <View style={styles.options}>
         <TimeAgo style={styles.timeAgoText} time={createdAt} interval={60000} />
-        <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
+        { this.props.static ?
+          <View style={styles.buttons}>
+            <TouchableOpacity onPress={() => { this.deletePost(); }}>
+              <Image
+                style={{ width: 20, height: 22 }}
+                source={Trash}
+                accessibilityLabel="Delete"
+              />
+            </TouchableOpacity>
             <Image
-              style={{ width: 20, height: 20 }}
-              source={this.state.upArrowToggle}
-              accessibilityLabel="Up vote"
+              style={{ width: 25, height: 25 }}
+              source={UpArrowHighlighted}
+              accessibilityLabel="Up votes"
             />
-          </TouchableOpacity>
-          <Text style={styles.vote}>{this.state.message.upVotes}</Text>
-          <TouchableOpacity onPress={() => { this.updateVote('down'); }}>
+            <Text style={styles.vote}>{this.state.message.upVotes}</Text>
             <Image
-              style={{ width: 20, height: 20 }}
-              source={this.state.downArrowToggle}
-              accessibilityLabel="Down vote"
+              style={{ width: 25, height: 25 }}
+              source={DownArrowHighlighted}
+              accessibilityLabel="Down votes"
             />
-          </TouchableOpacity>
-          <Text style={styles.vote}>{this.state.message.downVotes}</Text>
-        </View>
+            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
+          </View>
+          :
+          <View style={styles.buttons}>
+            <TouchableOpacity onPress={() => { this.updateVote('up'); }}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={this.state.upArrowToggle}
+                accessibilityLabel="Up vote"
+              />
+            </TouchableOpacity>
+            <Text style={styles.vote}>{this.state.message.upVotes}</Text>
+            <TouchableOpacity onPress={() => { this.updateVote('down'); }}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={this.state.downArrowToggle}
+                accessibilityLabel="Down vote"
+              />
+            </TouchableOpacity>
+            <Text style={styles.vote}>{this.state.message.downVotes}</Text>
+          </View>
+        }
       </View>
     );
   }
