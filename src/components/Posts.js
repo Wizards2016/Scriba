@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
     padding: 0,
     zIndex: -1
   },
+  managePostsScrollView: {
+    flex: 1,
+    margin: 0,
+    padding: 0,
+    zIndex: -1
+  },
   text: {
     textAlign: 'center',
     justifyContent: 'center'
@@ -179,7 +185,12 @@ export default class Posts extends Component {
         </View>
         <View style={styles.container}>
           <ScrollView
-            style={styles.scrollView}
+            style={
+              this.props.static ?
+              styles.managePostsScrollView
+              :
+              styles.scrollView
+            }
             automaticallyAdjustContentInsets={false}
             refreshControl={
               <RefreshControl
