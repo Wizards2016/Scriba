@@ -74,7 +74,6 @@ export default class Scribe extends Component {
       fetch(`http://127.0.0.1:8000/votes?displayName=${this.state.username}`, {
           method: 'GET'
       })
-      .then(response => response.json())
       .then((votes) => {
         if(votes && this.state.username) {
           for(var i = 0; i < messages.length; i++) {
