@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
-  ScrollView,
   View,
-  StatusBar,
   Image
 } from 'react-native';
-import PostRow from './PostRow';
-import PostDetails from './PostDetails';
 import Analytics from '../util/Analytics';
 import Marker from '../media/marker.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
@@ -18,37 +14,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  title: {
-    flex: 1,
-    alignItems: 'center',
-    paddingTop: 10,
-    justifyContent: 'center',
-    width: 200,
-    overflow: 'hidden'
-  },
-  titleText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '400'
-  },
-  options: {
-    backgroundColor: '#007aff',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    paddingTop: 20,
-    paddingBottom: 0,
-    margin: 0,
-    height: 70
-  },
   statsContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center'
-  },
-  postsContainer: {
-    flex: 1,
-    backgroundColor: '#ddd'
   }
 });
 

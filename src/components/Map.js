@@ -18,6 +18,7 @@ import {
   Picker
 } from 'react-native';
 import PostInfo from './PostInfo';
+import Header from './Header';
 import MapView from 'react-native-maps';
 import Button from 'react-native-button';
 import Prompt from 'react-native-prompt';
@@ -396,21 +397,9 @@ export default class Map extends Component {
         renderScene={(route, list) => {
           return ( route.index === 0 ?
             <View style={styles.container}>
-              <View>
-                <StatusBar
-                  style="zIndex: 0"
-                  barStyle="light-content"
-                />
-              </View>
-              <View style={styles.options}>
-                <View style={styles.buttonsLeft}>
-                </View>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>Nearby</Text>
-                </View>
-                <View style={styles.buttonsRight}>
-                </View>
-              </View>
+              <Header
+                title={'Nearby'}
+              />
               <View behavior="padding" style={styles.container} automaticallyAdjustContentInsets={false}>
                 {this.renderPostInfo()}
                 <MapView id="map-view"

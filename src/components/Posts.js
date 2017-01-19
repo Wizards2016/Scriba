@@ -99,15 +99,17 @@ export default class Posts extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.state.sortBy === 'time'){
-      var title = 'Latest';
-      var sortedPosts = PostSorting.sortByTime(nextProps.data);
-    } else if(this.state.sortBy === 'votes'){
-      var title = 'Popular';
-      var sortedPosts = PostSorting.sortByVotes(nextProps.data);
-    } else if(this.state.sortBy === 'distance'){
-      var title = 'Distance';
-      var sortedPosts = PostSorting.sortByDistance(this.props.location, nextProps.data);
+    let title;
+    let sortedPosts;
+    if (this.state.sortBy === 'time') {
+      title = 'Latest';
+      sortedPosts = PostSorting.sortByTime(nextProps.data);
+    } else if (this.state.sortBy === 'votes') {
+      title = 'Popular';
+      sortedPosts = PostSorting.sortByVotes(nextProps.data);
+    } else if (this.state.sortBy === 'distance') {
+      title = 'Distance';
+      sortedPosts = PostSorting.sortByDistance(this.props.location, nextProps.data);
     }
     this.setState({
       dataSource: ds.cloneWithRows(sortedPosts),
@@ -189,14 +191,15 @@ export default class Posts extends Component {
                 dataSource={this.state.dataSource}
                 renderRow={data => {
                   return (
-                  <PostRow
-                    message={data}
-                    username={this.props.username}
-                    userAuth={this.props.userAuth}
-                    login={this.props.login}
-                    getMessages={this.props.getMessages}
-                    refreshMessages={this.refreshMessages}
-                  />)}}
+                    <PostRow
+                      message={data}
+                      username={this.props.username}
+                      userAuth={this.props.userAuth}
+                      login={this.props.login}
+                      getMessages={this.props.getMessages}
+                      refreshMessages={this.refreshMessages}
+                    />);
+                }}
               />
               :
               <Text style={styles.text}>
