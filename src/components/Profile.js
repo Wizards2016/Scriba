@@ -6,7 +6,7 @@ import {
   Image
 } from 'react-native';
 import Analytics from '../util/Analytics';
-import Marker from '../media/marker.png';
+import PostsIcon from '../media/posts-icon.png';
 import UpArrowHighlighted from '../media/arrow_up_highlighted.png';
 import DownArrowHighlighted from '../media/arrow_down_highlighted.png';
 
@@ -76,7 +76,7 @@ export default class Profile extends Component {
               <Text>{`${this.state.voteStats.downVotes}\n`}</Text>
               <Image
                 style={{ width: 40, height: 40 }}
-                source={Marker}
+                source={PostsIcon}
                 accessibilityLabel="Posts"
               />
               <Text>{`${this.state.postStats.totalPosts}`}</Text>
