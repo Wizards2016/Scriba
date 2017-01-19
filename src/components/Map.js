@@ -378,8 +378,7 @@ export default class Map extends Component {
           this.updateTextStyle(styles.textInput);
           this.updateTextRequired(false, false);
           this.updatePostPage();
-          this.props.getMessages();
-          list.pop();
+          this.props.getMessages(() => {list.pop()});
         })
         .catch((err) => {
           console.log('POST request err: ', err);
