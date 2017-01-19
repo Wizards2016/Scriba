@@ -55,7 +55,6 @@ export default class Scribe extends Component {
             this.getUserVotes(responseData);
           } else {
             responseData.forEach((message, i)=> responseData[i].userVote = null );
-            console.log(responseData);
             this.setState({ data: responseData });
           }
         })
