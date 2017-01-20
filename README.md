@@ -8,13 +8,13 @@
 
 ## Table of Contents
 
-1. [Team](#Team)
-2. [Usage](#Usage)
-3. [Requirements](#Requirements)
-4. [Installing dependencies](#Installing-dependencies)
-5. [Run the application](#Run-the-application)
-6. [Troubleshooting](#Troubleshooting)
-7. [Resources](#Resources)
+1. [Team](#team)
+2. [Usage](#usage)
+3. [Requirements](#qequirements)
+4. [Installing dependencies](#installing-dependencies)
+5. [Run the application](#run-the-application)
+6. [Troubleshooting](#troubleshooting)
+7. [Resources](#resources)
 
 ## Team
 
